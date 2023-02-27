@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Players
+comment1.params=name\ bands
+comment1.target=void\ addPlayer(java.lang.String,\ java.util.ArrayList)
+comment2.params=
+comment2.target=void\ displayPlayers()
+comment3.params=g\ bandits
+comment3.target=java.util.ArrayList\ draw(GameRunner,\ int)
+numComments=4

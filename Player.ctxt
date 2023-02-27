@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Player
+comment1.params=name
+comment1.target=Player(java.lang.String)
+comment2.params=loc
+comment2.target=void\ watch(Locations)
+comment3.params=loc
+comment3.target=int\ watchCount(Locations)
+comment4.params=loc
+comment4.target=Player\ watchPerson(Locations)
+numComments=5
