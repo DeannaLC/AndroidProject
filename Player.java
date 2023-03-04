@@ -1,26 +1,42 @@
-import java.util.Random;
 
-public class Player {
-    
+/**
+ * Write a description of class Player here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
+public class Player
+{
+    boolean alive = true; 
     String name;
-    boolean alive = true;
-
+    String loc;
+    int votes;
+    
     public Player(String name){
         this.name = name;
     }
     
-    public void watch(Locations loc){
-        (loc.players).add(this);
+    public String getName(){
+        return this.name;
     }
     
-    public int watchCount(Locations loc){
-        return (loc.players).size();
+    public void observe(Location l, String loc){
+        this.loc = loc;
+        if (loc.equals("bank")){
+            (l.bank).add(this);
+            System.out.println();
+        }
+        else if (loc.equals("saloon"))
+            (l.saloon).add(this);
+        else
+            (l.ranch).add(this);
     }
     
-    public Player watchPerson(Locations loc){
-        Random rand = new Random();
-        int rnd = rand.nextInt((loc.players).size());
-        return (loc.players).get(rnd);
+    public void vote(int votes){
+        this.votes = votes;
     }
-
+    
+    void clearVotes(){
+        this.votes = 0;
+    }
 }
