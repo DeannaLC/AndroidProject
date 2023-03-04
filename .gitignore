@@ -1,1 +1,8 @@
 .idea/
+.idea/**/workspace.xml
+.idea/**/usage.statistics.xml
+out/**
+*.class
+*.ctxt
+package.bluej
+production/**
