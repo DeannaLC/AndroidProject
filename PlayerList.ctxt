@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=PlayerList
+comment1.params=
+comment1.target=PlayerList()
+comment2.params=name\ bands\ a
+comment2.target=void\ addPlayer(java.lang.String,\ java.util.ArrayList,\ int)
+comment3.params=bandits\ amt
+comment3.target=java.util.ArrayList\ draw(int,\ int)
+comment4.params=
+comment4.target=java.util.ArrayList\ playerNames()
+comment5.params=players
+comment5.target=java.lang.String\ toString(java.util.ArrayList)
+comment6.params=args
+comment6.target=void\ main(java.lang.String[])
+numComments=7

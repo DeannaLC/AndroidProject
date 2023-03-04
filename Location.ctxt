@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=Location
+comment0.text=\n\ Write\ a\ description\ of\ class\ Locations\ here.\n\n\ @author\ (your\ name)\n\ @version\ (a\ version\ number\ or\ a\ date)\n
+comment1.params=
+comment1.target=Location()
+comment1.text=\n\ Constructor\ for\ objects\ of\ class\ Locations\n
+comment2.params=
+comment2.target=void\ addPlayers()
+comment3.params=
+comment3.target=void\ clearLocs()
+comment4.params=name\ place
+comment4.target=Player\ randPlayer(java.lang.String,\ java.lang.String)
+comment5.params=place
+comment5.target=int\ getValue(java.lang.String)
+numComments=6

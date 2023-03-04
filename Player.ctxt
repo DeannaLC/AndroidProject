@@ -1,11 +1,14 @@
 #BlueJ class context
 comment0.target=Player
+comment0.text=\n\ Write\ a\ description\ of\ class\ Player\ here.\n\n\ @author\ (your\ name)\n\ @version\ (a\ version\ number\ or\ a\ date)\n
 comment1.params=name
 comment1.target=Player(java.lang.String)
-comment2.params=loc
-comment2.target=void\ watch(Locations)
-comment3.params=loc
-comment3.target=int\ watchCount(Locations)
-comment4.params=loc
-comment4.target=Player\ watchPerson(Locations)
-numComments=5
+comment2.params=
+comment2.target=java.lang.String\ getName()
+comment3.params=l\ loc
+comment3.target=void\ observe(Location,\ java.lang.String)
+comment4.params=votes
+comment4.target=void\ vote(int)
+comment5.params=
+comment5.target=void\ clearVotes()
+numComments=6
