@@ -1,9 +1,0 @@
-#BlueJ class context
-comment0.target=Controller
-comment1.params=dayLim\ playerCount\ moneyLim
-comment1.target=Controller(int,\ int,\ int)
-comment2.params=p
-comment2.target=int\ checkWin(PlayerList)
-comment3.params=money
-comment3.target=void\ addMoney(int)
-numComments=4
