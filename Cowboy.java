@@ -31,12 +31,16 @@ public class Cowboy extends Player
         else
             return (l.randPlayer(this.name, this.loc)).name;
     }
+
+    public int role(){
+        return 0;
+    }
     
     public static void main(String args[]){
         Cowboy p = new Cowboy("simon");
         
         Location l = new Location();
-        l.addPlayers();
+        //l.addPlayers();
         
         p.observe(l, "bank");
         

@@ -1,7 +1,11 @@
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Iterator;
 
+/**
+ * Class that contains list of players
+ */
 public class PlayerList{
     ArrayList players = new ArrayList<Player>();
     ArrayList bandits = new ArrayList<Bandit>();
@@ -9,50 +13,32 @@ public class PlayerList{
     
     public PlayerList(){}
     
-    public void addPlayer(String name, ArrayList bands, int a){
-        if (bands.indexOf(a) == -1){
+    public int addPlayer(String name, ArrayList bands, int cur){
+        if (bands.indexOf(cur) == -1){
             Cowboy cow = new Cowboy(name);
             players.add(cow);
             cowboys.add(cow);
-            System.out.println("Your role is cowboy");
+            return 0;
         }
         else{
             Bandit band = new Bandit(name);
             players.add(band);
             bandits.add(band);
-            System.out.println("Your role is bandit");
+            return 1;
         }
-    }
-
-    public ArrayList draw(int bandits, int amt){
-        ArrayList ret = new ArrayList();
-        Random rand = new Random();
-        int d = 0;
-        boolean repeat;
-        for (int i = bandits; i > 0; i = i - 1){
-            repeat = true;
-            while (repeat) {
-                d = rand.nextInt(amt);
-                if (ret.indexOf(d) == -1) {
-                    ret.add(d);
-                    repeat = false;
-                }
-            }
-        }
-        return ret;
     }
     
-    public ArrayList playerNames(){
-        ArrayList ret = new ArrayList<String>();
+    public PlayerList copy(){
+        PlayerList ret = new PlayerList();
         Player p;
         for (int i = 0; i < players.size(); i = i + 1){
             p = (Player) (players.get(i));
-            ret.add(p.getName());
+            ret.players.add(p);
         }
         return ret;
     }
     
-    public String toString(ArrayList players){
+    public String toString(){
         String playersRes = "Players: ";
         Player p;
         for (int i = 0; i < players.size(); i++){
@@ -60,9 +46,18 @@ public class PlayerList{
             playersRes += p.name;
             if (i != (players.size() - 1))
                 playersRes += ", ";
-        
         }
         return playersRes;
+    }
+
+    public Player findPlayer(String person){
+        Player h;
+        for (int i = 0; i < players.size(); i = i + 1){
+            h = (Player) players.get(i);
+            if (h.getName().equals(person))
+                return h;
+        }
+        return null;
     }
     
     public static void main(String args[]){
@@ -70,6 +65,6 @@ public class PlayerList{
         (p.players).add(new Player("jeff"));
         (p.players).add(new Player("jeoff"));
         (p.players).add(new Player("jerry"));
-        System.out.println(p.toString(p.players));
+        System.out.println(p.toString());
     }
 }

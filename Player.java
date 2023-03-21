@@ -1,26 +1,22 @@
 
 /**
- * Write a description of class Player here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * Superclass for Bandit and Cowboy subclasses
  */
-public class Player
-{
-    boolean alive = true; 
+public class Player {
+    boolean alive = true;
     String name;
     String loc;
     int votes;
-    
-    public Player(String name){
+
+    public Player(String name) {
         this.name = name;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
-    
-    public void observe(Location l, String loc){
+
+    public void observe(Location l, String loc) {
         this.loc = loc;
         if (loc.equals("bank")){
             (l.bank).add(this);
@@ -31,7 +27,13 @@ public class Player
         else
             (l.ranch).add(this);
     }
-    
+
+    public int role(){
+        return 3;
+    }
+
+    //public void rob(){}
+
     public void vote(int votes){
         this.votes = votes;
     }

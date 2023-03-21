@@ -8,8 +8,8 @@ import java.util.Random;
  */
 public class Bandit extends Player
 {
-    // instance variables - replace the example below with your own
-    private int x;
+
+    public boolean robbed = false;
 
     /**
      * Constructor for objects of class Bandit
@@ -33,9 +33,19 @@ public class Bandit extends Player
         else
             return (l.randPlayer(this.name, this.loc)).name;
     }
+
+    public int role(){
+        return 1;
+    }
     
-    public int rob(Location l){
-        return 0;
+    public int rob(Location l, String place){
+        if (place.equals("bank"))
+            l.bank.add(this);
+        else if (place.equals("saloon"))
+            l.saloon.add(this);
+        else
+            l.ranch.add(this);
+        return l.getValue(place);
     }
 }
 

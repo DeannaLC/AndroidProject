@@ -18,12 +18,12 @@ public class Location
      */
     public Location(){}
     
-    public void addPlayers(){
+    /*public void addPlayers(){
         bank.add(new Player("jeff"));
         bank.add(new Player("geoff"));
         bank.add(new Player("jeffrey"));
         bank.add(new Player("jebediah"));
-    }
+    }*/
     
     public void clearLocs(){
         this.bank = new ArrayList<Player>();
