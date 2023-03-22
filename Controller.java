@@ -9,7 +9,7 @@ public class Controller{
     int moneyLim;
     boolean inGame;
     PlayerList pl = new PlayerList();
-    Location l = new Location();
+    Location loc = new Location();
     
     public Controller(int dayLim, int playerCount, int moneyLim){
         this.dayLim = dayLim;
@@ -17,6 +17,13 @@ public class Controller{
         this.moneyLim = moneyLim;
     }
 
+    /**
+     * Random function for deciding which players get what roles
+     *
+     * @param bandits, number of bandits
+     * @param amt, total number of players
+     * @return ArrayList of ints for indices of players who will be bandits
+     */
     public ArrayList draw(int bandits, int amt){
         ArrayList ret = new ArrayList();
         Random rand = new Random();
@@ -35,35 +42,29 @@ public class Controller{
         return ret;
     }
 
+    public PlayerList copy(){
+        return this.pl.copy();
+    }
+
     public int addPlayer(String name, ArrayList bands, int cur){
         return this.pl.addPlayer(name, bands, cur);
     }
-    
-    int checkWin(PlayerList p){
+
+    /**
+     * Checks whether the game has been won
+     *
+     * @return 1 if game is still in play, 2 if the bandits have won, 3 if cowboys have won
+     */
+    int checkWin(){
         if (curDay == dayLim)
             return 3;
-        else if ((p.bandits).size() > ((p.players).size()))
+        else if ((pl.bandits).size() > ((pl.players).size()))
             return 2;
         else if (money >= moneyLim)
             return 2;
-        else if ((p.bandits).size() == 0)
+        else if ((pl.bandits).size() == 0)
             return 3;
         else
             return 1;
     }
-    
-    void addMoney(int money){
-        this.money = this.money + money;
-    }
-
-    public static void main(String args[]){
-        Controller c = new Controller(0, 0, 0);
-        ArrayList a = c.draw(2, 5);
-        c.addPlayer("jess", a, c.pl.players.size());
-        c.addPlayer("jax", a, 1);
-        c.addPlayer("jeoff", a, 2);
-        c.addPlayer("jeb", a, 3);
-        c.addPlayer("joe", a, 4);
-    }
-
 }

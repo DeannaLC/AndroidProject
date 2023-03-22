@@ -33,40 +33,6 @@ stop
 @enduml
 ```
 
-```plantuml
-
-@startuml
-title View Observations
-
-skin rose
-'define swimlanes
-|#technology|Players|
-|#implementation|System|
-
-|System|
-start
-while (More players?) is (yes)
-:Display list of player names;
-|Players|
-:Select name;
-|System|
-if (Bandit blending in or Cowboy?) is (yes) then
-:Display number of players or a name of a player at location;
-else (no)
-:Display how much is being taken;
-endif
-|Players|
-:Confirm viewing;
-|System|
-:Cross out name that was selected;
-|Players|
-:Pass phone;
-endwhile (no)
-|System|
-stop
-
-```
-
 ``` plantuml
 @startuml
 skin rose

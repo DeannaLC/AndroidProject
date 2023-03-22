@@ -37,6 +37,8 @@ public class Location
         int a;
         if (place.equals("bank")){
             while (repeat){
+                if (this.bank.size() == 1)
+                    return null;
                 a = rnd.nextInt((this.bank).size());
                 Player ret = ((this.bank).get(a));
                 if (ret.name != name)
@@ -45,6 +47,8 @@ public class Location
         }
         else if (place.equals("saloon")){
             while (repeat){
+                if (this.saloon.size() == 1)
+                    return null;
                 a = rnd.nextInt((this.saloon).size());
                 Player ret = ((this.saloon).get(a));
                 if (ret.name != name)
@@ -53,6 +57,8 @@ public class Location
         }
         else{
             while (repeat){
+                if (this.ranch.size() == 1)
+                    return null;
                 a = rnd.nextInt((this.ranch).size());
                 Player ret = ((this.ranch).get(a));
                 if (ret.name != name)

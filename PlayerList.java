@@ -12,7 +12,14 @@ public class PlayerList{
     ArrayList cowboys = new ArrayList<Cowboy>();
     
     public PlayerList(){}
-    
+
+    /**
+     * Takes in an ArrayList containing indices of bandits, a player's name, and the index of the player being added.
+     * @param name of the new Player
+     * @param bands, indices of bandits
+     * @param cur, current index of Player being added
+     * @return 0 if the new Player is a cowboy, 1 if the new Player is a bandit
+     */
     public int addPlayer(String name, ArrayList bands, int cur){
         if (bands.indexOf(cur) == -1){
             Cowboy cow = new Cowboy(name);
@@ -54,17 +61,10 @@ public class PlayerList{
         Player h;
         for (int i = 0; i < players.size(); i = i + 1){
             h = (Player) players.get(i);
-            if (h.getName().equals(person))
+            if (h.getName().toLowerCase().equals(person.toLowerCase()))
                 return h;
         }
         return null;
     }
-    
-    public static void main(String args[]){
-        PlayerList p = new PlayerList();
-        (p.players).add(new Player("jeff"));
-        (p.players).add(new Player("jeoff"));
-        (p.players).add(new Player("jerry"));
-        System.out.println(p.toString());
-    }
+
 }

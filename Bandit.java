@@ -20,6 +20,7 @@ public class Bandit extends Player
     }
 
     public String observation(Location l){
+        Player retPlayer;
         Random rnd = new Random();
         int a = rnd.nextInt(2);
         if (a == 0){
@@ -31,6 +32,9 @@ public class Bandit extends Player
                 return "" + (l.ranch).size();
         }
         else
+            retPlayer = l.randPlayer(this.name, this.loc);
+            if (retPlayer == null)
+                return null;
             return (l.randPlayer(this.name, this.loc)).name;
     }
 
