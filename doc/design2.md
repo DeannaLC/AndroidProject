@@ -37,6 +37,41 @@ end
 ```plantuml
 @startuml
 
+
+
+
+title Configure Game
+hide footbox
+skin rose
+
+actor Gamer as gamer
+participant "read : Scanner" as UI
+participant "c : Controller" as control
+participant ":PlayersClass" as players
+participant ":Player" as player
+
+control -> gamer: Ask for game parameters
+gamer -> UI: Input parameters
+UI -> control: Set parameters
+
+loop More Players
+control -> gamer: Ask for player name
+gamer -> UI: Input player name
+UI -> control: Give name
+control -> players: Create players()
+players -> player: Player(name)
+players -> player: AssignRole()
+player -> players: addPlayer()
+players -> UI: Give player data
+UI -> gamer: Display role
+else No More Players
+control -> gamer: Show configurations
+end
+```
+
+```plantuml
+@startuml
+
 title Take Action
 hide footbox
 skin rose
@@ -57,6 +92,52 @@ players -> player: Get player role
 player -> loc: Take action at location
 loc -> control: Give action data if money involved
 players -> UI: Remove player from list
+else No More Players
+control -> UI: Switch game phase
+UI -> gamer: Show phase switch
+end
+
+```
+```plantuml
+@startuml
+
+title Take Action
+hide footbox
+skin rose
+
+actor Gamer as gamer
+participant "read : Scanner" as UI
+participant "c : Controller" as control
+participant ":PlayerList" as players
+participant ":Player" as player
+participant "l :Location" as loc
+
+
+loop More Players
+control -> gamer: Give list of names
+gamer -> UI: Select name
+UI -> control : Give name
+control -> players: inPlay = listCopy.findPlayer(name)
+control -> player: inPlay.role()
+player -->> control: role
+alt if cowboy
+control -> gamer: Ask for location to watch
+gamer -> UI: Input location
+UI -> control: Give location
+control -> player: observe the location
+player -> loc: Take action at location
+players -> control: Remove player from list
+else if bandit
+control -> gamer: Ask for location to watch
+gamer -> UI: Input location
+UI -> control: Give location
+control -> gamer: Ask for action
+gamer -> UI: Input action
+UI -> control: give inputted action
+player -> loc: Take action at location
+players -> control: Remove player from list
+loc -> control: Give action data if money involved
+
 else No More Players
 control -> UI: Switch game phase
 UI -> gamer: Show phase switch
@@ -94,7 +175,7 @@ end
 @startuml
 
 
-title Class Diagram
+title Design Class Diagram
 hide empty methods
 
 
@@ -103,64 +184,73 @@ skin rose
 
 
 class Controller{
-int curDay
-int dayLimit
-int playerCount
-boolean inGame
-int money
-int moneyLim
+curDay : int
+dayLim : int
+playerCount : int
+money : int
+moneyLim : int
+inGame : boolean
 --
-boolean checkWin()
-boolean gamePhase()
-void addMoney()
++draw(bandits : int, amt : int)
++addPlayer(name : String, bands : ArrayList, cur : int)
+checkWin(p : PlayerList)
+addMoney(money : int)
 }
 
-class UI{
+class TextUI{
 --
-String displayPlayers(ArrayList players)
-String actionOptions()
-String gameConfig()
-String showRole(Player p)
++configurePlayers(c : Controller)
++actions(c : Controller)
++observations(c : Controller, robList : ArrayList<Bandit>)
++main{static}(args : String[])
 }
 
 class Player{
-boolean alive
-String name
-int votes
+alive : boolean
+name : String
+loc : String
+votes : int
 --
-void vote(int count)
-void clearVotes()
-void observe(Location l)
++getName()
++observe(l : Location, loc : String)
++role()
++vote(votes : int)
++clearVotes()
 }
 
 class Cowboy{
 --
-void observation(Location l)
++observation(l : Location, a : int)
++role()
 }
 
 class Bandit{
++robbed : boolean
 --
-void observation(Location l)
-void rob(Location l)
++observation(l : Location)
++role()
++rob(l : Location, place : String)
 }
 
 class PlayerList{
-ArrayList<Player> players
-ArrayList<Bandit> bandits
-ArrayList<Cowboy> cowboys
-int total
+players : ArrayList<Player> 
+bandits : ArrayList<Bandit>
+cowboys : ArrayList<Cowboy>
 --
-ArrayList draw()
-void addPlayer(ArrayList rand)
-void removePlayer()
++addPlayer(name : String, bands : ArrayList, cur : int)
++copy()
++toString()
++findPlayer(person : String)
 }
 
 class Location{
-ArrayList<Player> playerList
-int value
+bank : ArrayList<Player>
+saloon : ArrayList<Player>
+ranch : ArrayList<Player>
 --
-void setValue(String name)
-void clearPlayers()
++clearLocs()
++randPlayer(name : String, place : String)
++getValue(place : String)
 }
 
 Player <|-- Bandit

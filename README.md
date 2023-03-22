@@ -6,4 +6,4 @@ There is also a win check if money gained in the one round exceeds the money lim
 
 The program is able to handle any inputs, and if a wrong input is given when prompted for a certain type, it will ask the user again. 
 
-The Main method is contained in the TextUI class. All inputs are handled by a Scanner. 
+The Main method is contained in the TextUI class and doesn't require arguments. All inputs are handled by a Scanner. 
