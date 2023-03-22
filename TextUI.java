@@ -56,12 +56,13 @@ public class TextUI
         System.out.println(c.dayLim + " days, " + c.moneyLim + " dollars to win");
     }
     
-    public void actions(Controller c){
+    public ArrayList<Bandit> actions(Controller c){
         PlayerList listCopy = c.pl.copy();
         Scanner read = new Scanner(System.in);
         String name;
         String place;
         Player inPlay;
+        ArrayList<Bandit> ret = new ArrayList<Bandit>();
         while (listCopy.players.size() > 0) {
             System.out.println(listCopy.toString());
             System.out.println("Select your name");
@@ -74,6 +75,7 @@ public class TextUI
                     place = read.nextLine();
                     place = place.toLowerCase();
                     inPlay.observe(c.l, place);
+                    inPlay.loc = place;
                     System.out.println("You chose to watch the " + place + " for the night");
                 } else {
                     Bandit p1 = new Bandit("");
@@ -87,15 +89,57 @@ public class TextUI
                     if ((name.toLowerCase()).equals("rob")) {
                         dollars = p1.rob(c.l, place);
                         c.money = c.money + dollars;
+                        ret.add(p1);
+                        p1.loc = place;
                         System.out.println("You stole " + dollars + "$ from " + place);
                     }
                     else {
                         inPlay.observe(c.l, place);
+                        inPlay.loc = place;
                         System.out.println("You chose to hang out at " + place);
                     }
                 }
             }
             listCopy.players.remove(inPlay);
+        }
+        return ret;
+    }
+
+    public void observations(Controller c, ArrayList<Bandit> robList) {
+        PlayerList listCopy = c.pl.copy();
+        Scanner read = new Scanner(System.in);
+        String name;
+        String choice;
+        Player inPlay;
+        String obs;
+        while (listCopy.players.size() > 0) {
+            System.out.println(listCopy.toString());
+            System.out.println("Select your name");
+            name = read.nextLine();
+            inPlay = listCopy.findPlayer(name);
+            Cowboy cow;
+            Bandit band;
+            if (inPlay != null) {
+                if (inPlay instanceof Cowboy) {
+                    cow = (Cowboy) inPlay;
+                    System.out.println("Players or a name?");
+                    choice = read.nextLine();
+                    if (choice.equals("players")){
+                        System.out.println(cow.observation(c.l, 0));
+                    }
+                    else
+                        System.out.println(cow.observation(c.l, 1));
+                    listCopy.players.remove(cow);
+                }
+                else if (inPlay instanceof Bandit){
+                    band = (Bandit) inPlay;
+                    if (robList.indexOf(band) != -1)
+                        System.out.println(band.observation(c.l));
+                    else
+                        System.out.println("You wait the night at " + band.loc);
+                    listCopy.players.remove(band);
+                }
+            }
         }
     }
 
@@ -105,7 +149,8 @@ public class TextUI
         Controller c = new Controller(0, 0, 0);
         t.configurePlayers(c);
         Location l = new Location();
-        t.actions(c);
-        System.out.println();
+        ArrayList<Bandit> robbers = t.actions(c);
+        t.observations(c, robbers);
+        System.out.println("Total money: " + c.money);
     }
 }
