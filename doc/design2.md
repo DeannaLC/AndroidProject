@@ -37,6 +37,41 @@ end
 ```plantuml
 @startuml
 
+
+
+
+title Configure Game
+hide footbox
+skin rose
+
+actor Gamer as gamer
+participant "read : Scanner" as UI
+participant "c : Controller" as control
+participant ":PlayersClass" as players
+participant ":Player" as player
+
+control -> gamer: Ask for game parameters
+gamer -> UI: Input parameters
+UI -> control: Set parameters
+
+loop More Players
+control -> gamer: Ask for player name
+gamer -> UI: Input player name
+UI -> control: Give name
+control -> players: Create players()
+players -> player: Player(name)
+players -> player: AssignRole()
+player -> players: addPlayer()
+players -> UI: Give player data
+UI -> gamer: Display role
+else No More Players
+control -> gamer: Show configurations
+end
+```
+
+```plantuml
+@startuml
+
 title Take Action
 hide footbox
 skin rose
@@ -57,6 +92,52 @@ players -> player: Get player role
 player -> loc: Take action at location
 loc -> control: Give action data if money involved
 players -> UI: Remove player from list
+else No More Players
+control -> UI: Switch game phase
+UI -> gamer: Show phase switch
+end
+
+```
+```plantuml
+@startuml
+
+title Take Action
+hide footbox
+skin rose
+
+actor Gamer as gamer
+participant "read : Scanner" as UI
+participant "c : Controller" as control
+participant ":PlayerList" as players
+participant ":Player" as player
+participant "l :Location" as loc
+
+
+loop More Players
+control -> gamer: Give list of names
+gamer -> UI: Select name
+UI -> control : Give name
+control -> players: inPlay = listCopy.findPlayer(name)
+control -> player: inPlay.role()
+player -->> control: role
+alt if cowboy
+control -> gamer: Ask for location to watch
+gamer -> UI: Input location
+UI -> control: Give location
+control -> player: observe the location
+player -> loc: Take action at location
+players -> control: Remove player from list
+else if bandit
+control -> gamer: Ask for location to watch
+gamer -> UI: Input location
+UI -> control: Give location
+control -> gamer: Ask for action
+gamer -> UI: Input action
+UI -> control: give inputted action
+player -> loc: Take action at location
+players -> control: Remove player from list
+loc -> control: Give action data if money involved
+
 else No More Players
 control -> UI: Switch game phase
 UI -> gamer: Show phase switch
