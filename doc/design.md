@@ -2,7 +2,9 @@
 
 
 @startuml
-hide circle
+
+
+title Design Class Diagram
 hide empty methods
 
 
@@ -10,30 +12,80 @@ skin rose
 ' classes
 
 
-class GameRunner{
-dayLimit
-moneyLimit
-playerCount
-inGame
+class Controller{
+curDay : int
+dayLim : int
+playerCount : int
+money : int
+moneyLim : int
+inGame : boolean
+--
++draw(bandits : int, amt : int)
++addPlayer(name : String, bands : ArrayList, cur : int)
+checkWin(p : PlayerList)
+addMoney(money : int)
 }
 
-
-class Players{
-name
-alive
+class TextUI{
+--
++configurePlayers(c : Controller)
++actions(c : Controller)
++observations(c : Controller, robList : ArrayList<Bandit>)
++main{static}(args : String[])
 }
 
-
-class Bandit{
+class Player{
+alive : boolean
+name : String
+loc : String
+votes : int
+--
++getName()
++observe(l : Location, loc : String)
++role()
++vote(votes : int)
++clearVotes()
 }
-
 
 class Cowboy{
+--
++observation(l : Location, a : int)
++role()
 }
-' associations
-Players "3..*" - "1" GameRunner : \tContained in\t
-Players -down- Bandit : Instance of
-Players -down- Cowboy : Instance of
+
+class Bandit{
++robbed : boolean
+--
++observation(l : Location)
++role()
++rob(l : Location, place : String)
+}
+
+class PlayerList{
+players : ArrayList<Player> 
+bandits : ArrayList<Bandit>
+cowboys : ArrayList<Cowboy>
+--
++addPlayer(name : String, bands : ArrayList, cur : int)
++copy()
++toString()
++findPlayer(person : String)
+}
+
+class Location{
+bank : ArrayList<Player>
+saloon : ArrayList<Player>
+ranch : ArrayList<Player>
+--
++clearLocs()
++randPlayer(name : String, place : String)
++getValue(place : String)
+}
+
+Player <|-- Bandit
+Player <|-- Cowboy
+@enduml
+
 ```
 
 
@@ -64,77 +116,6 @@ UI -> loc : give action data
 loc -->> game : give action data
 @enduml
 ```
-
-
-```plantuml
-
-
-@startuml
-
-
-title Class Diagram
-hide circle
-hide empty methods
-
-
-skin rose
-' classes
-
-
-class GameRunner{
-int dayLimit
-int playerCount
-boolean inGame
-ArrayList<Players> players
-int money
---
-checkWin()
-removePlayer()
-updateDayNumber()
-}
-
-class Players{
-ArrayList<Player> players
---
-assignRoles(ArrayList random)
-}
-
-class Player{
-boolean alive
-String name
---
-vote()
-observe()
-}
-
-
-class Bandits{
---
-checkOtherBandits()
-steal()
-}
-
-
-class Cowboys{
---
-}
-
-
-class Locations{
-ArrayList<Players> players
-int value
---
-setValue(String name)
-}
-
-
-Player <|-- Bandits
-Player <|-- Cowboys
-@enduml
-```
-
-
-
 
 ```plantuml
 @startuml

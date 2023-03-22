@@ -55,15 +55,4 @@ public class Controller{
     void addMoney(int money){
         this.money = this.money + money;
     }
-
-    public static void main(String args[]){
-        Controller c = new Controller(0, 0, 0);
-        ArrayList a = c.draw(2, 5);
-        c.addPlayer("jess", a, c.pl.players.size());
-        c.addPlayer("jax", a, 1);
-        c.addPlayer("jeoff", a, 2);
-        c.addPlayer("jeb", a, 3);
-        c.addPlayer("joe", a, 4);
-    }
-
 }

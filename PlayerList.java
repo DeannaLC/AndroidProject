@@ -59,12 +59,4 @@ public class PlayerList{
         }
         return null;
     }
-    
-    public static void main(String args[]){
-        PlayerList p = new PlayerList();
-        (p.players).add(new Player("jeff"));
-        (p.players).add(new Player("jeoff"));
-        (p.players).add(new Player("jerry"));
-        System.out.println(p.toString());
-    }
 }

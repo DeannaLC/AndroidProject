@@ -35,17 +35,4 @@ public class Cowboy extends Player
     public int role(){
         return 0;
     }
-    
-    public static void main(String args[]){
-        Cowboy p = new Cowboy("simon");
-        
-        Location l = new Location();
-        //l.addPlayers();
-        
-        p.observe(l, "bank");
-        
-        System.out.println(p.observation(l, 0));
-        System.out.println(p.observation(l, 1));
-        System.out.println();
-    }
 }

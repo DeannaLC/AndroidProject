@@ -94,7 +94,7 @@ end
 @startuml
 
 
-title Class Diagram
+title Design Class Diagram
 hide empty methods
 
 
@@ -103,64 +103,73 @@ skin rose
 
 
 class Controller{
-int curDay
-int dayLimit
-int playerCount
-boolean inGame
-int money
-int moneyLim
+curDay : int
+dayLim : int
+playerCount : int
+money : int
+moneyLim : int
+inGame : boolean
 --
-boolean checkWin()
-boolean gamePhase()
-void addMoney()
++draw(bandits : int, amt : int)
++addPlayer(name : String, bands : ArrayList, cur : int)
+checkWin(p : PlayerList)
+addMoney(money : int)
 }
 
-class UI{
+class TextUI{
 --
-String displayPlayers(ArrayList players)
-String actionOptions()
-String gameConfig()
-String showRole(Player p)
++configurePlayers(c : Controller)
++actions(c : Controller)
++observations(c : Controller, robList : ArrayList<Bandit>)
++main{static}(args : String[])
 }
 
 class Player{
-boolean alive
-String name
-int votes
+alive : boolean
+name : String
+loc : String
+votes : int
 --
-void vote(int count)
-void clearVotes()
-void observe(Location l)
++getName()
++observe(l : Location, loc : String)
++role()
++vote(votes : int)
++clearVotes()
 }
 
 class Cowboy{
 --
-void observation(Location l)
++observation(l : Location, a : int)
++role()
 }
 
 class Bandit{
++robbed : boolean
 --
-void observation(Location l)
-void rob(Location l)
++observation(l : Location)
++role()
++rob(l : Location, place : String)
 }
 
 class PlayerList{
-ArrayList<Player> players
-ArrayList<Bandit> bandits
-ArrayList<Cowboy> cowboys
-int total
+players : ArrayList<Player> 
+bandits : ArrayList<Bandit>
+cowboys : ArrayList<Cowboy>
 --
-ArrayList draw()
-void addPlayer(ArrayList rand)
-void removePlayer()
++addPlayer(name : String, bands : ArrayList, cur : int)
++copy()
++toString()
++findPlayer(person : String)
 }
 
 class Location{
-ArrayList<Player> playerList
-int value
+bank : ArrayList<Player>
+saloon : ArrayList<Player>
+ranch : ArrayList<Player>
 --
-void setValue(String name)
-void clearPlayers()
++clearLocs()
++randPlayer(name : String, place : String)
++getValue(place : String)
 }
 
 Player <|-- Bandit
