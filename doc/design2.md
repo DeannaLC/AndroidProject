@@ -253,6 +253,8 @@ ranch : ArrayList<Player>
 +getValue(place : String)
 }
 
+Player -> "Contained in" PlayerList: \t\t
+Player -> "Contained in" Location: \t\t
 Player <|-- Bandit
 Player <|-- Cowboy
 @enduml
