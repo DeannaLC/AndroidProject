@@ -49,5 +49,26 @@ Simple Graphics
 Game Tutorial
 - A small game demo that can run players through how to play
 
+***Second Iteration***
 
+**High Priority**
+
+Day Gameplay
+- Reveal certain information from the night to all players (how much money was stolen and from where)
+- Allow players to vote to remove other players from the game based on results from the night
+
+Update Game Values & Check for Win
+- Updates internal game values that change with round (i.e. day count)
+- Checks to see if any of the win conditions have been triggered and if so displays winners
+
+**Medium Priority**
+
+Same as iteration 1 with the addition of:
+
+Android Implementation
+- Make the game playable on Android
+
+**Low Priority**
+
+Same as Iteration 1
 

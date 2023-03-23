@@ -1,4 +1,114 @@
 ```plantuml
+@startuml
+
+
+
+
+title Configure Game
+hide footbox
+skin rose
+
+actor Gamer as gamer
+participant "c : Controller" as control
+participant "read : Scanner" as UI
+participant ":PlayersClass" as players
+participant ":Player" as player
+
+control -> gamer: Ask for game parameters
+gamer -> UI: Input parameters
+UI -> control: Set parameters
+
+loop More Players
+control -> gamer: Ask for player name
+gamer -> UI: Input player name
+UI -> control: Give name
+control -> players: Create players()
+players -> player: Player(name)
+players -> player: AssignRole()
+player -> players: addPlayer()
+players -> UI: Give player data
+UI -> gamer: Display role
+else No More Players
+control -> gamer: Show configurations
+end
+```
+
+```plantuml
+@startuml
+
+title Take Action
+hide footbox
+skin rose
+
+actor Gamer as gamer
+participant "c : Controller" as control
+participant "read : Scanner" as UI
+participant ":PlayerList" as players
+participant ":Player" as player
+participant "l :Location" as loc
+
+
+loop More Players
+control -> gamer: Give list of names
+gamer -> UI: Select name
+UI -> control : Give name
+control -> players: inPlay = listCopy.findPlayer(name)
+control -> player: inPlay.role()
+player -->> control: role
+alt if cowboy
+control -> gamer: Ask for location to watch
+gamer -> UI: Input location
+UI -> control: Give location
+control -> player: observe the location
+player -> loc: Take action at location
+players -> control: Remove player from list
+else if bandit
+control -> gamer: Ask for location to watch
+gamer -> UI: Input location
+UI -> control: Give location
+control -> gamer: Ask for action
+gamer -> UI: Input action
+UI -> control: give inputted action
+player -> loc: Take action at location
+players -> control: Remove player from list
+loc -> control: Give action data if money involved
+
+else No More Players
+control -> UI: Switch game phase
+UI -> gamer: Show phase switch
+end
+```
+
+```plantuml
+@startuml
+
+title Check Observations
+hide footbox
+skin rose
+
+actor Gamer as gamer
+participant "c : Controller" as control
+participant "read : Scanner" as UI
+participant ":PlayerList" as players
+participant ":Player" as player
+participant ":Locations" as loc
+
+loop More Players
+control -> gamer: Ask for name
+gamer -> UI: Input name
+UI -> control: Give inputted name
+control -> players: findPlayer(name)
+alt if Cowboy
+control -> gamer: Ask for players or name
+gamer -> UI: give input
+UI -> control: relay input
+control -> gamer: display resulting info
+else if Bandit
+control -> gamer: display info
+end
+```
+
+```plantuml
 
 
 @startuml
@@ -82,111 +192,9 @@ ranch : ArrayList<Player>
 +getValue(place : String)
 }
 
+Player -> "Contained in" PlayerList: \t\t
+Player -> "Contained in" Location: \t\t
 Player <|-- Bandit
 Player <|-- Cowboy
 @enduml
-
 ```
-
-
-```plantuml
-
-
-@startuml
-
-
-title Take Action Sequence Diagram
-skin rose
-
-
-actor Gamer as gamer
-participant "TextUI: " as UI
-participant "PlayerClass: " as player
-participant "Locations:" as loc
-participant "GameRunner: " as game
-
-
-UI -> gamer : display list of names
-gamer -> UI : select own name
-UI -> player : check gamer's role
-player -> UI : return player's role
-UI -> gamer : display possible actions
-gamer -> UI : select action
-UI -> loc : give action data
-loc -->> game : give action data
-@enduml
-```
-
-```plantuml
-@startuml
-
-
-
-
-title Game Configure
-
-
-
-
-skin rose
-
-
-
-
-actor Gamer as gamer
-participant "TextUI: " as UI
-participant "PlayerClass: " as player
-participant "GameRunner: " as game
-
-
-
-UI -> gamer : ask for game parameters
-gamer -> UI : input game parameters
-UI -> game : set game parameters
-UI -> gamer : ask for player name
-gamer -> UI : input player name
-UI -> player : setName(name)
-player -> game : assign role and store data
-game -> UI : give role
-UI -> gamer : display role
-@enduml
-```
-
-
-
-
-```plantuml
-@startuml
-
-
-
-
-title Update Info
-
-
-
-
-skin rose
-
-
-
-
-actor Gamer as gamer
-participant "TextUI: " as UI
-participant "PlayerClass: " as player
-participant "Locations: " as loc
-participant "GameRunner: " as game
-
-
-
-
-UI -> gamer : display list of names
-gamer -> UI : select own name
-UI -> loc : get info from location
-loc -> UI : give info to UI
-UI -> gamer : display info
-@enduml
-```
-
-
-
