@@ -1,3 +1,4 @@
+package edu.vassar.cmpu203.high_noon_heist.model;
 
 /**
  * Superclass for Bandit and Cowboy subclasses

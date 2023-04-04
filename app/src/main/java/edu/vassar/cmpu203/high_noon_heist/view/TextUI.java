@@ -1,5 +1,14 @@
+package edu.vassar.cmpu203.high_noon_heist.view;
+
 import java.util.Scanner;
 import java.util.ArrayList;
+
+import edu.vassar.cmpu203.high_noon_heist.controller.Controller;
+import edu.vassar.cmpu203.high_noon_heist.model.Bandit;
+import edu.vassar.cmpu203.high_noon_heist.model.Cowboy;
+import edu.vassar.cmpu203.high_noon_heist.model.Location;
+import edu.vassar.cmpu203.high_noon_heist.model.Player;
+import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
 
 /**
  * Write a description of class TextUI here.
@@ -8,7 +17,7 @@ import java.util.ArrayList;
  * @version (a version number or a date)
  */
 public class TextUI
-{
+{/*
     public TextUI(){}
 
     /**
@@ -17,7 +26,7 @@ public class TextUI
      * @param Scanner s for reading inputs
      * @param int x which corresponds to the scanner
      * @return A valid value of x
-     */
+
     public int configIntErrorHandler(Scanner s, int x){
         boolean go = true;
         while (go){
@@ -38,7 +47,7 @@ public class TextUI
      * Text handler for setting up the game
      *
      * @param Controller c, which contains game data and runs the game
-     */
+
     public void configurePlayers(Controller control){
         Scanner read = new Scanner(System.in);
         int amt = 0;
@@ -94,7 +103,7 @@ public class TextUI
      *
      * @param Controller c which contains game data
      * @return ArrayList<Bandit> of bandits who have robbed
-     */
+
     public ArrayList<Bandit> actions(Controller control){
         PlayerList listCopy = control.copy();
         Scanner read = new Scanner(System.in);
@@ -222,4 +231,5 @@ public class TextUI
         if (control.checkWin() == 2)
             System.out.println("Bandits win!");
     }
+    */
 }

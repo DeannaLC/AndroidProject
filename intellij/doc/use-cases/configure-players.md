@@ -28,9 +28,10 @@ skin rose
 
 |System|
 start
-:Ask for number of bandits;
+:Ask for total players;
 :Ask for how much money bandits need to win;
 :Ask for how many ingame days;
+:Ask for number of bandits;
 |Players|
 :Input number of bandits;
 :Input amount of money needed to win;

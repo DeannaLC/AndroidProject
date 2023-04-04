@@ -1,10 +1,15 @@
+package edu.vassar.cmpu203.high_noon_heist.controller;
+
 import java.util.ArrayList;
 import java.util.Random;
 
+import edu.vassar.cmpu203.high_noon_heist.model.Location;
+import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
+
 public class Controller{
     int curDay = 0;
-    int dayLim;
-    int playerCount;
+    public int dayLim;
+    public int playerCount;
     int money = 0;
     int moneyLim;
     boolean inGame;
