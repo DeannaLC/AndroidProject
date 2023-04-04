@@ -1,3 +1,5 @@
+package edu.vassar.cmpu203.high_noon_heist.model;
+
 import java.util.ArrayList;
 import java.util.Random;
 

@@ -1,8 +1,10 @@
-package edu.vassar.cmpu203.high_noon_heist;
+package edu.vassar.cmpu203.high_noon_heist.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import edu.vassar.cmpu203.high_noon_heist.R;
 
 public class MainActivity extends AppCompatActivity {
 

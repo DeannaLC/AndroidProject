@@ -1,3 +1,5 @@
+package edu.vassar.cmpu203.high_noon_heist.model;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -7,8 +9,8 @@ import java.util.Iterator;
  * Class that contains list of players
  */
 public class PlayerList{
-    ArrayList players = new ArrayList<Player>();
-    ArrayList bandits = new ArrayList<Bandit>();
+    public ArrayList players = new ArrayList<Player>();
+    public ArrayList bandits = new ArrayList<Bandit>();
     ArrayList cowboys = new ArrayList<Cowboy>();
     
     public PlayerList(){}
