@@ -42,4 +42,11 @@ public class Player {
     void clearVotes(){
         this.votes = 0;
     }
+
+    public String displayRole(){
+        if (this instanceof Bandit)
+            return "Your role is bandit";
+        else
+            return "Your role is cowboy";
+    }
 }
