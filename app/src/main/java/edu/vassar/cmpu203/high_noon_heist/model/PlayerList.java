@@ -11,7 +11,7 @@ import java.util.Iterator;
 public class PlayerList{
     public ArrayList players = new ArrayList<Player>();
     public ArrayList bandits = new ArrayList<Bandit>();
-    ArrayList cowboys = new ArrayList<Cowboy>();
+    public ArrayList cowboys = new ArrayList<Cowboy>();
     
     public PlayerList(){}
 
@@ -36,6 +36,19 @@ public class PlayerList{
             return 1;
         }
     }
+
+    public void addCowboy(String name){
+        Cowboy c = new Cowboy(name);
+        players.add(c);
+        cowboys.add(c);
+    }
+
+    public void addBandit(String name){
+        Bandit b = new Bandit(name);
+        players.add(b);
+        bandits.add(b);
+    }
+
     
     public PlayerList copy(){
         PlayerList ret = new PlayerList();
@@ -48,13 +61,18 @@ public class PlayerList{
     }
     
     public String toString(){
-        String playersRes = "Players: ";
+        String playersRes = "";//"Players: ";
         Player p;
         for (int i = 0; i < players.size(); i++){
-            p = (Player) (players.get(i));
+            p = (Player) players.get(i);
             playersRes += p.name;
-            if (i != (players.size() - 1))
-                playersRes += ", ";
+            if (p.role() == 0)
+                playersRes += " the cowboy";
+            else
+                playersRes += " the bandit";
+            playersRes += "\n";
+            //if (i != (players.size() - 1))
+            //    playersRes += ", ";
         }
         return playersRes;
     }
@@ -68,4 +86,5 @@ public class PlayerList{
         }
         return null;
     }
+
 }
