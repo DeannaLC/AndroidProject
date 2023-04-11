@@ -10,10 +10,13 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import edu.vassar.cmpu203.high_noon_heist.R;
+import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentAddPlayersBinding;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentConfigGameBinding;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
@@ -40,6 +43,7 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        this.binding.confirmButton.setVisibility(View.INVISIBLE);
         this.binding.addNameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                     Editable playerNameEditable = AddPlayersFragment.this.binding.nameInputEditable.getText();
@@ -69,6 +73,24 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
                 }
             });
         }
+    }
+
+    public void showRole(MainActivity main){
+        this.binding.addNameButton.setVisibility(View.INVISIBLE);
+        this.binding.showRoleView.setText(main.showRole());
+        this.binding.confirmButton.setVisibility(View.VISIBLE);
+
+        this.binding.confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                AddPlayersFragment.this.clearRole();
+            }
+        });
+    }
+
+    public void clearRole(){
+        this.binding.showRoleView.setText(null);
+        this.binding.confirmButton.setVisibility(View.INVISIBLE);
     }
 
 }
