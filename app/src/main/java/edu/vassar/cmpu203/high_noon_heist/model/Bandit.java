@@ -35,7 +35,7 @@ public class Bandit extends Player
         }
         else
             retPlayer = l.randPlayer(this.name, this.loc);
-            if (retPlayer == null)
+        if (retPlayer == null)
                 return null;
             return (l.randPlayer(this.name, this.loc)).name;
     }
