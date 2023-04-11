@@ -53,5 +53,9 @@ public class Bandit extends Player
             l.ranch.add(this);
         return l.getValue(place);
     }
+
+    public String displayRole(){
+        return "Your role is Bandit";
+    }
 }
 

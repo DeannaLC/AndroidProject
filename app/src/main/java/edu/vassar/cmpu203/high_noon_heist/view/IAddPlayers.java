@@ -10,6 +10,10 @@ public interface IAddPlayers {
 
         //void onConfiguredGame();
 
+        boolean checkPlayerCap();
+
+        public void onPlayersSet();
+
     }
 
     void showNames(PlayerList players);

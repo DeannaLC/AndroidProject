@@ -20,8 +20,9 @@ import edu.vassar.cmpu203.high_noon_heist.view.IConfigGame;
 import edu.vassar.cmpu203.high_noon_heist.view.IMainView;
 import edu.vassar.cmpu203.high_noon_heist.view.IShowRole;
 import edu.vassar.cmpu203.high_noon_heist.view.MainView;
+import edu.vassar.cmpu203.high_noon_heist.view.ShowRoleFragment;
 
-public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener {
+public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IShowRole.Listener {
 
     int curDay = 0;
     int dayLim;
@@ -45,12 +46,15 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.setContentView(mainView.getRootView());
 
         this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
-        //this.mainView.displayFragment(new AddPlayersFragment(this), true, "addPlayers");
+    }
 
+    public boolean checkPlayerCap(){
+        return this.playerCount == this.playersList.players.size();
+    }
 
-        //this.addPlayersView = new AddPlayersView(this, this);
-        //this.setContentView(addPlayersView.getRootView());
-
+    public void onPlayersSet(){
+        ShowRoleFragment showRole = new ShowRoleFragment();
+        this.mainView.displayFragment(showRole, false, "showRole");
     }
 
     public void draw(){
@@ -99,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         addPlayers.showNames(this.playersList);
     }
 
-    public String showRole(IShowRole role){
+    public String showRole(){
         Player p = (Player) this.playersList.players.get(playersList.players.size() - 1);
         return p.displayRole();
     }

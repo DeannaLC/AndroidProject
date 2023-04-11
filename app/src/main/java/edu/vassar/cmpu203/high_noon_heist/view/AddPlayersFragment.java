@@ -42,24 +42,33 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.binding.addNameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                Editable playerNameEditable = AddPlayersFragment.this.binding.nameInputEditable.getText();
-                String playerName = playerNameEditable.toString();
+                    Editable playerNameEditable = AddPlayersFragment.this.binding.nameInputEditable.getText();
+                    String playerName = playerNameEditable.toString();
 
-                if (playerName.length() == 0){
-                    Snackbar sb = Snackbar.make(view, "need player name", Snackbar.LENGTH_LONG);
-                    sb.show();
-                    return;
+                    if (playerName.length() == 0) {
+                        Snackbar sb = Snackbar.make(view, "need player name", Snackbar.LENGTH_LONG);
+                        sb.show();
+                        return;
+                    }
+
+                    playerNameEditable.clear();
+
+                    AddPlayersFragment.this.listener.onAddedPlayer(playerName, AddPlayersFragment.this);
+
                 }
-
-                playerNameEditable.clear();
-
-                AddPlayersFragment.this.listener.onAddedPlayer(playerName, AddPlayersFragment.this);
-
-            }
         });
     }
 
     public void showNames(PlayerList players){
         this.binding.displayPlayers.setText(players.toString());
+        if (AddPlayersFragment.this.listener.checkPlayerCap()){
+            this.binding.addNameButton.setText("Next");
+            this.binding.addNameButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view){
+                    AddPlayersFragment.this.listener.onPlayersSet();
+                }
+            });
+        }
     }
+
 }

@@ -18,12 +18,19 @@ import edu.vassar.cmpu203.high_noon_heist.model.Player;
 public class ShowRoleFragment extends Fragment implements IShowRole {
 
     private FragmentShowRoleBinding binding;
+    private Listener listener;
 
     public ShowRoleFragment() {
     }
 
-    public void showRole(MainActivity main, IShowRole showRole){
-        this.binding.playerRole.setText(main.showRole(this));
+    public ShowRoleFragment(Listener listener){
+        this.listener = listener;
+    }
+
+
+
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+        this.binding.playerRole.setText(this.listener.showRole());
     }
 
 

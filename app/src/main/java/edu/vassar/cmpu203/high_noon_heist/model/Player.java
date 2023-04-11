@@ -44,9 +44,6 @@ public class Player {
     }
 
     public String displayRole(){
-        if (this instanceof Bandit)
-            return "Your role is bandit";
-        else
-            return "Your role is cowboy";
+        return "hi";
     }
 }

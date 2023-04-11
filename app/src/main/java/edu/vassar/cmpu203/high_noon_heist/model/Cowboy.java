@@ -42,4 +42,8 @@ public class Cowboy extends Player
     public int role(){
         return 0;
     }
+
+    public String displayRole(){
+        return "Your role is Cowboy";
+    }
 }
