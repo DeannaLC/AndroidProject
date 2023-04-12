@@ -63,9 +63,12 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
         });
     }
 
+
     public void showNames(PlayerList players){
         this.binding.displayPlayers.setText(players.toString());
         if (AddPlayersFragment.this.listener.checkPlayerCap()){
+            this.binding.nameInputEditable.setVisibility(View.INVISIBLE);
+            this.binding.addPlayersText.setVisibility(View.INVISIBLE);
             this.binding.addNameButton.setText("Next");
             this.binding.addNameButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view){
@@ -79,18 +82,26 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
         this.binding.addNameButton.setVisibility(View.INVISIBLE);
         this.binding.showRoleView.setText(main.showRole());
         this.binding.confirmButton.setVisibility(View.VISIBLE);
+        this.binding.nameInputEditable.setVisibility(View.INVISIBLE);
+        this.binding.addPlayersText.setVisibility(View.INVISIBLE);
+        this.binding.displayPlayers.setVisibility(View.INVISIBLE);
 
         this.binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                AddPlayersFragment.this.clearRole();
+                AddPlayersFragment.this.clearRole(main.getPlayers());
             }
         });
     }
 
-    public void clearRole(){
+    public void clearRole(PlayerList players){
+        this.binding.nameInputEditable.setVisibility(View.VISIBLE);
+        this.binding.addPlayersText.setVisibility(View.VISIBLE);
+        this.binding.displayPlayers.setVisibility(View.VISIBLE);
         this.binding.showRoleView.setText(null);
         this.binding.confirmButton.setVisibility(View.INVISIBLE);
+        this.binding.addNameButton.setVisibility(View.VISIBLE);
+        this.showNames(players);
     }
 
 }

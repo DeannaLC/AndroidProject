@@ -12,17 +12,15 @@ import java.util.Random;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
 import edu.vassar.cmpu203.high_noon_heist.view.AddPlayersFragment;
-import edu.vassar.cmpu203.high_noon_heist.view.AddPlayersView;
 import edu.vassar.cmpu203.high_noon_heist.view.ConfigGameFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.IAddPlayers;
-import edu.vassar.cmpu203.high_noon_heist.view.IAddPlayersView;
 import edu.vassar.cmpu203.high_noon_heist.view.IConfigGame;
 import edu.vassar.cmpu203.high_noon_heist.view.IMainView;
-import edu.vassar.cmpu203.high_noon_heist.view.IShowRole;
+import edu.vassar.cmpu203.high_noon_heist.view.IPlayerListAction;
 import edu.vassar.cmpu203.high_noon_heist.view.MainView;
-import edu.vassar.cmpu203.high_noon_heist.view.ShowRoleFragment;
+import edu.vassar.cmpu203.high_noon_heist.view.PlayerListActionFragment;
 
-public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IShowRole.Listener {
+public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener {
 
     int curDay = 0;
     int dayLim;
@@ -31,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     int playerCount;
     int banditCount;
     private PlayerList playersList;
-    private IAddPlayersView addPlayersView;
     private List banditVals;
+    private Player current;
 
     private IMainView mainView;
 
@@ -48,13 +46,22 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
     }
 
+    @Override
+    public PlayerList getPlayerListCopy(){
+        return this.playersList.copyPlayers();
+    }
+
     public boolean checkPlayerCap(){
         return this.playerCount == this.playersList.players.size();
     }
 
+    @Override
     public void onPlayersSet(){
-        ShowRoleFragment showRole = new ShowRoleFragment();
-        this.mainView.displayFragment(showRole, false, "showRole");
+        this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
+    }
+
+    public Player findPlayer(String name){
+        return this.playersList.findPlayer(name);
     }
 
     public void draw(){
@@ -100,12 +107,16 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
             playersList.addCowboy(name);
         else
             playersList.addBandit(name);
-        addPlayers.showNames(this.playersList);
+        addPlayers.showRole(this);
     }
 
     public String showRole(){
         Player p = (Player) this.playersList.players.get(playersList.players.size() - 1);
         return p.displayRole();
+    }
+
+    public void setCurrentPlayer(Player current){
+        this.current = current;
     }
 
     public void onSetCount(int total, int bandits){
@@ -115,5 +126,13 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
 
     public String toString(){
         return this.playerCount + " players, " + this.banditCount + " bandits, " + this.dayLim + " days, " + this.moneyLim + "$ to win";
+    }
+
+    public PlayerList getPlayers(){
+        return this.playersList;
+    }
+    @Override
+    public void playerSelected(){
+
     }
 }

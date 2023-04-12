@@ -50,7 +50,7 @@ public class PlayerList{
     }
 
     
-    public PlayerList copy(){
+    public PlayerList copyPlayers(){
         PlayerList ret = new PlayerList();
         Player p;
         for (int i = 0; i < players.size(); i = i + 1){
@@ -66,10 +66,6 @@ public class PlayerList{
         for (int i = 0; i < players.size(); i++){
             p = (Player) players.get(i);
             playersRes += p.name;
-            if (p.role() == 0)
-                playersRes += " the cowboy";
-            else
-                playersRes += " the bandit";
             playersRes += "\n";
             //if (i != (players.size() - 1))
             //    playersRes += ", ";
