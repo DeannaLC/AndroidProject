@@ -50,7 +50,10 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
 
         this.binding.confirmActionPlayer.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                PlayerListActionFragment.this.listener.playerSelected();
+                int selected = PlayerListActionFragment.this.binding.playerActionList.getCheckedRadioButtonId();
+                RadioButton selectedButton = PlayerListActionFragment.this.binding.playerActionList.findViewById(selected);
+                String name = selectedButton.getText().toString();
+                PlayerListActionFragment.this.listener.playerSelected(name);
             }
         });
     }
@@ -60,12 +63,5 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.binding = FragmentPlayerListActionBinding.inflate(inflater);
         return this.binding.getRoot();
-    }
-
-    public void getSelected(){
-        int selected = this.binding.playerActionList.getCheckedRadioButtonId();
-        RadioButton selectedButton = this.binding.playerActionList.findViewById(selected);
-        String name = selectedButton.getText().toString();
-        listener.setCurrentPlayer(listener.getPlayerListCopy().findPlayer(name));
     }
 }

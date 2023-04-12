@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import edu.vassar.cmpu203.high_noon_heist.model.Location;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
+import edu.vassar.cmpu203.high_noon_heist.view.ActionSelectFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.AddPlayersFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ConfigGameFragment;
+import edu.vassar.cmpu203.high_noon_heist.view.IActionSelect;
 import edu.vassar.cmpu203.high_noon_heist.view.IAddPlayers;
 import edu.vassar.cmpu203.high_noon_heist.view.IConfigGame;
 import edu.vassar.cmpu203.high_noon_heist.view.IMainView;
@@ -20,7 +23,7 @@ import edu.vassar.cmpu203.high_noon_heist.view.IPlayerListAction;
 import edu.vassar.cmpu203.high_noon_heist.view.MainView;
 import edu.vassar.cmpu203.high_noon_heist.view.PlayerListActionFragment;
 
-public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener {
+public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener {
 
     int curDay = 0;
     int dayLim;
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     private PlayerList playersList;
     private List banditVals;
     private Player current;
+
+    private Location loc = new Location();
 
     private IMainView mainView;
 
@@ -119,10 +124,10 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.current = current;
     }
 
-    public void onSetCount(int total, int bandits){
+    /*public void onSetCount(int total, int bandits){
         this.playerCount = total;
         this.draw();
-    }
+    }*/
 
     public String toString(){
         return this.playerCount + " players, " + this.banditCount + " bandits, " + this.dayLim + " days, " + this.moneyLim + "$ to win";
@@ -132,7 +137,20 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         return this.playersList;
     }
     @Override
-    public void playerSelected(){
+    public void playerSelected(String name){
+        Player cur = this.findPlayer(name);
+        this.setCurrentPlayer(cur);
+        ActionSelectFragment action = new ActionSelectFragment(this.current, this);
+        this.mainView.displayFragment(action, false, "act");
+    }
 
+    public void observeAt(String place, Player player){
+        player.observe(this.loc, place);
+    }
+
+    public int stealFrom(String place){
+        int val = this.loc.getValue(place);
+        this.curMoney = this.curMoney + val;
+        return val;
     }
 }

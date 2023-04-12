@@ -10,7 +10,7 @@ public interface IPlayerListAction {
 
         public void setCurrentPlayer(Player player);
 
-        public void playerSelected();
+        public void playerSelected(String name);
     }
 
 

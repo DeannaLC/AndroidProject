@@ -21,7 +21,6 @@ public class Player {
         this.loc = loc;
         if (loc.equals("bank")){
             (l.bank).add(this);
-            System.out.println();
         }
         else if (loc.equals("saloon"))
             (l.saloon).add(this);
