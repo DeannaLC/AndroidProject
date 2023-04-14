@@ -56,6 +56,11 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
             public void onClick(View view){
                 int selected = PlayerListActionFragment.this.binding.playerActionList.getCheckedRadioButtonId();
                 RadioButton selectedButton = PlayerListActionFragment.this.binding.playerActionList.findViewById(selected);
+                if (selectedButton == null){
+                    Snackbar sb = Snackbar.make(view, "need to select a player", Snackbar.LENGTH_LONG);
+                    sb.show();
+                    return;
+                }
                 String name = selectedButton.getText().toString();
                 PlayerListActionFragment.this.listener.playerSelected(name);
             }
