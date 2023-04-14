@@ -27,27 +27,31 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
     private FragmentPlayerListActionBinding binding;
 
     private Listener listener;
+    private PlayerList activePlayers;
 
-    public PlayerListActionFragment() {
+    public PlayerListActionFragment(){
         // Required empty public constructor
     }
 
-    public PlayerListActionFragment(Listener listener){
+    public PlayerListActionFragment(Listener listener, PlayerList activePlayers){
         this.listener = listener;
+        this.activePlayers = activePlayers;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        PlayerList active = this.listener.getPlayerListCopy();
         RadioButton newButton;
         Player cur;
-        for (int i = 0; i < active.players.size(); i = i + 1) {
+        for (int i = 0; i < this.activePlayers.players.size(); i = i + 1) {
             newButton = new RadioButton(super.getContext());
-            cur = (Player) active.players.get(i);
+            cur = (Player) activePlayers.players.get(i);
             newButton.setText(cur.getName());
             this.binding.playerActionList.addView(newButton);
         }
-
+        if (this.listener.checkPhase() == 1)
+            this.binding.selectText.setText("Choose a player to take Action");
+        else
+            this.binding.selectText.setText("Choose a player to view Action results");
         this.binding.confirmActionPlayer.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 int selected = PlayerListActionFragment.this.binding.playerActionList.getCheckedRadioButtonId();

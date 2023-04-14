@@ -21,10 +21,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/actionText"
+                android:id="@+id/selectText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Select Player to take Action" />
+                android:layout_height="wrap_content" />
 
             <RadioGroup
                 android:id="@+id/playerActionList"

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import edu.vassar.cmpu203.high_noon_heist.model.Cowboy;
 import edu.vassar.cmpu203.high_noon_heist.model.Location;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
@@ -20,10 +21,13 @@ import edu.vassar.cmpu203.high_noon_heist.view.IAddPlayers;
 import edu.vassar.cmpu203.high_noon_heist.view.IConfigGame;
 import edu.vassar.cmpu203.high_noon_heist.view.IMainView;
 import edu.vassar.cmpu203.high_noon_heist.view.IPlayerListAction;
+import edu.vassar.cmpu203.high_noon_heist.view.IViewObservation;
 import edu.vassar.cmpu203.high_noon_heist.view.MainView;
 import edu.vassar.cmpu203.high_noon_heist.view.PlayerListActionFragment;
+import edu.vassar.cmpu203.high_noon_heist.view.ResultScreenFragment;
+import edu.vassar.cmpu203.high_noon_heist.view.ViewObservationFragment;
 
-public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener {
+public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener, IViewObservation.Listener {
 
     int curDay = 0;
     int dayLim;
@@ -34,10 +38,13 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     private PlayerList playersList;
     private List banditVals;
     private Player current;
+    private PlayerList canAct;
 
     private Location loc = new Location();
 
     private IMainView mainView;
+    //1 for action, 2 for observation, 3 for daytime
+    private int gamePhase;
 
 
     @Override
@@ -51,9 +58,12 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
     }
 
-    @Override
     public PlayerList getPlayerListCopy(){
         return this.playersList.copyPlayers();
+    }
+
+    public int getMoney(){
+        return this.curMoney;
     }
 
     public boolean checkPlayerCap(){
@@ -62,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
 
     @Override
     public void onPlayersSet(){
-        this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
+        this.canAct = this.getPlayerListCopy();
+        this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "listAction");
     }
 
     public Player findPlayer(String name){
@@ -100,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
 
     public void onOptionsSet(){
         AddPlayersFragment addPlayersFrag = new AddPlayersFragment(this);
+        this.gamePhase = 1;
         this.mainView.displayFragment(addPlayersFrag, false, "addPlayers");
     }
 
@@ -124,10 +136,6 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.current = current;
     }
 
-    /*public void onSetCount(int total, int bandits){
-        this.playerCount = total;
-        this.draw();
-    }*/
 
     public String toString(){
         return this.playerCount + " players, " + this.banditCount + " bandits, " + this.dayLim + " days, " + this.moneyLim + "$ to win";
@@ -140,17 +148,62 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     public void playerSelected(String name){
         Player cur = this.findPlayer(name);
         this.setCurrentPlayer(cur);
-        ActionSelectFragment action = new ActionSelectFragment(this.current, this);
-        this.mainView.displayFragment(action, false, "act");
+        if (this.gamePhase == 1) {
+            ActionSelectFragment action = new ActionSelectFragment(this.current, this);
+            this.mainView.displayFragment(action, true, "act");
+        }
+        else if (this.gamePhase == 2){
+            ViewObservationFragment observation = new ViewObservationFragment(this, this.current);
+            this.mainView.displayFragment(observation, true, "observe");
+        }
+    }
+
+    @Override
+    public int checkPhase(){
+        return this.gamePhase;
+    }
+
+    @Override
+    public void onActionDone(){
+        this.canAct.removePlayer(current);
+        if (this.canAct.players.size() > 0)
+            this.mainView.displayFragment(new PlayerListActionFragment(this, canAct), true, "listAction");
+        else{
+            if (this.gamePhase == 1) {
+                this.gamePhase = 2;
+                canAct = this.getPlayerListCopy();
+                this.mainView.displayFragment(new PlayerListActionFragment(this, canAct), true, "listAction");
+            }
+            else
+                this.mainView.displayFragment(new ResultScreenFragment(this), true, "results");
+
+        }
     }
 
     public void observeAt(String place, Player player){
         player.observe(this.loc, place);
     }
 
+    public String showObservation(int number){
+        return this.current.observation(this.loc, number);
+    }
+
     public int stealFrom(String place){
-        int val = this.loc.getValue(place);
+        int val = current.rob(this.loc, place);
         this.curMoney = this.curMoney + val;
         return val;
+    }
+
+    public int checkWin(){
+        if (curDay == dayLim)
+            return 3;
+        else if ((playersList.bandits).size() > ((playersList.cowboys).size()))
+            return 2;
+        else if (curMoney >= moneyLim)
+            return 2;
+        else if ((playersList.bandits).size() == 0)
+            return 3;
+        else
+            return 1;
     }
 }

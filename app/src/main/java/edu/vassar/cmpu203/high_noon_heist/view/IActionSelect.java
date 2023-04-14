@@ -7,5 +7,7 @@ public interface IActionSelect {
         public void observeAt(String place, Player player);
 
         public int stealFrom(String place);
+
+        public void onActionDone();
     }
 }

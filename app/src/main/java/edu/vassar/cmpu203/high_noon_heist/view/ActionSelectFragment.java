@@ -18,11 +18,6 @@ import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentActionSelectBindin
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentAddPlayersBinding;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ActionSelectFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ActionSelectFragment extends Fragment implements IActionSelect{
 
     Player active;
@@ -59,9 +54,9 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         View.OnClickListener ret = new View.OnClickListener() {
             public void onClick(View view) {
                 ActionSelectFragment.this.listener.observeAt(place.toLowerCase(), ActionSelectFragment.this.active);
-                ActionSelectFragment.this.binding.buttonSet.setVisibility(View.INVISIBLE);
+                ActionSelectFragment.this.binding.buttonSet.removeAllViews();
                 ActionSelectFragment.this.binding.splashText.setText("You chose to watch the " + place + " for the night");
-
+                ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());
             }
         };
         return ret;
@@ -71,10 +66,22 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         return new View.OnClickListener() {
             public void onClick(View view){
                 int val = ActionSelectFragment.this.listener.stealFrom(place);
-                ActionSelectFragment.this.binding.buttonSet.setVisibility(View.INVISIBLE);
+                ActionSelectFragment.this.binding.buttonSet.removeAllViews();
                 ActionSelectFragment.this.binding.splashText.setText("You stole " + val + "$ from the " + place);
+                ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());
             }
         };
+    }
+
+    public Button addConfirm(){
+        Button confirm = new MaterialButton(super.getContext());
+        confirm.setText("Confirm");
+        confirm.setOnClickListener(new View.OnClickListener(){
+           public void onClick(View view){
+               ActionSelectFragment.this.listener.onActionDone();
+           }
+        });
+        return confirm;
     }
 
     public void cowboyAction() {
@@ -113,11 +120,11 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
                bank.setText("Bank");
                bank.setOnClickListener(ActionSelectFragment.this.generalStealButton("bank"));
                Button saloon = new MaterialButton(ActionSelectFragment.super.getContext());
-               bank.setText("Saloon");
-               bank.setOnClickListener(ActionSelectFragment.this.generalStealButton("saloon"));
+               saloon.setText("Saloon");
+               saloon.setOnClickListener(ActionSelectFragment.this.generalStealButton("saloon"));
                Button ranch = new MaterialButton(ActionSelectFragment.super.getContext());
-               bank.setText("ranch");
-               bank.setOnClickListener(ActionSelectFragment.this.generalStealButton("ranch"));
+               ranch.setText("ranch");
+               ranch.setOnClickListener(ActionSelectFragment.this.generalStealButton("ranch"));
                ActionSelectFragment.this.binding.buttonSet.addView(bank);
                ActionSelectFragment.this.binding.buttonSet.addView(saloon);
                ActionSelectFragment.this.binding.buttonSet.addView(ranch);;

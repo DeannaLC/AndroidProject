@@ -83,4 +83,8 @@ public class PlayerList{
         return null;
     }
 
+    public void removePlayer(Player p){
+        this.players.remove(p);
+    }
+
 }

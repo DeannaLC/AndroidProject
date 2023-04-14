@@ -42,6 +42,17 @@ public class Player {
         this.votes = 0;
     }
 
+    public String viewLoc(){
+        return this.loc;
+    }
+
+    public String observation(Location loc, int a){
+        return "";
+    }
+
+    public int rob(Location l, String place){
+        return 0;
+    };
     public String displayRole(){
         return "hi";
     }
