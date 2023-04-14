@@ -35,6 +35,19 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
 
     private IMainView mainView;
 
+    public MainActivity(int dayLim, int moneyLim, int playerCount, int banditCount)
+    {
+        this.dayLim = dayLim;
+        this.moneyLim = moneyLim;
+        this.playerCount = playerCount;
+        this.banditCount = banditCount;
+
+    }
+
+    public List retBanditVals()
+    {
+        return this.banditVals;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
