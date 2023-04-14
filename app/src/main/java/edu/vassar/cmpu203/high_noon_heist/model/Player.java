@@ -21,7 +21,6 @@ public class Player {
         this.loc = loc;
         if (loc.equals("bank")){
             (l.bank).add(this);
-            System.out.println();
         }
         else if (loc.equals("saloon"))
             (l.saloon).add(this);
@@ -43,10 +42,18 @@ public class Player {
         this.votes = 0;
     }
 
+    public String viewLoc(){
+        return this.loc;
+    }
+
+    public String observation(Location loc, int a){
+        return "";
+    }
+
+    public int rob(Location l, String place){
+        return 0;
+    };
     public String displayRole(){
-        if (this instanceof Bandit)
-            return "Your role is bandit";
-        else
-            return "Your role is cowboy";
+        return "hi";
     }
 }

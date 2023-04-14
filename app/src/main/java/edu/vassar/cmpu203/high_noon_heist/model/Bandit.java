@@ -21,11 +21,14 @@ public class Bandit extends Player
         super(name);
     }
 
-    public String observation(Location l){
+    public String observation(Location l, int a){
+        //int a doesn't do anything, there to satisfy polymorphism requirement
+        if (robbed)
+            return "";
         Player retPlayer;
         Random rnd = new Random();
-        int a = rnd.nextInt(2);
-        if (a == 0){
+        int b = rnd.nextInt(2);
+        if (b == 0){
             if ((this.loc).equals("bank"))
                 return  "" + (l.bank).size();
             else if ((this.loc).equals("saloon"))
@@ -36,8 +39,8 @@ public class Bandit extends Player
         else
             retPlayer = l.randPlayer(this.name, this.loc);
         if (retPlayer == null)
-                return null;
-            return (l.randPlayer(this.name, this.loc)).name;
+            return null;
+        return (l.randPlayer(this.name, this.loc)).name;
     }
 
     public int role(){
@@ -45,13 +48,24 @@ public class Bandit extends Player
     }
     
     public int rob(Location l, String place){
-        if (place.equals("bank"))
+        this.robbed = true;
+        if (place.equals("bank")) {
+            this.loc = "bank";
             l.bank.add(this);
-        else if (place.equals("saloon"))
+        }
+        else if (place.equals("saloon")) {
             l.saloon.add(this);
-        else
+            this.loc = "saloon";
+        }
+        else {
             l.ranch.add(this);
+            this.loc = "ranch";
+        }
         return l.getValue(place);
+    }
+
+    public String displayRole(){
+        return "Your role is Bandit";
     }
 }
 

@@ -21,16 +21,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="140dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/displayPlayers">
 
             <TextView
-                android:id="@+id/textview"
+                android:id="@+id/addPlayersText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Player Names" />
@@ -46,6 +48,36 @@
             <Button
                 android:id="@+id/addNameButton"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/roleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <TextView
+                android:id="@+id/showRoleView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="353dp"
+                android:layout_marginRight="353dp"
+                android:layout_marginBottom="0dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/confirmButton"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Button" />
         </LinearLayout>

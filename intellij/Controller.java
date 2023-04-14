@@ -7,7 +7,6 @@ import java.util.Random;
 
 import edu.vassar.cmpu203.high_noon_heist.model.Location;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
-import edu.vassar.cmpu203.high_noon_heist.view.IAddPlayersView;
 
 public class Controller{
     int curDay = 0;
