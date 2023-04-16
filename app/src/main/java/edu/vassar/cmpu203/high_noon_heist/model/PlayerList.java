@@ -22,20 +22,6 @@ public class PlayerList{
      * @param cur, current index of Player being added
      * @return 0 if the new Player is a cowboy, 1 if the new Player is a bandit
      */
-    public int addPlayer(String name, ArrayList bands, int cur){
-        if (bands.indexOf(cur) == -1){
-            Cowboy cow = new Cowboy(name);
-            players.add(cow);
-            cowboys.add(cow);
-            return 0;
-        }
-        else{
-            Bandit band = new Bandit(name);
-            players.add(band);
-            bandits.add(band);
-            return 1;
-        }
-    }
 
     public void addCowboy(String name){
         Cowboy c = new Cowboy(name);
