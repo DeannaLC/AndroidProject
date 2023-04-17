@@ -19,20 +19,22 @@ public class Location
      * Constructor for objects of class Locations
      */
     public Location(){}
-    
-    /*public void addPlayers(){
-        bank.add(new Player("jeff"));
-        bank.add(new Player("geoff"));
-        bank.add(new Player("jeffrey"));
-        bank.add(new Player("jebediah"));
-    }*/
-    
+
+    /**
+     * Clears players in all the places
+     */
     public void clearLocs(){
         this.bank = new ArrayList<Player>();
         this.saloon = new ArrayList<Player>();
         this.ranch = new ArrayList<Player>();
     }
 
+    /**
+     * Gets a random Player from one of the location
+     * @param name of Player checking
+     * @param place, the location a Player is picked from
+     * @return
+     */
     public Player randPlayer(String name, String place){
         boolean repeat = true;
         Random rnd = new Random();
@@ -70,7 +72,12 @@ public class Location
         //satisfy return value, will never reach this
         return new Player("");
     }
-    
+
+    /**
+     * Gets the amount being stolen from a place
+     * @param place, where money is stolen from
+     * @return the amount stolen
+     */
     public int getValue(String place){
         Random rnd = new Random();
         if (place.equals("bank"))

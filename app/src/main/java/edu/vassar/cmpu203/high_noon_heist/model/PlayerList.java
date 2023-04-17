@@ -59,6 +59,11 @@ public class PlayerList{
         return playersRes;
     }
 
+    /**
+     * Finds a Player by their name
+     * @param person, name of the Player
+     * @return Player with name inputted, null if not found
+     */
     public Player findPlayer(String person){
         Player h;
         for (int i = 0; i < players.size(); i = i + 1){
@@ -69,6 +74,10 @@ public class PlayerList{
         return null;
     }
 
+    /**
+     * Removes a Player from the game
+     * @param p, Player being removed
+     */
     public void removePlayer(Player p){
         this.players.remove(p);
     }

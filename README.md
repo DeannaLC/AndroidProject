@@ -19,4 +19,5 @@ the results of their actions. There's a win check at the end that will display a
 Inputs are handled through Android input field declarations. Empty fields or invalid inputs are handled and asks the player to change their selection.
 
 Testing was not done for handling a large number of players. Not sure what it would do in terms of screen display. 
+Unit Tests also only pick one set of actions and observations to avoid complications. 
 

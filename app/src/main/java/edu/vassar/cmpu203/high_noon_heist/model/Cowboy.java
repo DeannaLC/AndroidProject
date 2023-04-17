@@ -3,12 +3,6 @@ package edu.vassar.cmpu203.high_noon_heist.model;
 import java.util.Random;
 import java.util.ArrayList;
 
-/**
- * Write a description of class Cowboy here.
- *
- * @author (your name)
- * @version (a version number or a date)
- */
 public class Cowboy extends Player
 {
 
@@ -19,9 +13,14 @@ public class Cowboy extends Player
     {
         super(name);
     }
-    
+
+    /**
+     * Allows a cowboy to get information from a location
+     * @param l, Location they're getting info from
+     * @param a, 0 if they get amount of people, 1 if they get a random other name
+     * @return
+     */
     public String observation(Location l, int a){
-        String b;
         Player retPlayer;
         if (a == 0){
             if ((this.loc).equals("bank"))
@@ -39,6 +38,10 @@ public class Cowboy extends Player
         }
     }
 
+    /**
+     * Identifier for Cowboy
+     * @return 0 to show Player is a Cowboy
+     */
     public int role(){
         return 0;
     }

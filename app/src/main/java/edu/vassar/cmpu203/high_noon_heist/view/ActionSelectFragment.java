@@ -18,6 +18,9 @@ import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentActionSelectBindin
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentAddPlayersBinding;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 
+/**
+ * Fragment for a Player taking an action
+ */
 public class ActionSelectFragment extends Fragment implements IActionSelect{
 
     Player active;
@@ -28,6 +31,11 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         // Required empty public constructor
     }
 
+    /**
+     * Constructor for ActionSelectFragment
+     * @param active, current player who's making an action
+     * @param listener, MainActivity which controls the game
+     */
     public ActionSelectFragment(Player active, Listener listener){
         this.active = active;
         this.listener = listener;
@@ -50,6 +58,12 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         return this.binding.getRoot();
     }
 
+    /**
+     * General template for a button made to observe a location
+     *
+     * @param place, name of the location to be observed
+     * @return View.OnClickListener for a button to use
+     */
     public View.OnClickListener generalObserveButton(String place) {
         View.OnClickListener ret = new View.OnClickListener() {
             public void onClick(View view) {
@@ -62,6 +76,12 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         return ret;
     }
 
+    /**
+     * General template for a button made to steal from a location
+     *
+     * @param place, name of the location to be stolen from
+     * @return View.OnClickListener for a button to use
+     */
     public View.OnClickListener generalStealButton(String place){
         return new View.OnClickListener() {
             public void onClick(View view){
@@ -73,6 +93,10 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         };
     }
 
+    /**
+     * Creates a confirm button
+     * @return Confirm button to go to another screen
+     */
     public Button addConfirm(){
         Button confirm = new MaterialButton(super.getContext());
         confirm.setText("Confirm");
@@ -84,6 +108,9 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         return confirm;
     }
 
+    /**
+     * Called for a Cowboy to perform an action
+     */
     public void cowboyAction() {
         this.binding.splashText.setText("Choose a place to watch for the night");
         Button bank = new MaterialButton(super.getContext());
@@ -100,6 +127,9 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         this.binding.buttonSet.addView(ranch);
     }
 
+    /**
+     * Called for a bandit to perform an action
+     */
     public void banditAction(){
         this.binding.splashText.setText("Choose to Watch or Steal");
         Button watch = new MaterialButton(super.getContext());

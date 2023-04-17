@@ -9,6 +9,10 @@ public class Player {
     String loc;
     int votes;
 
+    /**
+     * General Player constructor
+     * @param name of Player
+     */
     public Player(String name) {
         this.name = name;
     }

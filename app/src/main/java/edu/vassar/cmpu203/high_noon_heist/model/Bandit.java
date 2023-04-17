@@ -3,10 +3,7 @@ package edu.vassar.cmpu203.high_noon_heist.model;
 import java.util.Random;
 
 /**
- * Write a description of class Bandit here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * Bandit class
  */
 public class Bandit extends Player
 {
@@ -21,6 +18,13 @@ public class Bandit extends Player
         super(name);
     }
 
+    /**
+     * Allows a bandit to get information from a Location
+     *
+     * @param l, Location they're going to
+     * @param a, doesn't do anything but there to satisfy superclass
+     * @return
+     */
     public String observation(Location l, int a){
         //int a doesn't do anything, there to satisfy polymorphism requirement
         if (robbed)
@@ -43,10 +47,20 @@ public class Bandit extends Player
         return (l.randPlayer(this.name, this.loc)).name;
     }
 
+    /**
+     * Gives a number showing what role a Player is
+     * @return 1, which bandits are defined as
+     */
     public int role(){
         return 1;
     }
-    
+
+    /**
+     * Allows a bandit to take money from a Location
+     * @param l, Location they're getting money from
+     * @param place, name of the Location they're getting money from
+     * @return an integer on how much they've stolen
+     */
     public int rob(Location l, String place){
         this.robbed = true;
         if (place.equals("bank")) {

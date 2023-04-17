@@ -19,6 +19,9 @@ import edu.vassar.cmpu203.high_noon_heist.R;
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentConfigGameBinding;
 
+/**
+ * Fragment for configuring the game
+ */
 public class ConfigGameFragment extends Fragment implements IConfigGame{
 
     private FragmentConfigGameBinding binding;
@@ -90,6 +93,10 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
         });
     }
 
+    /**
+     * Displays game options after they've been set
+     * @param m, for displaying the configuration
+     */
     @Override
     public void showConfig(MainActivity m){
         this.binding.showOptions.setText(m.toString());
