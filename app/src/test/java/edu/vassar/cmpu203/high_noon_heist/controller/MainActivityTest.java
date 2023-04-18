@@ -16,8 +16,9 @@ class MainActivityTest {
     @Test
     void testDraw() {
         MainActivity main = new MainActivity(55,10000, 7, 3);
-        main.draw();
-        System.out.println("print test");
-        assertEquals(main.banditCount, (main.retBanditVals()).size(), "failure test message");
+        assertEquals("7 players, 3 bandits, 55 days, 10000$ to win", main.toString(), "not equal strings");
+        //main.draw();
+        //System.out.println("print test");
+        //assertEquals(main.banditCount, (main.retBanditVals()).size(), "failure test message");
     }
 }

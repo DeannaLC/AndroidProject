@@ -21,7 +21,6 @@ public class Cowboy extends Player
     }
     
     public String observation(Location l, int a){
-        String b;
         Player retPlayer;
         if (a == 0){
             if ((this.loc).equals("bank"))

@@ -72,3 +72,20 @@ Android Implementation
 
 Same as Iteration 1
 
+***Third Iteration***
+
+**High Priority**
+
+Complete Full Game Loop
+- Add Voting Screen
+- Add Day Progression
+
+Add Data Persistence and State Preservation
+
+**Medium Priority**
+
+Same as iteration 1
+
+**Low Priority** 
+
+Same as iteration 1

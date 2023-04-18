@@ -9,27 +9,34 @@ hide footbox
 skin rose
 
 actor Gamer as gamer
-participant "c : Controller" as control
-participant "read : Scanner" as UI
-participant ":PlayersClass" as players
-participant ":Player" as player
+participant " : UI" as UI
+participant "m : MainActivity" as main
+participant " : PlayerList" as players
+participant " : Player" as player
 
-control -> gamer: Ask for game parameters
+UI -> gamer: Ask for game parameters
 gamer -> UI: Input parameters
-UI -> control: Set parameters
+UI -> main: onSetOptions(total, bandits, dayLim, moneyLim)
+UI -> main: draw()
+UI -> gamer: Show configurations
 
 loop More Players
-control -> gamer: Ask for player name
+UI -> gamer: Ask for player name
 gamer -> UI: Input player name
-UI -> control: Give name
-control -> players: Create players()
-players -> player: Player(name)
-players -> player: AssignRole()
-player -> players: addPlayer()
-players -> UI: Give player data
+UI -> main : onAddedPlayer(name)
+alt if cowboy
+main -> players : addCowboy(name)
+players -> player : new Cowboy(name)
+else if bandit
+main -> players : addBandit(name)
+players -> player : new Bandit(name)
+end
+main -> UI : showNames(players)
 UI -> gamer: Display role
+UI -> gamer : Show list of added players
 else No More Players
-control -> gamer: Show configurations
+main -> UI : onOptionsSet()
+UI -> gamer : go to next screen
 end
 ```
 
@@ -41,41 +48,27 @@ hide footbox
 skin rose
 
 actor Gamer as gamer
-participant "c : Controller" as control
-participant "read : Scanner" as UI
-participant ":PlayerList" as players
+participant " : UI" as UI
+participant "m : MainActivity" as main
 participant ":Player" as player
 participant "l :Location" as loc
 
 
 loop More Players
-control -> gamer: Give list of names
+UI -> gamer: Display list of names
 gamer -> UI: Select name
-UI -> control : Give name
-control -> players: inPlay = listCopy.findPlayer(name)
-control -> player: inPlay.role()
-player -->> control: role
-alt if cowboy
-control -> gamer: Ask for location to watch
-gamer -> UI: Input location
-UI -> control: Give location
-control -> player: observe the location
-player -> loc: Take action at location
-players -> control: Remove player from list
-else if bandit
-control -> gamer: Ask for location to watch
-gamer -> UI: Input location
-UI -> control: Give location
-control -> gamer: Ask for action
-gamer -> UI: Input action
-UI -> control: give inputted action
-player -> loc: Take action at location
-players -> control: Remove player from list
-loc -> control: Give action data if money involved
-
+UI -> main : playerSelected(name)
+alt chose to observe
+main -> player : observeAt(place, player)
+player -> loc : observe(l, loc)
+else chose to rob
+main -> player : stealFrom(place)
+player -> loc : rob(l, place)
+end
+main -> UI : onActionDone()
 else No More Players
-control -> UI: Switch game phase
-UI -> gamer: Show phase switch
+main -> UI: onActionDone()
+UI -> gamer: Change screen
 end
 ```
 
@@ -87,24 +80,21 @@ hide footbox
 skin rose
 
 actor Gamer as gamer
-participant "c : Controller" as control
-participant "read : Scanner" as UI
-participant ":PlayerList" as players
+participant " : UI" as UI
+participant "m : MainActivity" as main
 participant ":Player" as player
 participant ":Locations" as loc
 
 loop More Players
-control -> gamer: Ask for name
-gamer -> UI: Input name
-UI -> control: Give inputted name
-control -> players: findPlayer(name)
-alt if Cowboy
-control -> gamer: Ask for players or name
-gamer -> UI: give input
-UI -> control: relay input
-control -> gamer: display resulting info
-else if Bandit
-control -> gamer: display info
+UI -> gamer: Display list of names
+gamer -> UI: Select name
+UI -> main : playerSelected(name)
+main -> player : showObservation(number)
+player -> loc : observation(loc, a)
+main -> UI : onActionDone()
+else No More Players
+main -> UI : onActionDone()
+UI -> gamer : Display results screen
 end
 ```
 
@@ -192,7 +182,7 @@ ranch : ArrayList<Player>
 +getValue(place : String)
 }
 
-Player -> "Contained in" PlayerList: \t\t
+Player o-- "Aggregation of" PlayerList: \t\t
 Player -> "Contained in" Location: \t\t
 Player <|-- Bandit
 Player <|-- Cowboy
