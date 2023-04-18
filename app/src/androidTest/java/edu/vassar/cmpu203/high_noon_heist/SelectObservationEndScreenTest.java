@@ -26,6 +26,12 @@ public class SelectObservationEndScreenTest {
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * Makes a player check their observation
+     *
+     * @param name of player seeing an observation
+     * @param vi view interaction being checked
+     */
     public void doObservation(String name, ViewInteraction vi){
         Espresso.onView(ViewMatchers.withText(name)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.confirmActionPlayer)).perform(ViewActions.click());
@@ -39,6 +45,9 @@ public class SelectObservationEndScreenTest {
         Espresso.onView(ViewMatchers.withText("Confirm")).perform(ViewActions.click());
     }
 
+    /**
+     * Test for player select, observation, and end result screen.
+     */
     @Test
     public void testSelectObservationEndScreen(){
         SelectActionTest selectAct = new SelectActionTest();

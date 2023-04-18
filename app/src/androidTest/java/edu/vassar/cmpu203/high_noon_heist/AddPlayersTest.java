@@ -27,6 +27,12 @@ public class AddPlayersTest {
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * Function for each name to be added and make sure role is displayed
+     *
+     * @param name of player being added
+     * @param vi view interaction being checked
+     */
     public void addPlayerCheckRole(String name, ViewInteraction vi){
         Espresso.onView(ViewMatchers.withId(R.id.nameInputEditable)).perform(ViewActions.typeText(name));
         Espresso.closeSoftKeyboard();
@@ -36,6 +42,9 @@ public class AddPlayersTest {
         Espresso.onView(ViewMatchers.withId(R.id.confirmButton)).perform(ViewActions.click());
     }
 
+    /**
+     * Test for add players screen
+     */
     @Test
     public void testAddPlayers(){
 

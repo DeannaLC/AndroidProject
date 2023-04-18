@@ -25,6 +25,9 @@ public class ConfigGameTest {
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * Test for game's configuration screen
+     */
     @Test
     public void testConfigGame(){
         Matcher<View> matcher = ViewMatchers.withId(R.id.showOptions);

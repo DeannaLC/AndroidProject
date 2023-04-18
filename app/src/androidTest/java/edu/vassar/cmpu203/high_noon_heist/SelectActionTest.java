@@ -30,6 +30,12 @@ public class SelectActionTest {
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * Has a player perform an action based on their role, and checks onscreen text is correct
+     *
+     * @param name of player being tested
+     * @param vi view interaction being checked
+     */
     public void doAction(String name, ViewInteraction vi){
         Espresso.onView(ViewMatchers.withText(name)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.confirmActionPlayer)).perform(ViewActions.click());
@@ -45,6 +51,9 @@ public class SelectActionTest {
         Espresso.onView(ViewMatchers.withText("Confirm")).perform(ViewActions.click());
     }
 
+    /**
+     * Test for player and action select screen
+     */
     @Test
     public void testActionSelect(){
         AddPlayersTest addPeople = new AddPlayersTest();
