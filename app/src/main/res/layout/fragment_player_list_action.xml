@@ -34,7 +34,7 @@
                 android:id="@+id/confirmActionPlayer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:text="Select" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

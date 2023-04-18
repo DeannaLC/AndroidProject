@@ -21,6 +21,9 @@ import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentAddPlayersBinding;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentConfigGameBinding;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
 
+/**
+ * Fragment for adding players to the game
+ */
 public class AddPlayersFragment extends Fragment implements IAddPlayers {
 
     private FragmentAddPlayersBinding binding;
@@ -64,6 +67,10 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
     }
 
 
+    /**
+     * Displays a list of player names, or advances to next screen if player amount is reached
+     * @param players, current added players
+     */
     public void showNames(PlayerList players){
         this.binding.displayPlayers.setText(players.toString());
         if (AddPlayersFragment.this.listener.checkPlayerCap()){
@@ -78,6 +85,10 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
         }
     }
 
+    /**
+     * Displays an added player's role
+     * @param main, for accessing the most recently added player
+     */
     public void showRole(MainActivity main){
         this.binding.addNameButton.setVisibility(View.INVISIBLE);
         this.binding.showRoleView.setText(main.showRole());
@@ -94,6 +105,10 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
         });
     }
 
+    /**
+     * Changes layout after a player has viewed their role
+     * @param players who are currently added
+     */
     public void clearRole(PlayerList players){
         this.binding.nameInputEditable.setVisibility(View.VISIBLE);
         this.binding.addPlayersText.setVisibility(View.VISIBLE);

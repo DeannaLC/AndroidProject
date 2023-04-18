@@ -22,20 +22,6 @@ public class PlayerList{
      * @param cur, current index of Player being added
      * @return 0 if the new Player is a cowboy, 1 if the new Player is a bandit
      */
-    public int addPlayer(String name, ArrayList bands, int cur){
-        if (bands.indexOf(cur) == -1){
-            Cowboy cow = new Cowboy(name);
-            players.add(cow);
-            cowboys.add(cow);
-            return 0;
-        }
-        else{
-            Bandit band = new Bandit(name);
-            players.add(band);
-            bandits.add(band);
-            return 1;
-        }
-    }
 
     public void addCowboy(String name){
         Cowboy c = new Cowboy(name);
@@ -73,6 +59,11 @@ public class PlayerList{
         return playersRes;
     }
 
+    /**
+     * Finds a Player by their name
+     * @param person, name of the Player
+     * @return Player with name inputted, null if not found
+     */
     public Player findPlayer(String person){
         Player h;
         for (int i = 0; i < players.size(); i = i + 1){
@@ -83,6 +74,10 @@ public class PlayerList{
         return null;
     }
 
+    /**
+     * Removes a Player from the game
+     * @param p, Player being removed
+     */
     public void removePlayer(Player p){
         this.players.remove(p);
     }

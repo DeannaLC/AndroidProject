@@ -19,6 +19,9 @@ import edu.vassar.cmpu203.high_noon_heist.R;
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentConfigGameBinding;
 
+/**
+ * Fragment for configuring the game
+ */
 public class ConfigGameFragment extends Fragment implements IConfigGame{
 
     private FragmentConfigGameBinding binding;
@@ -60,7 +63,7 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
                 String moneyLimStr = moneyLimEditable.toString();
 
                 if (playerTotalStr.length() == 0 || banditTotalStr.length() == 0 || dayLimStr.length() == 0 || moneyLimStr.length() == 0) {
-                    Snackbar sb = Snackbar.make(view, "invalid", Snackbar.LENGTH_LONG);
+                    Snackbar sb = Snackbar.make(view, "need all fields filled", Snackbar.LENGTH_LONG);
                     sb.show();
                     return;
                 }
@@ -70,26 +73,48 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
                 int dayLim = Integer.parseInt(dayLimStr);
                 int moneyLim = Integer.parseInt(moneyLimStr);
 
+                if (playerTotal % 2 == 0) {
+                    if (banditAmt >= playerTotal / 2) {
+                        Snackbar sb = Snackbar.make(view, "too many bandits", Snackbar.LENGTH_LONG);
+                        sb.show();
+                        return;
+                    }
+                }
+                else {
+                    if (banditAmt > playerTotal / 2) {
+                        Snackbar sb = Snackbar.make(view, "too many bandits", Snackbar.LENGTH_LONG);
+                        sb.show();
+                        return;
+                    }
+                }
+
                 ConfigGameFragment.this.listener.onSetOptions(playerTotal, banditAmt, dayLim, moneyLim, ConfigGameFragment.this);
             }
         });
     }
 
+    /**
+     * Displays game options after they've been set
+     * @param m, for displaying the configuration
+     */
     @Override
     public void showConfig(MainActivity m){
         this.binding.showOptions.setText(m.toString());
 
-        Button toAddPlayers = new MaterialButton(super.getContext());
-        toAddPlayers.setText("Next");
+        if (this.binding.nextButtons.getChildCount() == 1) {
 
-        toAddPlayers.setOnClickListener(new View.OnClickListener() {
+            Button toAddPlayers = new MaterialButton(super.getContext());
+            toAddPlayers.setText("Next");
 
-            @Override
-            public void onClick(View view){
-                ConfigGameFragment.this.listener.onOptionsSet();
-            }
-        });
-        this.binding.nextButtons.addView(toAddPlayers);
+            toAddPlayers.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    ConfigGameFragment.this.listener.onOptionsSet();
+                }
+            });
+            this.binding.nextButtons.addView(toAddPlayers);
+        }
 
     }
 }

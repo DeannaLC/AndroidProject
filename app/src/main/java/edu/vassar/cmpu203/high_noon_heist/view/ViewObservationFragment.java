@@ -18,6 +18,9 @@ import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentPlayerListActionBi
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentViewObservationBinding;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 
+/**
+ * Fragment for viewing action results
+ */
 public class ViewObservationFragment extends Fragment implements IViewObservation {
 
     private FragmentViewObservationBinding binding;
@@ -78,7 +81,7 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
     public void banditObservation(){
         String text = this.listener.showObservation(0);
         if (text.equals("")){
-            this.binding.viewPrompt.setText("You hung out at " + this.current.viewLoc() + " for the night");
+            this.binding.viewPrompt.setText("You hung out at the " + this.current.viewLoc() + " for the night");
         }
         else
             this.binding.viewPrompt.setText("You saw " + text + " at " + this.current.viewLoc());

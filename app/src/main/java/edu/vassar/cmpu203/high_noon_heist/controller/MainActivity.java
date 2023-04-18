@@ -79,10 +79,17 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         return this.curMoney;
     }
 
+    /**
+     * Checks if current amount of players meets total players
+     * @return Boolean on if player cap is reached
+     */
     public boolean checkPlayerCap(){
         return this.playerCount == this.playersList.players.size();
     }
 
+    /**
+     * Changes to player select once all players are set
+     */
     @Override
     public void onPlayersSet(){
         this.canAct = this.getPlayerListCopy();
@@ -93,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         return this.playersList.findPlayer(name);
     }
 
+    /**
+     * Randomly determines which players will be bandits
+     */
     public void draw(){
         ArrayList ret = new ArrayList();
         Random rand = new Random();
@@ -111,6 +121,14 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.banditVals = ret;
     }
 
+    /**
+     * Sets game options
+     * @param total amount of players
+     * @param bandits, number of bandits
+     * @param dayLim, total number of days
+     * @param moneyLim, money to exceed
+     * @param config, game fragment that displays
+     */
     @Override
     public void onSetOptions(int total, int bandits, int dayLim, int moneyLim, IConfigGame config){
         this.playerCount = total;
@@ -122,12 +140,20 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         config.showConfig(this);
     }
 
+    /**
+     * Moves to add players once options are confirmed
+     */
     public void onOptionsSet(){
         AddPlayersFragment addPlayersFrag = new AddPlayersFragment(this);
         this.gamePhase = 1;
         this.mainView.displayFragment(addPlayersFrag, false, "addPlayers");
     }
 
+    /**
+     * Handles adding a Player
+     * @param name of the Player being added
+     * @param addPlayers displays data
+     */
     @Override
     public void onAddedPlayer(@NonNull String name, IAddPlayers addPlayers) {
         //temp for testing adding player screen alone
@@ -157,6 +183,11 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     public PlayerList getPlayers(){
         return this.playersList;
     }
+
+    /**
+     * Takes players to action or observation screen when a Player is selected
+     * @param name of Player being selected
+     */
     @Override
     public void playerSelected(String name){
         Player cur = this.findPlayer(name);
@@ -176,6 +207,9 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         return this.gamePhase;
     }
 
+    /**
+     * Changes screen once a viewing is confirmed
+     */
     @Override
     public void onActionDone(){
         this.canAct.removePlayer(current);
@@ -207,6 +241,10 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         return val;
     }
 
+    /**
+     * Checks whether the game has been won
+     * @return 3 if cowboys win, 2 if bandits win, 1 if game is still in play
+     */
     public int checkWin(){
         if (curDay == dayLim)
             return 3;

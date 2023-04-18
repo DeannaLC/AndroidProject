@@ -15,7 +15,9 @@ import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentPlayerListActionBinding;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentResultScreenBinding;
 
-
+/**
+ * Fragment for viewing the game results
+ */
 public class ResultScreenFragment extends Fragment {
 
     private FragmentResultScreenBinding binding;
@@ -26,6 +28,10 @@ public class ResultScreenFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Constructor for result screen
+     * @param data to get game data
+     */
     public ResultScreenFragment(MainActivity data){
         this.data = data;
     }

@@ -22,6 +22,9 @@ import edu.vassar.cmpu203.high_noon_heist.model.Cowboy;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
 
+/**
+ * Fragment for choosing a player to take actions or view results
+ */
 public class PlayerListActionFragment extends Fragment implements IPlayerListAction {
 
     private FragmentPlayerListActionBinding binding;
@@ -33,6 +36,11 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
         // Required empty public constructor
     }
 
+    /**
+     * Constructor for PlayerListActionFragment
+     * @param listener, MainActivity to run methods
+     * @param activePlayers, players who have not yet done something in the game phase
+     */
     public PlayerListActionFragment(Listener listener, PlayerList activePlayers){
         this.listener = listener;
         this.activePlayers = activePlayers;
@@ -56,6 +64,11 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
             public void onClick(View view){
                 int selected = PlayerListActionFragment.this.binding.playerActionList.getCheckedRadioButtonId();
                 RadioButton selectedButton = PlayerListActionFragment.this.binding.playerActionList.findViewById(selected);
+                if (selectedButton == null){
+                    Snackbar sb = Snackbar.make(view, "need to select a player", Snackbar.LENGTH_LONG);
+                    sb.show();
+                    return;
+                }
                 String name = selectedButton.getText().toString();
                 PlayerListActionFragment.this.listener.playerSelected(name);
             }

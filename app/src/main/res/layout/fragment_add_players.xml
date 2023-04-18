@@ -39,17 +39,16 @@
 
             <EditText
                 android:id="@+id/nameInputEditable"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:inputType="textPersonName" />
 
             <Button
                 android:id="@+id/addNameButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:text="Add" />
         </LinearLayout>
 
         <LinearLayout
@@ -64,12 +63,11 @@
 
             <TextView
                 android:id="@+id/showRoleView"
-                android:layout_width="wrap_content"
+                android:layout_width="271dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="353dp"
                 android:layout_marginRight="353dp"
                 android:layout_marginBottom="0dp"
-                android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -77,9 +75,10 @@
 
             <Button
                 android:id="@+id/confirmButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:text="Confirm" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
