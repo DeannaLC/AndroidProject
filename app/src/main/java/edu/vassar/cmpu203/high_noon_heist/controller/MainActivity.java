@@ -22,12 +22,14 @@ import edu.vassar.cmpu203.high_noon_heist.view.IConfigGame;
 import edu.vassar.cmpu203.high_noon_heist.view.IMainView;
 import edu.vassar.cmpu203.high_noon_heist.view.IPlayerListAction;
 import edu.vassar.cmpu203.high_noon_heist.view.IViewObservation;
+import edu.vassar.cmpu203.high_noon_heist.view.IVote;
 import edu.vassar.cmpu203.high_noon_heist.view.MainView;
 import edu.vassar.cmpu203.high_noon_heist.view.PlayerListActionFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ResultScreenFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ViewObservationFragment;
+import edu.vassar.cmpu203.high_noon_heist.view.VoteFragment;
 
-public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener, IViewObservation.Listener {
+public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener, IViewObservation.Listener, IVote.Listener {
 
     int curDay = 0;
     int dayLim;
@@ -80,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     @Override
     public void onPlayersSet(){
         this.canAct = this.getPlayerListCopy();
-        this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "listAction");
+        this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "votes");
+        //this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "listAction");
     }
 
     public Player findPlayer(String name){
@@ -209,7 +212,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
                 this.mainView.displayFragment(new PlayerListActionFragment(this, canAct), true, "listAction");
             }
             else
-                this.mainView.displayFragment(new ResultScreenFragment(this), true, "results");
+                //this.mainView.displayFragment(new ResultScreenFragment(this), true, "results");
+                this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "vote");
 
         }
     }
@@ -243,5 +247,13 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
             return 3;
         else
             return 1;
+    }
+
+    public void addVote(Player p){
+        p.addVote();
+    }
+
+    public void subVote(Player p){
+        p.subVote();
     }
 }

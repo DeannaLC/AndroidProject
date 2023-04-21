@@ -82,4 +82,33 @@ public class PlayerList{
         this.players.remove(p);
     }
 
+    public ArrayList voteVals(){
+        Player cur;
+        ArrayList votes = new ArrayList();
+        for (int i = 0; i < this.players.size(); i = i + 1){
+            cur = (Player) this.players.get(i);
+            votes.add(cur.getVotes());
+        }
+        return votes;
+    }
+
+    public String voteValsStr(){
+        Player cur;
+        String ret = "";
+        for (int i = 0; i < this.players.size(); i = i + 1){
+            cur = (Player) this.players.get(i);
+            ret = ret + " " + cur.getVotes();
+        }
+        return ret;
+    }
+
+    public int tallyVotes(){
+        int count = 0;
+        Player cur;
+        for (int i = 0; i < this.players.size(); i = i + 1) {
+            cur = (Player) this.players.get(i);
+            count = count + cur.getVotes();
+        }
+        return count;
+    }
 }

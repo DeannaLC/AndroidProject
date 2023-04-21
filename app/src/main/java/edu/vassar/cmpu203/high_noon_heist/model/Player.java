@@ -60,4 +60,17 @@ public class Player {
     public String displayRole(){
         return "hi";
     }
+
+    public int getVotes(){
+        return this.votes;
+    }
+
+    public void addVote(){
+        this.votes = this.votes + 1;
+    }
+
+    public void subVote(){
+        if (this.votes != 0)
+            this.votes = this.votes - 1;
+    }
 }
