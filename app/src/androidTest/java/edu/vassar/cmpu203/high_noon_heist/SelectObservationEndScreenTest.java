@@ -37,7 +37,7 @@ public class SelectObservationEndScreenTest {
         Espresso.onView(ViewMatchers.withId(R.id.confirmActionPlayer)).perform(ViewActions.click());
         try {
             Espresso.onView(ViewMatchers.withText("Number")).perform(ViewActions.click());
-            vi.check(ViewAssertions.matches(ViewMatchers.withSubstring("You saw 5 people at the bank")));
+            vi.check(ViewAssertions.matches(ViewMatchers.withSubstring("You saw 5 total at the bank")));
         }
         catch(NoMatchingViewException ignore){
             vi.check(ViewAssertions.matches(ViewMatchers.withSubstring("You hung out at the bank for the night")));

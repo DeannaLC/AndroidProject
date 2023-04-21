@@ -21,3 +21,4 @@ Inputs are handled through Android input field declarations. Empty fields or inv
 Testing was not done for handling a large number of players. Not sure what it would do in terms of screen display. 
 Unit Tests also only pick one set of actions and observations to avoid complications. 
 
+Full system tests can be run using SelectObservationEndScreenTest

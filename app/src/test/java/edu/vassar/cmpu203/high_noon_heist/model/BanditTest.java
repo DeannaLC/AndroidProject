@@ -35,7 +35,7 @@ class BanditTest {
         }
         else
         {
-            assertEquals(obs, "Zangief");
+            assertEquals("Villain", obs);
         }
 
 

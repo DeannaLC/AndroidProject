@@ -60,7 +60,7 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
            public void onClick(View view){
                ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
                String res = ViewObservationFragment.this.listener.showObservation(0);
-               ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " people at the " + ViewObservationFragment.this.current.viewLoc());
+               ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " total at the " + ViewObservationFragment.this.current.viewLoc());
                ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
            }
         });
@@ -70,7 +70,10 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
             public void onClick(View view){
                 ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
                 String res = ViewObservationFragment.this.listener.showObservation(1);
-                ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " at the " + ViewObservationFragment.this.current.viewLoc());
+                if (res == null)
+                    ViewObservationFragment.this.binding.viewPrompt.setText("No other players at the " + ViewObservationFragment.this.current.viewLoc());
+                else
+                    ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " at the " + ViewObservationFragment.this.current.viewLoc());
                 ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
             }
         });
@@ -80,7 +83,13 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
 
     public void banditObservation(){
         String text = this.listener.showObservation(0);
-        if (text.equals("")){
+        if (text == null){
+            this.binding.viewPrompt.setText("No other players at the " + this.current.viewLoc());
+            this.binding.viewPromptButtons.addView(this.addConfirm());
+            return;
+
+        }
+        else if (text.equals("")){
             this.binding.viewPrompt.setText("You hung out at the " + this.current.viewLoc() + " for the night");
         }
         else
