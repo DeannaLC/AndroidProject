@@ -15,14 +15,6 @@ public class PlayerList{
     
     public PlayerList(){}
 
-    /**
-     * Takes in an ArrayList containing indices of bandits, a player's name, and the index of the player being added.
-     * @param name of the new Player
-     * @param bands, indices of bandits
-     * @param cur, current index of Player being added
-     * @return 0 if the new Player is a cowboy, 1 if the new Player is a bandit
-     */
-
     public void addCowboy(String name){
         Cowboy c = new Cowboy(name);
         players.add(c);
@@ -80,6 +72,8 @@ public class PlayerList{
      */
     public void removePlayer(Player p){
         this.players.remove(p);
+        this.bandits.remove(p);
+        this.cowboys.remove(p);
     }
 
     public ArrayList voteVals(){
@@ -111,4 +105,38 @@ public class PlayerList{
         }
         return count;
     }
+
+    public Player mostVotes(){
+        Player ret = new Player("");
+        Player cur;
+        int max = -1;
+        for (int i = 0; i < this.players.size(); i = i + 1){
+            cur = (Player) this.players.get(i);
+            if (cur.getVotes() > max){
+                ret = cur;
+                max = cur.getVotes();
+            }
+        }
+        return ret;
+    }
+
+    public boolean checkTie(){
+        int check = this.mostVotes().getVotes();
+        int tally = 0;
+        int cur;
+        ArrayList count = this.voteVals();
+        for (int i = 0; i < count.size(); i = i + 1){
+            cur = (int) count.get(i);
+            if (cur == check)
+                tally = tally + 1;
+            if (tally > 1)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean canRemove(){
+        return this.tallyVotes() > this.players.size() / 2;
+    }
+
 }

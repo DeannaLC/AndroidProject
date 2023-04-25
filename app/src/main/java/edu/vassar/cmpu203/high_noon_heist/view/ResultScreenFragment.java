@@ -49,6 +49,8 @@ public class ResultScreenFragment extends Fragment {
         if (this.data.checkWin() == 2){
             this.binding.winText.setText("Bandits win!");
         }
+        else
+            this.binding.winText.setText("Cowboys win!");
     }
 
 }

@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     @Override
     public void onPlayersSet(){
         this.canAct = this.getPlayerListCopy();
-        this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "votes");
-        //this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "listAction");
+        //this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "votes");
+        this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "listAction");
     }
 
     public Player findPlayer(String name){
@@ -205,16 +205,23 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.canAct.removePlayer(current);
         if (this.canAct.players.size() > 0)
             this.mainView.displayFragment(new PlayerListActionFragment(this, canAct), true, "listAction");
-        else{
+        else {
             if (this.gamePhase == 1) {
                 this.gamePhase = 2;
                 canAct = this.getPlayerListCopy();
                 this.mainView.displayFragment(new PlayerListActionFragment(this, canAct), true, "listAction");
+                return;
             }
-            else
-                //this.mainView.displayFragment(new ResultScreenFragment(this), true, "results");
-                this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "vote");
-
+            else {
+                this.curDay = this.curDay + 1;
+                if (this.checkWin() == 1) {
+                    this.loc.clearLocs();
+                    this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "vote");
+                    return;
+                }
+                else
+                    this.mainView.displayFragment(new ResultScreenFragment(this), true, "results");
+            }
         }
     }
 
@@ -239,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     public int checkWin(){
         if (curDay == dayLim)
             return 3;
-        else if ((playersList.bandits).size() > ((playersList.cowboys).size()))
+        else if ((playersList.bandits).size() >= ((playersList.cowboys).size()))
             return 2;
         else if (curMoney >= moneyLim)
             return 2;
@@ -256,4 +263,34 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     public void subVote(Player p){
         p.subVote();
     }
+
+    public Player onSubmitVotes(){
+        ArrayList vals = this.playersList.voteVals();
+        boolean repeats = this.playersList.checkTie();
+        Player ret;
+        if (repeats == false){
+            if (this.playersList.canRemove()) {
+                ret = this.playersList.mostVotes();
+                this.playersList.removePlayer(ret);
+                return ret;
+            }
+        }
+        return null;
+    }
+
+    public void onVotingDone(){
+        this.gamePhase = 1;
+        canAct = this.playersList.copyPlayers();
+        if (this.checkWin() == 1) {
+            this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "select");
+            return;
+        }
+        else
+            this.mainView.displayFragment(new ResultScreenFragment(this), true, "results");
+    }
+
+    public int getCurDay(){
+        return this.curDay;
+    }
+
 }

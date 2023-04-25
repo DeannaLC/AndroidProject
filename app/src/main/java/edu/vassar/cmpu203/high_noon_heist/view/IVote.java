@@ -9,5 +9,11 @@ public interface IVote {
         public void subVote(Player p);
 
         public Player findPlayer(String name);
+
+        public Player onSubmitVotes();
+
+        public int getCurDay();
+
+        public void onVotingDone();
     }
 }
