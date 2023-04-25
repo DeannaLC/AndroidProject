@@ -75,10 +75,13 @@ public class VoteFragment extends Fragment implements IVote{
         };
     }
 
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Player cur;
         TextView nameDisplay;
         TextView voteDisplay;
+        TextView day = new TextView(super.getContext());
+        day.setText("Day " + this.listener.getCurDay());
+        this.binding.voting.addView(day);
         String curName;
         for (int i = 0; i < this.people.players.size(); i = i + 1) {
             LinearLayout addRow = new LinearLayout(super.getContext());
@@ -102,5 +105,36 @@ public class VoteFragment extends Fragment implements IVote{
             addRow.addView(down);
             this.binding.voting.addView(addRow);
         }
+        Button submit = new MaterialButton(super.getContext());
+        submit.setText("Submit");
+        submit.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                VoteFragment.this.binding.voting.removeAllViews();
+                Player p = VoteFragment.this.listener.onSubmitVotes();
+                TextView resultText = new TextView(VoteFragment.super.getContext());
+                TextView roleText = new TextView(VoteFragment.super.getContext());
+                if (p == null){
+                    resultText.setText("Vote failed! No one was removed!");
+                }
+                else{
+                    resultText.setText(p.getName() + " was removed from the game!");
+                    if (p.role() == 1)
+                        roleText.setText("They were a bandit!");
+                    else
+                        roleText.setText("They were a cowboy!");
+                }
+                VoteFragment.this.binding.voting.addView(resultText);
+                VoteFragment.this.binding.voting.addView(roleText);
+                Button confirm = new MaterialButton(VoteFragment.super.getContext());
+                confirm.setText("Confirm");
+                confirm.setOnClickListener(new View.OnClickListener(){
+                   public void onClick(View view){
+                       VoteFragment.this.listener.onVotingDone();
+                   }
+                });
+                VoteFragment.this.binding.voting.addView(confirm);
+            }
+        });
+        this.binding.voting.addView(submit);
     }
 }
