@@ -76,6 +76,16 @@ public class PlayerList{
         this.cowboys.remove(p);
     }
 
+    public ArrayList voteVals(){
+        Player cur;
+        ArrayList votes = new ArrayList();
+        for (int i = 0; i < this.players.size(); i = i + 1){
+            cur = (Player) this.players.get(i);
+            votes.add(cur.getVotes());
+        }
+        return votes;
+    }
+
     /*
     public int[] voteVals(){
         Player cur;
