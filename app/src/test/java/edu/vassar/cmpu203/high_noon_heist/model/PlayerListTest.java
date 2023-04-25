@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 class PlayerListTest {
 
     /**
@@ -51,6 +53,30 @@ class PlayerListTest {
         Player notReal = plList.findPlayer("not real");
         assertEquals(notReal, null);
 
+    }
+
+    @Test
+    void testVoteVals()
+    {
+        PlayerList plList = new PlayerList();
+
+        plList.addCowboy("a");
+        plList.addBandit("b");
+        plList.addCowboy("c");
+
+        Player a = (Player) plList.players.get(0);
+        Player b = (Player) plList.players.get(1);
+        Player c = (Player) plList.players.get(2);
+
+        a.vote(2);
+        b.vote(8);
+        c.vote(3);
+
+        int[] exArr = {2,8,3};
+
+        boolean check = Arrays.equals(exArr, plList.voteVals());
+
+        assertTrue(check);
     }
 
 }

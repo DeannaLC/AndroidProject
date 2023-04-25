@@ -82,15 +82,17 @@ public class PlayerList{
         this.players.remove(p);
     }
 
-    public ArrayList voteVals(){
+    /*
+    public int[] voteVals(){
         Player cur;
-        ArrayList votes = new ArrayList();
+        int[] votes = new int[this.players.size()];
         for (int i = 0; i < this.players.size(); i = i + 1){
             cur = (Player) this.players.get(i);
-            votes.add(cur.getVotes());
+            votes[i] = (cur.getVotes());
         }
         return votes;
     }
+    */
 
     public String voteValsStr(){
         Player cur;
