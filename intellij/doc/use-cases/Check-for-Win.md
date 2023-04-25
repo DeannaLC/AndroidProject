@@ -19,7 +19,7 @@
 ``` plantuml
 @startuml
 skin rose
-title Full Game Loop
+title Check for Win
 
 start
 :Execute __Configure Players__;
@@ -34,7 +34,7 @@ stop
 ```plantuml
 @startuml
 skin rose
-title Win Condition
+title Check for Win
 
 start
 if (Enough money stolen?) is (yes) then
