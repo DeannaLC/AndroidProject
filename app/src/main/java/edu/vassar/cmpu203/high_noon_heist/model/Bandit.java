@@ -1,5 +1,9 @@
 package edu.vassar.cmpu203.high_noon_heist.model;
 
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+
 import java.util.Random;
 
 /**
@@ -9,6 +13,7 @@ public class Bandit extends Player
 {
 
     public boolean robbed = false;
+    private static final String ROBBED = "robbed";
 
     /**
      * Constructor for objects of class Bandit
@@ -80,6 +85,28 @@ public class Bandit extends Player
 
     public String displayRole(){
         return "Your role is Bandit";
+    }
+
+    public Bundle toBundle(){
+        final Bundle b = new Bundle();
+        b.putString(NAME, this.name);
+        b.putString(LOCATION, this.loc);
+        b.putInt(VOTES, this.votes);
+        b.putBoolean(ROBBED, this.robbed);
+        return b;
+    }
+
+    public static Bandit fromBundle(@NonNull Bundle bun){
+        final String name = bun.getString(NAME);
+        final String loc = bun.getString(LOCATION);
+        final int votes = bun.getInt(VOTES);
+        final boolean robbed = bun.getBoolean(ROBBED);
+
+        Bandit ret = new Bandit(name);
+        ret.loc = loc;
+        ret.votes = votes;
+        ret.robbed = robbed;
+        return ret;
     }
 }
 
