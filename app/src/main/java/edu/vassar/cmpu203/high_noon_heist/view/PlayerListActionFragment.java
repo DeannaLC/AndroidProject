@@ -30,7 +30,7 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
     private FragmentPlayerListActionBinding binding;
 
     private Listener listener;
-    private PlayerList activePlayers;
+    //private PlayerList activePlayers;
 
     public PlayerListActionFragment(){
         // Required empty public constructor
@@ -41,16 +41,17 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
      * @param listener, MainActivity to run methods
      * @param activePlayers, players who have not yet done something in the game phase
      */
-    public PlayerListActionFragment(Listener listener, PlayerList activePlayers){
+    public PlayerListActionFragment(Listener listener){//, PlayerList activePlayers){
         this.listener = listener;
-        this.activePlayers = activePlayers;
+        //this.activePlayers = activePlayers;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         RadioButton newButton;
         Player cur;
-        for (int i = 0; i < this.activePlayers.players.size(); i = i + 1) {
+        PlayerList activePlayers = this.listener.getCanAct();
+        for (int i = 0; i < activePlayers.players.size(); i = i + 1) {
             newButton = new RadioButton(super.getContext());
             cur = (Player) activePlayers.players.get(i);
             newButton.setText(cur.getName());
@@ -80,5 +81,11 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.binding = FragmentPlayerListActionBinding.inflate(inflater);
         return this.binding.getRoot();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
     }
 }

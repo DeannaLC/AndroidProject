@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import edu.vassar.cmpu203.high_noon_heist.model.Bandit;
 import edu.vassar.cmpu203.high_noon_heist.model.Cowboy;
 import edu.vassar.cmpu203.high_noon_heist.model.Location;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
@@ -16,6 +17,7 @@ import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
 import edu.vassar.cmpu203.high_noon_heist.view.ActionSelectFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.AddPlayersFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ConfigGameFragment;
+import edu.vassar.cmpu203.high_noon_heist.view.HighNoonHeistFragFactory;
 import edu.vassar.cmpu203.high_noon_heist.view.IActionSelect;
 import edu.vassar.cmpu203.high_noon_heist.view.IAddPlayers;
 import edu.vassar.cmpu203.high_noon_heist.view.IConfigGame;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     int playerCount;
     int banditCount;
     private PlayerList playersList;
-    private List banditVals;
+    private ArrayList banditVals;
     private Player current;
     private PlayerList canAct;
 
@@ -47,17 +49,66 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     private IMainView mainView;
     //1 for action, 2 for observation, 3 for daytime
     private int gamePhase;
-
+    private static final String CURDAY = "curDay";
+    private static final String DAYLIM = "dayLim";
+    private static final String CURMONEY = "curMoney";
+    private static final String MONEYLIM = "moneyLim";
+    private static final String PLAYERCOUNT = "playerCount";
+    private static final String BANDITCOUNT = "banditCount";
+    private static final String PLAYERSLIST = "playersList";
+    private static final String BANDITVALS = "banditVals";
+    private static final String CURRENT = "current";
+    private static final String CANACT = "canAct";
+    private static final String LOCATION = "loc";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportFragmentManager().setFragmentFactory(new HighNoonHeistFragFactory(this));
         super.onCreate(savedInstanceState);
-        this.playersList = new PlayerList();
 
         this.mainView = new MainView(this);
         this.setContentView(mainView.getRootView());
 
-        this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
+        if (savedInstanceState == null) {
+            this.playersList = new PlayerList();
+            this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
+        }
+        else{
+            this.curDay = savedInstanceState.getInt(CURDAY);
+            this.dayLim = savedInstanceState.getInt(DAYLIM);
+            this.curMoney = savedInstanceState.getInt(CURMONEY);
+            this.moneyLim = savedInstanceState.getInt(CURMONEY);
+            this.playerCount = savedInstanceState.getInt(PLAYERCOUNT);
+            this.banditCount = savedInstanceState.getInt(BANDITCOUNT);
+            /*this.playersList = (PlayerList) savedInstanceState.getSerializable(PLAYERSLIST);
+            this.banditVals = savedInstanceState.getIntegerArrayList(BANDITVALS);
+            this.current = (Player) savedInstanceState.getSerializable(CURRENT);
+            this.canAct = (PlayerList) savedInstanceState.getSerializable(CANACT);
+            this.loc = (Location) savedInstanceState.getSerializable(LOCATION);
+
+            this.playersList = PlayerList.fromBundle(savedInstanceState);*/
+            /*if (savedInstanceState.getString("role") == "bandit")
+                this.current = Bandit.fromBundle(savedInstanceState);
+            else
+                this.current = Cowboy.fromBundle(savedInstanceState);*/
+
+        }
+
+    }
+
+    protected void onSaveInstanceState(@NonNull Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putInt(DAYLIM, this.dayLim);
+        outState.putInt(CURDAY, this.curDay);
+        outState.putInt(CURMONEY, this.curMoney);
+        outState.putInt(MONEYLIM, this.moneyLim);
+        outState.putInt(PLAYERCOUNT, this.playerCount);
+        outState.putInt(BANDITCOUNT, this.banditCount);
+        /*outState.putSerializable(PLAYERSLIST, this.playersList);
+        outState.putIntegerArrayList(BANDITVALS, this.banditVals);
+        outState.putSerializable(CURRENT, this.current);
+        outState.putSerializable(CANACT, this.canAct);
+        outState.putSerializable(LOCATION, this.loc);*/
     }
 
     public PlayerList getPlayerListCopy(){
@@ -83,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     public void onPlayersSet(){
         this.canAct = this.getPlayerListCopy();
         //this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "votes");
-        this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "listAction");
+        this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
     }
 
     public Player findPlayer(String name){
@@ -183,11 +234,11 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         Player cur = this.findPlayer(name);
         this.setCurrentPlayer(cur);
         if (this.gamePhase == 1) {
-            ActionSelectFragment action = new ActionSelectFragment(this.current, this);
+            ActionSelectFragment action = new ActionSelectFragment(this);
             this.mainView.displayFragment(action, true, "act");
         }
         else if (this.gamePhase == 2){
-            ViewObservationFragment observation = new ViewObservationFragment(this, this.current);
+            ViewObservationFragment observation = new ViewObservationFragment(this);
             this.mainView.displayFragment(observation, true, "observe");
         }
     }
@@ -204,19 +255,19 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     public void onActionDone(){
         this.canAct.removePlayer(current);
         if (this.canAct.players.size() > 0)
-            this.mainView.displayFragment(new PlayerListActionFragment(this, canAct), true, "listAction");
+            this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
         else {
             if (this.gamePhase == 1) {
                 this.gamePhase = 2;
                 canAct = this.getPlayerListCopy();
-                this.mainView.displayFragment(new PlayerListActionFragment(this, canAct), true, "listAction");
+                this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
                 return;
             }
             else {
                 this.curDay = this.curDay + 1;
                 if (this.checkWin() == 1) {
                     this.loc.clearLocs();
-                    this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "vote");
+                    this.mainView.displayFragment(new VoteFragment(this), true, "vote");
                     return;
                 }
                 else
@@ -278,11 +329,16 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         return null;
     }
 
+    public PlayerList getCanAct(){
+        return this.canAct;
+    }
+
     public void onVotingDone(){
         this.gamePhase = 1;
         canAct = this.playersList.copyPlayers();
         if (this.checkWin() == 1) {
-            this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "select");
+            //this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "select");
+            this.mainView.displayFragment(new PlayerListActionFragment(this), true, "select");
             return;
         }
         else
@@ -291,6 +347,14 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
 
     public int getCurDay(){
         return this.curDay;
+    }
+
+    public Player getCurrent(){
+        return this.current;
+    }
+
+    public String doViewLoc(){
+        return this.current.viewLoc();
     }
 
 }

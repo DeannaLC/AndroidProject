@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,7 +15,7 @@ import java.util.Random;
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Location
+public class Location implements Serializable
 {
     ArrayList<Player> bank = new ArrayList<Player>();
     ArrayList<Player> saloon = new ArrayList<Player>();
@@ -127,13 +128,24 @@ public class Location
 
     public static Location fromBundle(@NonNull Bundle b){
         Location ret = new Location();
-        for (Parcelable bankPerson : b.getParcelableArray(BANK))
-            ret.bank.add(Player.fromBundle((Bundle) bankPerson));
-        for (Parcelable saloonPerson : b.getParcelableArray(SALOON))
-            ret.saloon.add(Player.fromBundle((Bundle) saloonPerson));
-        for (Parcelable ranchPerson : b.getParcelableArray(RANCH))
-            ret.ranch.add(Player.fromBundle((Bundle) ranchPerson));
-
+        for (Parcelable bankPerson : b.getParcelableArray(BANK)) {
+            if (b.getString("role") == "cowboy")
+                ret.bank.add(Cowboy.fromBundle((Bundle) bankPerson));
+            else
+                ret.bank.add(Bandit.fromBundle((Bundle) bankPerson));
+        }
+        for (Parcelable saloonPerson : b.getParcelableArray(SALOON)) {
+            if (b.getString("role") == "cowboy")
+                ret.saloon.add(Cowboy.fromBundle((Bundle) saloonPerson));
+            else
+                ret.saloon.add(Bandit.fromBundle((Bundle) saloonPerson));
+        }
+        for (Parcelable ranchPerson : b.getParcelableArray(RANCH)) {
+            if (b.getString("role") == "cowboy")
+                ret.ranch.add(Cowboy.fromBundle((Bundle) ranchPerson));
+            else
+                ret.ranch.add(Bandit.fromBundle((Bundle) ranchPerson));
+        }
         return ret;
     }
 

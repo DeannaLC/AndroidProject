@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -13,7 +14,7 @@ import java.util.Iterator;
 /**
  * Class that contains list of players
  */
-public class PlayerList{
+public class PlayerList implements Serializable {
     public ArrayList players = new ArrayList<Player>();
     public ArrayList bandits = new ArrayList<Bandit>();
     public ArrayList cowboys = new ArrayList<Cowboy>();
@@ -192,13 +193,23 @@ public class PlayerList{
     public static PlayerList fromBundle(@NonNull Bundle b){
         final PlayerList playerList = new PlayerList();
         for (Parcelable playerParcelable : b.getParcelableArray(PLAYERS)){
-            Player p = Player.fromBundle((Bundle) playerParcelable);
+            /*Player p = Player.fromBundle((Bundle) playerParcelable);
             playerList.players.add(p);
             if (p.role() == 1){
                 playerList.bandits.add(p);
             }
             else
-                playerList.cowboys.add(p);
+                playerList.cowboys.add(p);*/
+            if (b.getString("role") == "bandit"){
+                Bandit band = Bandit.fromBundle((Bundle) playerParcelable);
+                playerList.players.add(band);
+                playerList.bandits.add(band);
+            }
+            else{
+                Cowboy cow = Cowboy.fromBundle((Bundle) playerParcelable);
+                playerList.players.add(cow);
+                playerList.cowboys.add(cow);
+            }
         }
         return playerList;
     }

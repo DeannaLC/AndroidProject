@@ -23,7 +23,7 @@ import edu.vassar.cmpu203.high_noon_heist.model.Player;
  */
 public class ActionSelectFragment extends Fragment implements IActionSelect{
 
-    Player active;
+    //Player active;
     Listener listener;
     FragmentActionSelectBinding binding;
 
@@ -36,15 +36,16 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
      * @param active, current player who's making an action
      * @param listener, MainActivity which controls the game
      */
-    public ActionSelectFragment(Player active, Listener listener){
-        this.active = active;
+    public ActionSelectFragment(Listener listener){//Player active, Listener listener){
+        //this.active = active;
         this.listener = listener;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Player active = this.listener.getCurrent();
         this.binding.showNameText.setText(active.getName());
-        if (this.active.role() == 0){
+        if (active.role() == 0){
             this.cowboyAction();
         }
         else
@@ -67,7 +68,7 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
     public View.OnClickListener generalObserveButton(String place) {
         View.OnClickListener ret = new View.OnClickListener() {
             public void onClick(View view) {
-                ActionSelectFragment.this.listener.observeAt(place.toLowerCase(), ActionSelectFragment.this.active);
+                ActionSelectFragment.this.listener.observeAt(place.toLowerCase(), ActionSelectFragment.this.listener.getCurrent());
                 ActionSelectFragment.this.binding.buttonSet.removeAllViews();
                 ActionSelectFragment.this.binding.splashText.setText("You chose to watch the " + place + " for the night");
                 ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());

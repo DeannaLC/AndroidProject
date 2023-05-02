@@ -10,5 +10,7 @@ public interface IPlayerListAction {
         public void playerSelected(String name);
 
         public int checkPhase();
+
+        public PlayerList getCanAct();
     }
 }

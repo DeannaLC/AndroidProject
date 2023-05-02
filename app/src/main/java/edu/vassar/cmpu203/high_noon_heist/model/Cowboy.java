@@ -4,10 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.util.ArrayList;
 
-public class Cowboy extends Player
+public class Cowboy extends Player implements Serializable
 {
 
     /**
@@ -59,6 +60,7 @@ public class Cowboy extends Player
         b.putString(NAME, this.name);
         b.putString(LOCATION, this.loc);
         b.putInt(VOTES, this.votes);
+        b.putString(ROLE, "cowboy");
         return b;
     }
 

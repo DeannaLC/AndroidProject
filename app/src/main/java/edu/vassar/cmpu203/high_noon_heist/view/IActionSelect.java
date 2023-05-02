@@ -9,5 +9,7 @@ public interface IActionSelect {
         public int stealFrom(String place);
 
         public void onActionDone();
+
+        public Player getCurrent();
     }
 }

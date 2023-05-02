@@ -4,12 +4,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * Bandit class
  */
-public class Bandit extends Player
+public class Bandit extends Player implements Serializable
 {
 
     public boolean robbed = false;
@@ -93,14 +94,15 @@ public class Bandit extends Player
         b.putString(LOCATION, this.loc);
         b.putInt(VOTES, this.votes);
         b.putBoolean(ROBBED, this.robbed);
+        b.putString(ROLE, "bandit");
         return b;
     }
 
-    public static Bandit fromBundle(@NonNull Bundle bun){
-        final String name = bun.getString(NAME);
-        final String loc = bun.getString(LOCATION);
-        final int votes = bun.getInt(VOTES);
-        final boolean robbed = bun.getBoolean(ROBBED);
+    public static Bandit fromBundle(@NonNull Bundle b){
+        final String name = b.getString(NAME);
+        final String loc = b.getString(LOCATION);
+        final int votes = b.getInt(VOTES);
+        final boolean robbed = b.getBoolean(ROBBED);
 
         Bandit ret = new Bandit(name);
         ret.loc = loc;

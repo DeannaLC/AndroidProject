@@ -24,9 +24,6 @@ import edu.vassar.cmpu203.high_noon_heist.model.Player;
 public class ViewObservationFragment extends Fragment implements IViewObservation {
 
     private FragmentViewObservationBinding binding;
-
-    private Player current;
-
     private Listener listener;
 
     @Nullable
@@ -39,28 +36,28 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
     public ViewObservationFragment(){
     }
 
-    public ViewObservationFragment(Listener listener, Player current){
+    public ViewObservationFragment(Listener listener){
         this.listener = listener;
-        this.current = current;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Player current = this.listener.getCurrent();
         if (current.role() == 0)
-            this.cowboyObservation();
+            this.cowboyObservation(current);
         else
-            this.banditObservation();
+            this.banditObservation(current);
     }
 
-    public void cowboyObservation(){
-        this.binding.viewPrompt.setText("View number of players or a specific player at " + this.current.viewLoc() + "?");
+    public void cowboyObservation(Player current){
+        this.binding.viewPrompt.setText("View number of players or a specific player at " + current.viewLoc() + "?");
         Button number = new MaterialButton(super.getContext());
         number.setText("Number");
         number.setOnClickListener(new View.OnClickListener() {
            public void onClick(View view){
                ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
                String res = ViewObservationFragment.this.listener.showObservation(0);
-               ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " total at the " + ViewObservationFragment.this.current.viewLoc());
+               ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " total at the " + ViewObservationFragment.this.listener.doViewLoc());
                ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
            }
         });
@@ -71,9 +68,9 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
                 ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
                 String res = ViewObservationFragment.this.listener.showObservation(1);
                 if (res == null)
-                    ViewObservationFragment.this.binding.viewPrompt.setText("No other players at the " + ViewObservationFragment.this.current.viewLoc());
+                    ViewObservationFragment.this.binding.viewPrompt.setText("No other players at the " + ViewObservationFragment.this.listener.doViewLoc());
                 else
-                    ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " at the " + ViewObservationFragment.this.current.viewLoc());
+                    ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " at the " + ViewObservationFragment.this.listener.doViewLoc());
                 ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
             }
         });
@@ -81,19 +78,19 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         this.binding.viewPromptButtons.addView(person);
     }
 
-    public void banditObservation(){
+    public void banditObservation(Player current){
         String text = this.listener.showObservation(0);
         if (text == null){
-            this.binding.viewPrompt.setText("No other players at the " + this.current.viewLoc());
+            this.binding.viewPrompt.setText("No other players at the " + current.viewLoc());
             this.binding.viewPromptButtons.addView(this.addConfirm());
             return;
 
         }
         else if (text.equals("")){
-            this.binding.viewPrompt.setText("You hung out at the " + this.current.viewLoc() + " for the night");
+            this.binding.viewPrompt.setText("You hung out at the " + current.viewLoc() + " for the night");
         }
         else
-            this.binding.viewPrompt.setText("You saw " + text + " at " + this.current.viewLoc());
+            this.binding.viewPrompt.setText("You saw " + text + " at " + current.viewLoc());
         this.binding.viewPromptButtons.addView(this.addConfirm());
     }
 

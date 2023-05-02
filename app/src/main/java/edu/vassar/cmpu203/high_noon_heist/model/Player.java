@@ -2,10 +2,12 @@ package edu.vassar.cmpu203.high_noon_heist.model;
 
 import android.os.Bundle;
 
+import java.io.Serializable;
+
 /**
  * Superclass for Bandit and Cowboy subclasses
  */
-public class Player {
+public class Player implements Serializable {
     boolean alive = true;
     String name;
     String loc;
@@ -13,6 +15,7 @@ public class Player {
     protected static final String VOTES = "votes";
     protected static final String LOCATION = "loc";
     protected static final String NAME = "name";
+    protected static final String ROLE = "role";
 
 
     /**

@@ -28,13 +28,13 @@ public class VoteFragment extends Fragment implements IVote{
 
     private FragmentVoteBinding binding;
 
-    private PlayerList people;
+   // private PlayerList people;
 
     public VoteFragment(){}
 
-    public VoteFragment(Listener listener, PlayerList people){
+    public VoteFragment(Listener listener){//, PlayerList people){
         this.listener = listener;
-        this.people = people;
+        //this.people = people;
     }
 
     @Nullable
@@ -47,14 +47,15 @@ public class VoteFragment extends Fragment implements IVote{
     public View.OnClickListener addVoteListener(String name){
         return new View.OnClickListener(){
             public void onClick(View view){
+                PlayerList people = VoteFragment.this.listener.getPlayers();
                 Player person = VoteFragment.this.listener.findPlayer(name);
-                if ((VoteFragment.this.people.tallyVotes() + 1) > VoteFragment.this.people.players.size()){
+                if ((people.tallyVotes() + 1) > people.players.size()){
                     Snackbar sb = Snackbar.make(view, "cannot vote more than number of players", Snackbar.LENGTH_LONG);
                     sb.show();
                     return;
                 }
                 person.addVote();
-                int curId = VoteFragment.this.people.players.indexOf(person) + 4300;
+                int curId = people.players.indexOf(person) + 4300;
                 TextView edit = (TextView) VoteFragment.this.binding.voting.findViewById(curId);
                 edit.setText(person.getVotes() + "");
             }
@@ -64,10 +65,11 @@ public class VoteFragment extends Fragment implements IVote{
     public View.OnClickListener subVoteListener(String name){
         return new View.OnClickListener(){
             public void onClick(View view){
+                PlayerList people = VoteFragment.this.listener.getPlayers();
                 Player person = VoteFragment.this.listener.findPlayer(name);
                 person.subVote();
                 //VoteFragment.this.binding.voteStr.setText(VoteFragment.this.people.voteValsStr());
-                int curId = VoteFragment.this.people.players.indexOf(person) + 4300;
+                int curId = people.players.indexOf(person) + 4300;
                 TextView edit = (TextView) VoteFragment.this.binding.voting.findViewById(curId);
                 edit.setText(person.getVotes() + "");
 
@@ -83,14 +85,15 @@ public class VoteFragment extends Fragment implements IVote{
         day.setText("Day " + this.listener.getCurDay());
         this.binding.voting.addView(day);
         String curName;
-        for (int i = 0; i < this.people.players.size(); i = i + 1) {
+        PlayerList people = this.listener.getPlayers();
+        for (int i = 0; i < people.players.size(); i = i + 1) {
             LinearLayout addRow = new LinearLayout(super.getContext());
             addRow.setOrientation(LinearLayout.HORIZONTAL);
             Button up = new MaterialButton(super.getContext());
             Button down = new MaterialButton(super.getContext());
             up.setText("plus");
             down.setText("minus");
-            cur = (Player) this.people.players.get(i);
+            cur = (Player) people.players.get(i);
             curName = cur.getName();
             nameDisplay = new TextView(super.getContext());
             nameDisplay.setText(curName);
