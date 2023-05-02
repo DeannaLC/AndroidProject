@@ -1,5 +1,7 @@
 package edu.vassar.cmpu203.high_noon_heist.model;
 
+import android.os.Bundle;
+
 /**
  * Superclass for Bandit and Cowboy subclasses
  */
@@ -8,6 +10,10 @@ public class Player {
     String name;
     String loc;
     int votes;
+    protected static final String VOTES = "votes";
+    protected static final String LOCATION = "loc";
+    protected static final String NAME = "name";
+
 
     /**
      * General Player constructor
@@ -72,5 +78,13 @@ public class Player {
     public void subVote(){
         if (this.votes != 0)
             this.votes = this.votes - 1;
+    }
+
+    public Bundle toBundle(){
+        return new Bundle();
+    }
+
+    public static Player fromBundle(Bundle b){
+        return new Player("");
     }
 }

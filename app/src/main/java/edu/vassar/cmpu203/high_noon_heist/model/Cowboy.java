@@ -1,5 +1,9 @@
 package edu.vassar.cmpu203.high_noon_heist.model;
 
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -48,5 +52,25 @@ public class Cowboy extends Player
 
     public String displayRole(){
         return "Your role is Cowboy";
+    }
+
+    public Bundle toBundle(){
+        final Bundle b = new Bundle();
+        b.putString(NAME, this.name);
+        b.putString(LOCATION, this.loc);
+        b.putInt(VOTES, this.votes);
+        return b;
+    }
+
+    public static Cowboy fromBundle(@NonNull Bundle b){
+        final String name = b.getString(NAME);
+        final String loc = b.getString(LOCATION);
+        final int votes = b.getInt(VOTES);
+
+        Cowboy ret = new Cowboy(name);
+        ret.loc = loc;
+        ret.votes = votes;
+
+        return ret;
     }
 }

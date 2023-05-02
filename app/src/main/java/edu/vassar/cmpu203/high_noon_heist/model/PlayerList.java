@@ -1,5 +1,10 @@
 package edu.vassar.cmpu203.high_noon_heist.model;
 
+import android.os.Bundle;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -12,6 +17,10 @@ public class PlayerList{
     public ArrayList players = new ArrayList<Player>();
     public ArrayList bandits = new ArrayList<Bandit>();
     public ArrayList cowboys = new ArrayList<Cowboy>();
+
+    private static final String PLAYERS = "players";
+    private static final String BANDITS = "bandits";
+    private static final String COWBOYS = "cowboys";
     
     public PlayerList(){}
 
@@ -149,6 +158,49 @@ public class PlayerList{
 
     public boolean canRemove(){
         return this.tallyVotes() > this.players.size() / 2;
+    }
+
+    public Bundle toBundle(){
+        final Bundle b = new Bundle();
+        final Bundle[] playerBundle = new Bundle[this.players.size()];
+        final Bundle[] banditBundle = new Bundle[this.bandits.size()];
+        final Bundle[] cowboyBundle = new Bundle[this.cowboys.size()];
+
+        int bCursor = 0;
+        int cCursor = 0;
+        Player cur;
+        for (int i = 0; i < this.players.size(); i = i + 1){
+            cur = (Player) this.players.get(i);
+            playerBundle[i] = cur.toBundle();
+            if (cur.role() == 1){
+                banditBundle[bCursor] = cur.toBundle();
+                bCursor = bCursor + 1;
+            }
+            else{
+                cowboyBundle[cCursor] = cur.toBundle();
+                cCursor = cCursor + 1;
+            }
+
+        }
+        b.putParcelableArray(PLAYERS, playerBundle);
+        b.putParcelableArray(BANDITS, banditBundle);
+        b.putParcelableArray(COWBOYS, cowboyBundle);
+
+        return b;
+    }
+
+    public static PlayerList fromBundle(@NonNull Bundle b){
+        final PlayerList playerList = new PlayerList();
+        for (Parcelable playerParcelable : b.getParcelableArray(PLAYERS)){
+            Player p = Player.fromBundle((Bundle) playerParcelable);
+            playerList.players.add(p);
+            if (p.role() == 1){
+                playerList.bandits.add(p);
+            }
+            else
+                playerList.cowboys.add(p);
+        }
+        return playerList;
     }
 
 }

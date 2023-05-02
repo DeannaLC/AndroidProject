@@ -1,5 +1,10 @@
 package edu.vassar.cmpu203.high_noon_heist.model;
 
+import android.os.Bundle;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,6 +19,10 @@ public class Location
     ArrayList<Player> bank = new ArrayList<Player>();
     ArrayList<Player> saloon = new ArrayList<Player>();
     ArrayList<Player> ranch = new ArrayList<Player>();
+
+    private static final String BANK = "bank";
+    private static final String SALOON = "saloon";
+    private static final String RANCH = "ranch";
 
     /**
      * Constructor for objects of class Locations
@@ -87,4 +96,45 @@ public class Location
         else
             return 1000 - rnd.nextInt(501);
     }
+
+    public Bundle toBundle(){
+        Bundle b = new Bundle();
+        final Bundle[] bankBundle = new Bundle[this.bank.size()];
+        final Bundle[] saloonBundle = new Bundle[this.saloon.size()];
+        final Bundle[] ranchBundle = new Bundle[this.ranch.size()];
+
+        int i = 0;
+        for (Player p : this.bank) {
+            bankBundle[i++] = p.toBundle();
+        }
+        i = 0;
+
+        for (Player p : this.saloon){
+            saloonBundle[i++] = p.toBundle();
+        }
+        i = 0;
+
+        for (Player p : this.ranch){
+            ranchBundle[i++] = p.toBundle();
+        }
+
+        b.putParcelableArray(BANK, bankBundle);
+        b.putParcelableArray(SALOON, saloonBundle);
+        b.putParcelableArray(RANCH, ranchBundle);
+
+        return b;
+    }
+
+    public static Location fromBundle(@NonNull Bundle b){
+        Location ret = new Location();
+        for (Parcelable bankPerson : b.getParcelableArray(BANK))
+            ret.bank.add(Player.fromBundle((Bundle) bankPerson));
+        for (Parcelable saloonPerson : b.getParcelableArray(SALOON))
+            ret.saloon.add(Player.fromBundle((Bundle) saloonPerson));
+        for (Parcelable ranchPerson : b.getParcelableArray(RANCH))
+            ret.ranch.add(Player.fromBundle((Bundle) ranchPerson));
+
+        return ret;
+    }
+
 }
