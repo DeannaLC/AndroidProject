@@ -22,3 +22,9 @@ Testing was not done for handling a large number of players. Not sure what it wo
 Unit Tests also only pick one set of actions and observations to avoid complications. 
 
 Full system tests can be run using SelectObservationEndScreenTest
+
+========================================================
+
+**CREDIT**
+
+Background image taken from: https://www.pxfuel.com/en/desktop-wallpaper-ztful
