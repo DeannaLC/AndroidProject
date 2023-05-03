@@ -90,4 +90,8 @@ public class Player implements Serializable {
     public static Player fromBundle(Bundle b){
         return new Player("");
     }
+
+    public static boolean checkBundleRole(Bundle b){
+        return b.getString(ROLE).equals("bandit");
+    }
 }

@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     private Location loc = new Location();
 
     private IMainView mainView;
-    //1 for action, 2 for observation, 3 for daytime
-    private int gamePhase;
+    //0 for config, 1 for action, 2 for observation, 3 for daytime
+    private int gamePhase = 0;
     private static final String CURDAY = "curDay";
     private static final String DAYLIM = "dayLim";
     private static final String CURMONEY = "curMoney";
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     private static final String CURRENT = "current";
     private static final String CANACT = "canAct";
     private static final String LOCATION = "loc";
+    private static final String GAMEPHASE = "gamePhase";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,24 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
             this.moneyLim = savedInstanceState.getInt(CURMONEY);
             this.playerCount = savedInstanceState.getInt(PLAYERCOUNT);
             this.banditCount = savedInstanceState.getInt(BANDITCOUNT);
-            /*this.playersList = (PlayerList) savedInstanceState.getSerializable(PLAYERSLIST);
+            this.playersList = PlayerList.fromBundle(savedInstanceState.getBundle(PLAYERSLIST));
+            this.banditVals = savedInstanceState.getIntegerArrayList(BANDITVALS);
+            this.gamePhase = savedInstanceState.getInt(GAMEPHASE);
+            //if (this.gamePhase == 0)
+            //    this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
+            Bundle pBundle = savedInstanceState.getBundle(CURRENT);
+            if (pBundle != null) {
+                if (Player.checkBundleRole(pBundle))
+                    this.current = Bandit.fromBundle(pBundle);
+                else
+                    this.current = Cowboy.fromBundle(pBundle);
+            }
+            if (savedInstanceState.getBundle(CANACT) != null)
+                this.canAct = PlayerList.fromBundle(savedInstanceState.getBundle(CANACT));
+            this.loc = Location.fromBundle(savedInstanceState.getBundle(LOCATION));
+            /* w/ serializables
+
+            this.playersList = (PlayerList) savedInstanceState.getSerializable(PLAYERSLIST);
             this.banditVals = savedInstanceState.getIntegerArrayList(BANDITVALS);
             this.current = (Player) savedInstanceState.getSerializable(CURRENT);
             this.canAct = (PlayerList) savedInstanceState.getSerializable(CANACT);
@@ -104,7 +122,18 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         outState.putInt(MONEYLIM, this.moneyLim);
         outState.putInt(PLAYERCOUNT, this.playerCount);
         outState.putInt(BANDITCOUNT, this.banditCount);
-        /*outState.putSerializable(PLAYERSLIST, this.playersList);
+        outState.putInt(GAMEPHASE, this.gamePhase);
+        if (this.playersList != null)
+            outState.putBundle(PLAYERSLIST, this.playersList.toBundle());
+        if (this.current != null)
+            outState.putBundle(CURRENT, this.current.toBundle());
+        outState.putIntegerArrayList(BANDITVALS, this.banditVals);
+        if (this.canAct != null)
+            outState.putBundle(CANACT, this.canAct.toBundle());
+        outState.putBundle(LOCATION, this.loc.toBundle());
+        /*
+        w/ serializables
+        outState.putSerializable(PLAYERSLIST, this.playersList);
         outState.putIntegerArrayList(BANDITVALS, this.banditVals);
         outState.putSerializable(CURRENT, this.current);
         outState.putSerializable(CANACT, this.canAct);
