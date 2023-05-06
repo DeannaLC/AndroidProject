@@ -13,11 +13,15 @@ public interface IAddPlayers {
 
         boolean checkPlayerCap();
 
-        public void onPlayersSet();
+        void onPlayersSet();
+
+        PlayerList getPlayers();
+
+        String showRole();
 
     }
 
-    void showNames(PlayerList players);
+    void showNames();
 
-    void showRole(MainActivity main);
+    void showRole();
 }

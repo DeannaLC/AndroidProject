@@ -126,27 +126,55 @@ public class Location implements Serializable
         return b;
     }
 
+    public void addTo(Player p, String place){
+        if (place.equals("bank"))
+            this.bank.add(p);
+        else if (place.equals("saloon"))
+            this.saloon.add(p);
+        else
+            this.ranch.add(p);
+    }
+
     public static Location fromBundle(@NonNull Bundle b){
         Location ret = new Location();
         for (Parcelable bankPerson : b.getParcelableArray(BANK)) {
-            if (b.getString("role") == "cowboy")
+            Bundle x = (Bundle) bankPerson;
+            if (x.getString("role").equals("cowboy"))
                 ret.bank.add(Cowboy.fromBundle((Bundle) bankPerson));
             else
                 ret.bank.add(Bandit.fromBundle((Bundle) bankPerson));
         }
         for (Parcelable saloonPerson : b.getParcelableArray(SALOON)) {
-            if (b.getString("role") == "cowboy")
+            Bundle x = (Bundle) saloonPerson;
+            if (x.getString("role").equals("cowboy"))
                 ret.saloon.add(Cowboy.fromBundle((Bundle) saloonPerson));
             else
                 ret.saloon.add(Bandit.fromBundle((Bundle) saloonPerson));
         }
         for (Parcelable ranchPerson : b.getParcelableArray(RANCH)) {
-            if (b.getString("role") == "cowboy")
+            Bundle x = (Bundle) ranchPerson;
+            if (x.getString("role").equals("cowboy"))
                 ret.ranch.add(Cowboy.fromBundle((Bundle) ranchPerson));
             else
                 ret.ranch.add(Bandit.fromBundle((Bundle) ranchPerson));
         }
         return ret;
+    }
+
+    public String inLocation(String name){
+        for (int i = 0; i < this.bank.size(); i = i + 1) {
+            if (name.equals(this.bank.get(i).getName()))
+                return "bank";
+        }
+        for (int i = 0; i < this.saloon.size(); i = i + 1) {
+            if (name.equals(this.saloon.get(i).getName()))
+                return "saloon";
+        }
+        for (int i = 0; i < this.ranch.size(); i = i + 1) {
+            if (name.equals(this.ranch.get(i).getName()))
+                return "ranch";
+        }
+        return "none";
     }
 
 }

@@ -26,6 +26,18 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
     //Player active;
     Listener listener;
     FragmentActionSelectBinding binding;
+    boolean stealing = false;
+    private static final String STEALING = "stealing";
+    boolean watchingPlace = false;
+    private static final String WATCHINGPLACE = "watchingPlace";
+    boolean onStealConfirm = false;
+    private static final String ONSTEALCONFIRM = "onStealConfirm";
+    boolean onWatchConfirm = false;
+    private static final String ONWATCHCONFIRM = "onWatchConfirm";
+    String place;
+    private static final String PLACE = "place";
+    int stealingVal = 0;
+    private static final String STEALINGVAL = "stealingVal";
 
     public ActionSelectFragment() {
         // Required empty public constructor
@@ -33,7 +45,6 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
 
     /**
      * Constructor for ActionSelectFragment
-     * @param active, current player who's making an action
      * @param listener, MainActivity which controls the game
      */
     public ActionSelectFragment(Listener listener){//Player active, Listener listener){
@@ -68,13 +79,24 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
     public View.OnClickListener generalObserveButton(String place) {
         View.OnClickListener ret = new View.OnClickListener() {
             public void onClick(View view) {
+                ActionSelectFragment.this.place = place;
+                //ActionSelectFragment.this.listener.setLocInPL();
                 ActionSelectFragment.this.listener.observeAt(place.toLowerCase(), ActionSelectFragment.this.listener.getCurrent());
-                ActionSelectFragment.this.binding.buttonSet.removeAllViews();
+                ActionSelectFragment.this.watchConfirm();
+                /*ActionSelectFragment.this.binding.buttonSet.removeAllViews();
                 ActionSelectFragment.this.binding.splashText.setText("You chose to watch the " + place + " for the night");
-                ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());
+                ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());*/
             }
         };
         return ret;
+    }
+
+    public void watchConfirm(){
+        this.watchingPlace = false;
+        this.onWatchConfirm = true;
+        ActionSelectFragment.this.binding.buttonSet.removeAllViews();
+        ActionSelectFragment.this.binding.splashText.setText("You chose to watch the " + this.place + " for the night");
+        ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());
     }
 
     /**
@@ -86,12 +108,28 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
     public View.OnClickListener generalStealButton(String place){
         return new View.OnClickListener() {
             public void onClick(View view){
-                int val = ActionSelectFragment.this.listener.stealFrom(place);
+                ActionSelectFragment.this.place = place;
+                //ActionSelectFragment.this.listener.setLocInPL();
+               // ActionSelectFragment.this.listener.setRobbedInPL();
+                ActionSelectFragment.this.stealConfirm();
+                /*int val = ActionSelectFragment.this.listener.stealFrom(place);
+                ActionSelectFragment.this.onStealConfirm = true;
                 ActionSelectFragment.this.binding.buttonSet.removeAllViews();
                 ActionSelectFragment.this.binding.splashText.setText("You stole " + val + "$ from the " + place);
                 ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());
+                */
             }
         };
+    }
+
+    public void stealConfirm(){
+        this.stealing = false;
+        this.onStealConfirm = true;
+        if (this.stealingVal == 0)
+            this.stealingVal = this.listener.stealFrom(this.place);
+        this.binding.buttonSet.removeAllViews();
+        this.binding.splashText.setText("You stole " + this.stealingVal + "$ from the " + this.place);
+        this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());
     }
 
     /**
@@ -138,6 +176,7 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         watch.setOnClickListener(new View.OnClickListener() {
            public void onClick(View view){
                ActionSelectFragment.this.binding.buttonSet.removeAllViews();
+               ActionSelectFragment.this.watchingPlace = true;
                ActionSelectFragment.this.cowboyAction();
            }
         });
@@ -145,6 +184,8 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         steal.setText("Steal");
         steal.setOnClickListener(new View.OnClickListener() {
            public void onClick(View view){
+               ActionSelectFragment.this.stealingOptions();
+               /*ActionSelectFragment.this.stealing = true;
                ActionSelectFragment.this.binding.splashText.setText("Choose where to Steal from");
                ActionSelectFragment.this.binding.buttonSet.removeAllViews();
                Button bank = new MaterialButton(ActionSelectFragment.super.getContext());
@@ -158,10 +199,60 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
                ranch.setOnClickListener(ActionSelectFragment.this.generalStealButton("ranch"));
                ActionSelectFragment.this.binding.buttonSet.addView(bank);
                ActionSelectFragment.this.binding.buttonSet.addView(saloon);
-               ActionSelectFragment.this.binding.buttonSet.addView(ranch);;
+               ActionSelectFragment.this.binding.buttonSet.addView(ranch);;*/
            }
         });
-        this.binding.buttonSet.addView(watch);
-        this.binding.buttonSet.addView(steal);
+        if (this.stealing == false && this.watchingPlace == false) {
+            this.binding.buttonSet.addView(watch);
+            this.binding.buttonSet.addView(steal);
+        }
+    }
+
+    public void stealingOptions(){
+        this.stealing = true;
+        this.binding.splashText.setText("Choose where to Steal from");
+        this.binding.buttonSet.removeAllViews();
+        Button bank = new MaterialButton(ActionSelectFragment.super.getContext());
+        bank.setText("Bank");
+        bank.setOnClickListener(ActionSelectFragment.this.generalStealButton("bank"));
+        Button saloon = new MaterialButton(ActionSelectFragment.super.getContext());
+        saloon.setText("Saloon");
+        saloon.setOnClickListener(ActionSelectFragment.this.generalStealButton("saloon"));
+        Button ranch = new MaterialButton(ActionSelectFragment.super.getContext());
+        ranch.setText("ranch");
+        ranch.setOnClickListener(ActionSelectFragment.this.generalStealButton("ranch"));
+        this.binding.buttonSet.addView(bank);
+        this.binding.buttonSet.addView(saloon);
+        this.binding.buttonSet.addView(ranch);;
+    }
+
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putString(PLACE, this.place);
+        outState.putBoolean(STEALING, this.stealing);
+        outState.putBoolean(WATCHINGPLACE, this.watchingPlace);
+        outState.putBoolean(ONSTEALCONFIRM, this.onStealConfirm);
+        outState.putBoolean(ONWATCHCONFIRM, this.onWatchConfirm);
+        outState.putInt(STEALINGVAL, this.stealingVal);
+    }
+
+    public void onViewStateRestored(@NonNull Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            this.place = savedInstanceState.getString(PLACE);
+            this.stealing = savedInstanceState.getBoolean(STEALING);
+            this.watchingPlace = savedInstanceState.getBoolean(WATCHINGPLACE);
+            this.onStealConfirm = savedInstanceState.getBoolean(ONSTEALCONFIRM);
+            this.onWatchConfirm = savedInstanceState.getBoolean(ONWATCHCONFIRM);
+            this.stealingVal = savedInstanceState.getInt(STEALINGVAL);
+        }
+        if (this.stealing)
+            this.stealingOptions();
+        else if (this.watchingPlace)
+            this.cowboyAction();
+        else if (this.onStealConfirm)
+            this.stealConfirm();
+        else if (this.onWatchConfirm)
+            this.watchConfirm();
     }
 }

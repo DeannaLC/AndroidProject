@@ -11,5 +11,6 @@ public interface IViewObservation {
         public Player getCurrent();
 
         public String doViewLoc();
+
     }
 }

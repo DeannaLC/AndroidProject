@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 import edu.vassar.cmpu203.high_noon_heist.R;
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentConfigGameBinding;
+import edu.vassar.cmpu203.high_noon_heist.model.Player;
 
 /**
  * Fragment for configuring the game
@@ -27,6 +28,8 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
     private FragmentConfigGameBinding binding;
 
     private Listener listener;
+    private static final String OPTIONSDONE = "optionsDone";
+    private boolean optionsDone = false;
 
     public ConfigGameFragment() {}
 
@@ -87,7 +90,7 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
                         return;
                     }
                 }
-
+                ConfigGameFragment.this.optionsDone = true;
                 ConfigGameFragment.this.listener.onSetOptions(playerTotal, banditAmt, dayLim, moneyLim, ConfigGameFragment.this);
             }
         });
@@ -95,11 +98,10 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
 
     /**
      * Displays game options after they've been set
-     * @param m, for displaying the configuration
      */
     @Override
-    public void showConfig(MainActivity m){
-        this.binding.showOptions.setText(m.toString());
+    public void showConfig(){
+        this.binding.showOptions.setText(this.listener.toString());
 
         if (this.binding.nextButtons.getChildCount() == 1) {
 
@@ -121,9 +123,16 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean(OPTIONSDONE, this.optionsDone);
     }
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null){
+            this.optionsDone = savedInstanceState.getBoolean(OPTIONSDONE);
+            if (this.optionsDone){
+                this.showConfig();
+            }
+        }
     }
 }

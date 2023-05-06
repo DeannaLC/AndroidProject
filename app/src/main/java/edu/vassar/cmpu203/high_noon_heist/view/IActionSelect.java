@@ -4,12 +4,16 @@ import edu.vassar.cmpu203.high_noon_heist.model.Player;
 
 public interface IActionSelect {
     interface Listener{
-        public void observeAt(String place, Player player);
+        void observeAt(String place, Player player);
 
-        public int stealFrom(String place);
+        int stealFrom(String place);
 
-        public void onActionDone();
+        void onActionDone();
 
-        public Player getCurrent();
+        Player getCurrent();
+
+        //void setLocInPL();
+
+        //void setRobbedInPL();
     }
 }

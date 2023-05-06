@@ -30,7 +30,7 @@ public class Player implements Serializable {
         return this.name;
     }
 
-    public void observe(Location l, String loc) {
+    public void observe(Location l, String loc){
         this.loc = loc;
         if (loc.equals("bank")){
             (l.bank).add(this);
@@ -85,6 +85,10 @@ public class Player implements Serializable {
 
     public Bundle toBundle(){
         return new Bundle();
+    }
+
+    public void updateLoc(String loc){
+        this.loc = loc;
     }
 
     public static Player fromBundle(Bundle b){

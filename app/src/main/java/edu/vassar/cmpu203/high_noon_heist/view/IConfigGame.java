@@ -13,6 +13,6 @@ public interface IConfigGame {
 
     }
 
-    void showConfig(MainActivity m);
+    void showConfig();
 
 }

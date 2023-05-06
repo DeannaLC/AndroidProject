@@ -25,6 +25,12 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
 
     private FragmentViewObservationBinding binding;
     private Listener listener;
+    private boolean viewingPerson = false;
+    private final static String VIEWINGPERSON = "viewingPerson";
+    private final static String VIEWINGNUMBER = "viewingNumber";
+    private boolean viewingNumber = false;
+    private final static String RESULT = "result";
+    private String result = "";
 
     @Nullable
     @Override
@@ -50,32 +56,37 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
     }
 
     public void cowboyObservation(Player current){
+        //Player current = this.listener.getCurrent();
         this.binding.viewPrompt.setText("View number of players or a specific player at " + current.viewLoc() + "?");
         Button number = new MaterialButton(super.getContext());
         number.setText("Number");
         number.setOnClickListener(new View.OnClickListener() {
            public void onClick(View view){
-               ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
+               ViewObservationFragment.this.showNumber();
+               /*ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
                String res = ViewObservationFragment.this.listener.showObservation(0);
                ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " total at the " + ViewObservationFragment.this.listener.doViewLoc());
-               ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
+               ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());*/
            }
         });
         Button person = new MaterialButton(super.getContext());
         person.setText("Person");
         person.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
+                /*ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
                 String res = ViewObservationFragment.this.listener.showObservation(1);
                 if (res == null)
                     ViewObservationFragment.this.binding.viewPrompt.setText("No other players at the " + ViewObservationFragment.this.listener.doViewLoc());
                 else
                     ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " at the " + ViewObservationFragment.this.listener.doViewLoc());
-                ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
+                ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());*/
+                ViewObservationFragment.this.showPerson();
             }
         });
-        this.binding.viewPromptButtons.addView(number);
-        this.binding.viewPromptButtons.addView(person);
+        if (this.viewingNumber == false && this.viewingPerson == false) {
+            this.binding.viewPromptButtons.addView(number);
+            this.binding.viewPromptButtons.addView(person);
+        }
     }
 
     public void banditObservation(Player current){
@@ -94,6 +105,27 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         this.binding.viewPromptButtons.addView(this.addConfirm());
     }
 
+    public void showNumber(){
+        this.viewingNumber = true;
+        this.binding.viewPromptButtons.removeAllViews();
+        if (this.result.equals(""))
+            this.result = this.listener.showObservation(0);
+        this.binding.viewPrompt.setText("You saw " + this.result + " total at the " + this.listener.doViewLoc());
+        this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
+    }
+
+    public void showPerson(){
+        this.viewingPerson = true;
+        this.binding.viewPromptButtons.removeAllViews();
+        if (this.result.equals(""))
+            this.result = this.listener.showObservation(1);
+        if (this.result == null)
+            this.binding.viewPrompt.setText("No other players at the " + this.listener.doViewLoc());
+        else
+            this.binding.viewPrompt.setText("You saw " + this.result + " at the " + this.listener.doViewLoc());
+        this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
+    }
+
     public Button addConfirm(){
         Button confirm = new MaterialButton(super.getContext());
         confirm.setText("Confirm");
@@ -103,6 +135,26 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
             }
         });
         return confirm;
+    }
+
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(VIEWINGNUMBER, this.viewingNumber);
+        outState.putBoolean(VIEWINGPERSON, this.viewingPerson);
+        outState.putString(RESULT, this.result);
+    }
+
+    public void onViewStateRestored(@NonNull Bundle savedInstanceState){
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            this.viewingNumber = savedInstanceState.getBoolean(VIEWINGNUMBER);
+            this.viewingPerson = savedInstanceState.getBoolean(VIEWINGPERSON);
+            this.result = savedInstanceState.getString(RESULT);
+        }
+        if (this.viewingNumber)
+            this.showNumber();
+        if (this.viewingPerson)
+            this.showPerson();
     }
 
 }

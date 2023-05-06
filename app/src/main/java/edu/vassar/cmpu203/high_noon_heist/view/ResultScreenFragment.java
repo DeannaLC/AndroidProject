@@ -18,11 +18,11 @@ import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentResultScreenBindin
 /**
  * Fragment for viewing the game results
  */
-public class ResultScreenFragment extends Fragment {
+public class ResultScreenFragment extends Fragment implements IResults{
 
     private FragmentResultScreenBinding binding;
 
-    private MainActivity data;
+    private Listener listener;
 
     public ResultScreenFragment() {
         // Required empty public constructor
@@ -30,10 +30,9 @@ public class ResultScreenFragment extends Fragment {
 
     /**
      * Constructor for result screen
-     * @param data to get game data
      */
-    public ResultScreenFragment(MainActivity data){
-        this.data = data;
+    public ResultScreenFragment(Listener listener){
+        this.listener = listener;
     }
 
     @Nullable
@@ -45,12 +44,17 @@ public class ResultScreenFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        this.binding.moneyStolen.setText("Money stolen: " + this.data.getMoney() + "$");
-        if (this.data.checkWin() == 2){
+        this.binding.moneyStolen.setText("Money stolen: " + this.listener.getMoney() + "$");
+        if (this.listener.checkWin() == 2){
             this.binding.winText.setText("Bandits win!");
         }
         else
             this.binding.winText.setText("Cowboys win!");
+        this.binding.menu.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                ResultScreenFragment.this.listener.onGameDone();
+            }
+        });
     }
 
 }

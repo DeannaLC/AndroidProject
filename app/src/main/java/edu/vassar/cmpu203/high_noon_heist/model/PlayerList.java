@@ -44,6 +44,10 @@ public class PlayerList implements Serializable {
         for (int i = 0; i < players.size(); i = i + 1){
             p = (Player) (players.get(i));
             ret.players.add(p);
+            if (p.role() == 1)
+                ret.bandits.add(p);
+            else
+                ret.cowboys.add(p);
         }
         return ret;
     }
@@ -108,7 +112,7 @@ public class PlayerList implements Serializable {
     }
     */
 
-    public String voteValsStr(){
+    /*public String voteValsStr(){
         Player cur;
         String ret = "";
         for (int i = 0; i < this.players.size(); i = i + 1){
@@ -116,7 +120,7 @@ public class PlayerList implements Serializable {
             ret = ret + " " + cur.getVotes();
         }
         return ret;
-    }
+    }*/
 
     public int tallyVotes(){
         int count = 0;
@@ -161,6 +165,13 @@ public class PlayerList implements Serializable {
         return this.tallyVotes() > this.players.size() / 2;
     }
 
+    public void removeByName(String name){
+        Player removing = this.findPlayer(name);
+        this.players.remove(removing);
+        this.bandits.remove(removing);
+        this.cowboys.remove(removing);
+    }
+
     public Bundle toBundle(){
         final Bundle b = new Bundle();
         final Bundle[] playerBundle = new Bundle[this.players.size()];
@@ -200,7 +211,8 @@ public class PlayerList implements Serializable {
             }
             else
                 playerList.cowboys.add(p);*/
-            if (b.getString("role") == "bandit"){
+            Bundle x = (Bundle) playerParcelable;
+            if (x.getString("role").equals("bandit")){
                 Bandit band = Bandit.fromBundle((Bundle) playerParcelable);
                 playerList.players.add(band);
                 playerList.bandits.add(band);

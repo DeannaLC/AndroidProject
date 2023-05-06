@@ -23,6 +23,7 @@ import edu.vassar.cmpu203.high_noon_heist.view.IAddPlayers;
 import edu.vassar.cmpu203.high_noon_heist.view.IConfigGame;
 import edu.vassar.cmpu203.high_noon_heist.view.IMainView;
 import edu.vassar.cmpu203.high_noon_heist.view.IPlayerListAction;
+import edu.vassar.cmpu203.high_noon_heist.view.IResults;
 import edu.vassar.cmpu203.high_noon_heist.view.IViewObservation;
 import edu.vassar.cmpu203.high_noon_heist.view.IVote;
 import edu.vassar.cmpu203.high_noon_heist.view.MainView;
@@ -31,7 +32,7 @@ import edu.vassar.cmpu203.high_noon_heist.view.ResultScreenFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ViewObservationFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.VoteFragment;
 
-public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener, IViewObservation.Listener, IVote.Listener {
+public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener,  IResults.Listener, IViewObservation.Listener, IVote.Listener {
 
     int curDay = 0;
     int dayLim;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     private static final String LOCATION = "loc";
     private static final String GAMEPHASE = "gamePhase";
 
+    public MainActivity(){}
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportFragmentManager().setFragmentFactory(new HighNoonHeistFragFactory(this));
@@ -78,40 +81,57 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
             this.curDay = savedInstanceState.getInt(CURDAY);
             this.dayLim = savedInstanceState.getInt(DAYLIM);
             this.curMoney = savedInstanceState.getInt(CURMONEY);
-            this.moneyLim = savedInstanceState.getInt(CURMONEY);
+            this.moneyLim = savedInstanceState.getInt(MONEYLIM);
             this.playerCount = savedInstanceState.getInt(PLAYERCOUNT);
             this.banditCount = savedInstanceState.getInt(BANDITCOUNT);
             this.playersList = PlayerList.fromBundle(savedInstanceState.getBundle(PLAYERSLIST));
             this.banditVals = savedInstanceState.getIntegerArrayList(BANDITVALS);
             this.gamePhase = savedInstanceState.getInt(GAMEPHASE);
-            //if (this.gamePhase == 0)
-            //    this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
             Bundle pBundle = savedInstanceState.getBundle(CURRENT);
+            Player cur = new Player("");
             if (pBundle != null) {
                 if (Player.checkBundleRole(pBundle))
-                    this.current = Bandit.fromBundle(pBundle);
+                    cur = Bandit.fromBundle(pBundle);
                 else
-                    this.current = Cowboy.fromBundle(pBundle);
+                    cur = Cowboy.fromBundle(pBundle);
             }
+            this.current = this.playersList.findPlayer(cur.getName());
             if (savedInstanceState.getBundle(CANACT) != null)
-                this.canAct = PlayerList.fromBundle(savedInstanceState.getBundle(CANACT));
-            this.loc = Location.fromBundle(savedInstanceState.getBundle(LOCATION));
-            /* w/ serializables
-
-            this.playersList = (PlayerList) savedInstanceState.getSerializable(PLAYERSLIST);
-            this.banditVals = savedInstanceState.getIntegerArrayList(BANDITVALS);
-            this.current = (Player) savedInstanceState.getSerializable(CURRENT);
-            this.canAct = (PlayerList) savedInstanceState.getSerializable(CANACT);
-            this.loc = (Location) savedInstanceState.getSerializable(LOCATION);
-
-            this.playersList = PlayerList.fromBundle(savedInstanceState);*/
-            /*if (savedInstanceState.getString("role") == "bandit")
-                this.current = Bandit.fromBundle(savedInstanceState);
-            else
-                this.current = Cowboy.fromBundle(savedInstanceState);*/
-
+                this.sharePlayers(savedInstanceState);
         }
 
+    }
+
+    public void sharePlayers(Bundle b){
+        Location l = Location.fromBundle(b.getBundle(LOCATION));
+        PlayerList actors = PlayerList.fromBundle(b.getBundle(CANACT));
+
+        Location shareLoc = new Location();
+        PlayerList shareActors = new PlayerList();
+
+        Player cur;
+        for (int i = 0; i < this.playersList.players.size(); i = i + 1){
+            cur = (Player) this.playersList.players.get(i);
+            if (actors.findPlayer(cur.getName()) != null) {
+                shareActors.players.add(cur);
+                if (cur.role() == 1)
+                    shareActors.bandits.add(cur);
+                else
+                    shareActors.cowboys.add(cur);
+            }
+        }
+        for (int i = 0; i < this.playersList.players.size(); i = i + 1){
+            cur = (Player) this.playersList.players.get(i);
+            if (l.inLocation(cur.getName()).equals("bank"))
+                shareLoc.addTo(cur, "bank");
+            else if (l.inLocation(cur.getName()).equals("saloon"))
+                shareLoc.addTo(cur, "saloon");
+            else if (l.inLocation(cur.getName()).equals("ranch"))
+                shareLoc.addTo(cur, "ranch");
+        }
+
+        this.loc = shareLoc;
+        this.canAct = shareActors;
     }
 
     protected void onSaveInstanceState(@NonNull Bundle outState){
@@ -131,13 +151,6 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         if (this.canAct != null)
             outState.putBundle(CANACT, this.canAct.toBundle());
         outState.putBundle(LOCATION, this.loc.toBundle());
-        /*
-        w/ serializables
-        outState.putSerializable(PLAYERSLIST, this.playersList);
-        outState.putIntegerArrayList(BANDITVALS, this.banditVals);
-        outState.putSerializable(CURRENT, this.current);
-        outState.putSerializable(CANACT, this.canAct);
-        outState.putSerializable(LOCATION, this.loc);*/
     }
 
     public PlayerList getPlayerListCopy(){
@@ -162,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     @Override
     public void onPlayersSet(){
         this.canAct = this.getPlayerListCopy();
-        //this.mainView.displayFragment(new VoteFragment(this, this.playersList), true, "votes");
         this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
     }
 
@@ -207,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.moneyLim = moneyLim;
         this.draw();
 
-        config.showConfig(this);
+        config.showConfig();
     }
 
     /**
@@ -233,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
             playersList.addCowboy(name);
         else
             playersList.addBandit(name);
-        addPlayers.showRole(this);
+        addPlayers.showRole();
     }
 
     public String showRole(){
@@ -282,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
      */
     @Override
     public void onActionDone(){
-        this.canAct.removePlayer(current);
+        this.canAct.removeByName(current.getName());
         if (this.canAct.players.size() > 0)
             this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
         else {
@@ -304,6 +316,18 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
             }
         }
     }
+
+    /*public void setRobbedInPL(){
+        String name = this.current.getName();
+        Bandit update = (Bandit) this.playersList.findPlayer(name);
+        update.robbed = true;
+    }
+
+    public void setLocInPL(){
+        String name = this.current.getName();
+        Player update = this.playersList.findPlayer(name);
+        update.updateLoc(current.viewLoc());
+    }*/
 
     public void observeAt(String place, Player player){
         player.observe(this.loc, place);
@@ -351,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         if (repeats == false){
             if (this.playersList.canRemove()) {
                 ret = this.playersList.mostVotes();
-                this.playersList.removePlayer(ret);
+                this.playersList.removeByName(ret.getName());
                 return ret;
             }
         }
@@ -384,6 +408,16 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
 
     public String doViewLoc(){
         return this.current.viewLoc();
+    }
+
+    public void onGameDone(){
+        this.curDay = 0;
+        this.curMoney = 0;
+        this.playersList = new PlayerList();
+        this.loc.clearLocs();
+        this.gamePhase = 0;
+
+        this.mainView.displayFragment(new ConfigGameFragment(this), true, "start");
     }
 
 }

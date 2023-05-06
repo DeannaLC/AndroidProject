@@ -28,6 +28,8 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
 
     private FragmentAddPlayersBinding binding;
     private Listener listener;
+    private boolean viewingRole = false;
+    private static final String VIEWINGROLE = "onViewingRole";
 
     public AddPlayersFragment() {
         // Required empty public constructor
@@ -47,6 +49,8 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.binding.confirmButton.setVisibility(View.INVISIBLE);
+        //PlayerList players = this.listener.getPlayers();
+        //this.binding.displayPlayers.setText(players.toString());
         this.binding.addNameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                     Editable playerNameEditable = AddPlayersFragment.this.binding.nameInputEditable.getText();
@@ -64,16 +68,17 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
 
                 }
         });
+        this.showNames();
     }
 
 
     /**
-     * Displays a list of player names, or advances to next screen if player amount is reached
-     * @param players, current added players
+     * Displays a list of player names, or option to advance to next screen if player amount is reached
      */
-    public void showNames(PlayerList players){
+    public void showNames(){
+        PlayerList players = this.listener.getPlayers();
         this.binding.displayPlayers.setText(players.toString());
-        if (AddPlayersFragment.this.listener.checkPlayerCap()){
+        if (this.listener.checkPlayerCap()){
             this.binding.nameInputEditable.setVisibility(View.INVISIBLE);
             this.binding.addPlayersText.setVisibility(View.INVISIBLE);
             this.binding.addNameButton.setText("Next");
@@ -87,11 +92,11 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
 
     /**
      * Displays an added player's role
-     * @param main, for accessing the most recently added player
      */
-    public void showRole(MainActivity main){
+    public void showRole(){
+        this.viewingRole = true;
         this.binding.addNameButton.setVisibility(View.INVISIBLE);
-        this.binding.showRoleView.setText(main.showRole());
+        this.binding.showRoleView.setText(this.listener.showRole());
         this.binding.confirmButton.setVisibility(View.VISIBLE);
         this.binding.nameInputEditable.setVisibility(View.INVISIBLE);
         this.binding.addPlayersText.setVisibility(View.INVISIBLE);
@@ -100,23 +105,36 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
         this.binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                AddPlayersFragment.this.clearRole(main.getPlayers());
+                AddPlayersFragment.this.clearRole();
             }
         });
     }
 
     /**
      * Changes layout after a player has viewed their role
-     * @param players who are currently added
      */
-    public void clearRole(PlayerList players){
+    public void clearRole(){
+        this.viewingRole = false;
         this.binding.nameInputEditable.setVisibility(View.VISIBLE);
         this.binding.addPlayersText.setVisibility(View.VISIBLE);
         this.binding.displayPlayers.setVisibility(View.VISIBLE);
         this.binding.showRoleView.setText(null);
         this.binding.confirmButton.setVisibility(View.INVISIBLE);
         this.binding.addNameButton.setVisibility(View.VISIBLE);
-        this.showNames(players);
+        this.showNames();
+    }
+
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(VIEWINGROLE, this.viewingRole);
+    }
+
+    public void onViewStateRestored(@NonNull Bundle savedInstanceState){
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null)
+            this.viewingRole = savedInstanceState.getBoolean(VIEWINGROLE);
+        if (viewingRole)
+            this.showRole();
     }
 
 }

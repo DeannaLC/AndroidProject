@@ -17,11 +17,11 @@ public class HighNoonHeistFragFactory extends FragmentFactory{
     private final MainActivity controller;
 
     public HighNoonHeistFragFactory(MainActivity controller){
-        super();
+        //super();
         this.controller = controller;
     }
 
-    @NonNull
+    /*@NonNull
     @Override
     public Fragment instantiate(@NonNull ClassLoader classLoader, @NonNull String className) {
         Fragment fragment;
@@ -50,5 +50,30 @@ public class HighNoonHeistFragFactory extends FragmentFactory{
                 break;
         }
         return fragment;
+    }*/
+
+    @NonNull
+    @Override
+    public Fragment instantiate(@NonNull ClassLoader classLoader, @NonNull String className) {
+
+        // convert from class name to class
+        Class<? extends Fragment> fragClass = loadFragmentClass(classLoader, className);
+
+        // is this fragment in our view package? if so, it must be one of ours!
+        if (fragClass.getPackage().getName().equals(VIEW_PACKAGE)) {
+            try {
+                Constructor<?>[] fcons = fragClass.getConstructors(); // get all the constructors
+                assert fcons.length > 0 : "Fragment class does not have a constructor";
+                return (Fragment) fcons[1].newInstance(controller); // go with first constructor
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+                final String emsg = String.format("Can't instantiate %s: ensure it's concrete and " +
+                        "has a public constructor with a ControllerActivity parameter", fragClass);
+                Log.e("NextGenPos", emsg);
+                e.printStackTrace();
+            }
+        }
+
+        // default is to delegate to superclass
+        return super.instantiate(classLoader, className);
     }
 }
