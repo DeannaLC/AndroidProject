@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 
 @RunWith(AndroidJUnit4.class)
-public class SelectObservationEndScreenTest {
+public class SelectObservationTest {
 
 
     @org.junit.Rule
@@ -49,7 +49,7 @@ public class SelectObservationEndScreenTest {
      * Test for player select, observation, and end result screen.
      */
     @Test
-    public void testSelectObservationEndScreen(){
+    public void testSelectObservation(){
         SelectActionTest selectAct = new SelectActionTest();
         selectAct.testActionSelect();
 
@@ -66,6 +66,7 @@ public class SelectObservationEndScreenTest {
         this.doObservation("Jebediah", promptVi);
         this.doObservation("Phil", promptVi);
 
+        /*
         Matcher<View> matcher3 = ViewMatchers.withId(R.id.moneyStolen);
         ViewInteraction stolenVi = Espresso.onView(matcher3);
         Matcher<View> matcher4 = ViewMatchers.withId(R.id.winText);
@@ -73,5 +74,24 @@ public class SelectObservationEndScreenTest {
 
         stolenVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("Money stolen: ")));
         winVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("Bandits win!")));
+         */
+    }
+
+    @Test
+    public void testSelectObservation2(){
+        SelectActionTest selectAct = new SelectActionTest();
+        selectAct.testActionSelect2();
+
+        Matcher<View> matcher1 = ViewMatchers.withId(R.id.selectText);
+        ViewInteraction selectVi = Espresso.onView(matcher1);
+        Matcher<View> matcher2 = ViewMatchers.withId(R.id.viewPrompt);
+        ViewInteraction promptVi = Espresso.onView(matcher2);
+
+        selectVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("Choose a player to view Action results")));
+
+        this.doObservation("Jack", promptVi);
+        this.doObservation("Jeb", promptVi);
+        this.doObservation("Jebediah", promptVi);
+        this.doObservation("Phil", promptVi);
     }
 }

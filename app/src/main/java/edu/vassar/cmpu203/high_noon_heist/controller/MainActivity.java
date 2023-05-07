@@ -11,9 +11,13 @@ import java.util.Random;
 
 import edu.vassar.cmpu203.high_noon_heist.model.Bandit;
 import edu.vassar.cmpu203.high_noon_heist.model.Cowboy;
+import edu.vassar.cmpu203.high_noon_heist.model.Leaderboard;
 import edu.vassar.cmpu203.high_noon_heist.model.Location;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
+import edu.vassar.cmpu203.high_noon_heist.model.Winner;
+import edu.vassar.cmpu203.high_noon_heist.persistence.IPersistenceFacade;
+import edu.vassar.cmpu203.high_noon_heist.persistence.LocalStorageFacade;
 import edu.vassar.cmpu203.high_noon_heist.view.ActionSelectFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.AddPlayersFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ConfigGameFragment;
@@ -21,18 +25,22 @@ import edu.vassar.cmpu203.high_noon_heist.view.HighNoonHeistFragFactory;
 import edu.vassar.cmpu203.high_noon_heist.view.IActionSelect;
 import edu.vassar.cmpu203.high_noon_heist.view.IAddPlayers;
 import edu.vassar.cmpu203.high_noon_heist.view.IConfigGame;
+import edu.vassar.cmpu203.high_noon_heist.view.ILeaderboard;
 import edu.vassar.cmpu203.high_noon_heist.view.IMainView;
 import edu.vassar.cmpu203.high_noon_heist.view.IPlayerListAction;
 import edu.vassar.cmpu203.high_noon_heist.view.IResults;
+import edu.vassar.cmpu203.high_noon_heist.view.IStart;
 import edu.vassar.cmpu203.high_noon_heist.view.IViewObservation;
 import edu.vassar.cmpu203.high_noon_heist.view.IVote;
+import edu.vassar.cmpu203.high_noon_heist.view.LeaderboardFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.MainView;
 import edu.vassar.cmpu203.high_noon_heist.view.PlayerListActionFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ResultScreenFragment;
+import edu.vassar.cmpu203.high_noon_heist.view.StartFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ViewObservationFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.VoteFragment;
 
-public class MainActivity extends AppCompatActivity implements IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener,  IResults.Listener, IViewObservation.Listener, IVote.Listener {
+public class MainActivity extends AppCompatActivity implements IStart.Listener, ILeaderboard.Listener, IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener,  IResults.Listener, IViewObservation.Listener, IVote.Listener {
 
     int curDay = 0;
     int dayLim;
@@ -46,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     private PlayerList canAct;
 
     private Location loc = new Location();
+    Winner winner;
+    public boolean testMode = false;
+    Leaderboard leaderboard;
+    private IPersistenceFacade persistenceFacade;
 
     private IMainView mainView;
     //0 for config, 1 for action, 2 for observation, 3 for daytime
@@ -62,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
     private static final String CANACT = "canAct";
     private static final String LOCATION = "loc";
     private static final String GAMEPHASE = "gamePhase";
+    //private static final String WINNER = "winner";
+    private static final String LEADERBOARD = "leaderboard";
 
     public MainActivity(){}
 
@@ -70,12 +84,16 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         getSupportFragmentManager().setFragmentFactory(new HighNoonHeistFragFactory(this));
         super.onCreate(savedInstanceState);
 
+        this.persistenceFacade = new LocalStorageFacade(this.getFilesDir());
+        this.leaderboard = this.persistenceFacade.retrieveLeaderboard();
+        if (this.leaderboard == null)
+            this.leaderboard = new Leaderboard();
         this.mainView = new MainView(this);
         this.setContentView(mainView.getRootView());
 
         if (savedInstanceState == null) {
             this.playersList = new PlayerList();
-            this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
+            this.mainView.displayFragment(new StartFragment(this), true, "start");
         }
         else{
             this.curDay = savedInstanceState.getInt(CURDAY);
@@ -98,8 +116,18 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
             this.current = this.playersList.findPlayer(cur.getName());
             if (savedInstanceState.getBundle(CANACT) != null)
                 this.sharePlayers(savedInstanceState);
+            //if (savedInstanceState.getBundle(WINNER) != null)
+            //    this.winner = Winner.fromBundle(savedInstanceState.getBundle(WINNER));
+            this.leaderboard = Leaderboard.fromBundle(savedInstanceState.getBundle(LEADERBOARD));
         }
+    }
 
+    public void onBegin(){
+        this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
+    }
+
+    public void onLeaderboardCheck(){
+        this.mainView.displayFragment(new LeaderboardFragment(this), true, "leaders");
     }
 
     public void sharePlayers(Bundle b){
@@ -136,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
 
     protected void onSaveInstanceState(@NonNull Bundle outState){
         super.onSaveInstanceState(outState);
+        this.persistenceFacade.saveLeaderboard(this.leaderboard);
         outState.putInt(DAYLIM, this.dayLim);
         outState.putInt(CURDAY, this.curDay);
         outState.putInt(CURMONEY, this.curMoney);
@@ -150,6 +179,9 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         outState.putIntegerArrayList(BANDITVALS, this.banditVals);
         if (this.canAct != null)
             outState.putBundle(CANACT, this.canAct.toBundle());
+        //if (this.winner != null)
+        //    outState.putBundle(WINNER, this.winner.toBundle());
+        outState.putBundle(LEADERBOARD, this.leaderboard.toBundle());
         outState.putBundle(LOCATION, this.loc.toBundle());
     }
 
@@ -187,6 +219,12 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
      */
     public void draw(){
         ArrayList ret = new ArrayList();
+        if (testMode){
+            ret.add(0);
+            ret.add(3);
+            this.banditVals = ret;
+            return;
+        }
         Random rand = new Random();
         int d = 0;
         boolean repeat;
@@ -299,6 +337,11 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
             this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
         else {
             if (this.gamePhase == 1) {
+                if (this.checkWin() == 2) {
+                    this.leaderboard.addWinner(this.winner);
+                    this.mainView.displayFragment(new ResultScreenFragment(this), true, "listAction");
+                    return;
+                }
                 this.gamePhase = 2;
                 canAct = this.getPlayerListCopy();
                 this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
@@ -308,11 +351,13 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
                 this.curDay = this.curDay + 1;
                 if (this.checkWin() == 1) {
                     this.loc.clearLocs();
+                    this.leaderboard.addWinner(this.winner);
                     this.mainView.displayFragment(new VoteFragment(this), true, "vote");
                     return;
                 }
-                else
+                else {
                     this.mainView.displayFragment(new ResultScreenFragment(this), true, "results");
+                }
             }
         }
     }
@@ -348,16 +393,30 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
      * @return 3 if cowboys win, 2 if bandits win, 1 if game is still in play
      */
     public int checkWin(){
+        Winner winner = new Winner();
+        int ret;
         if (curDay == dayLim)
-            return 3;
+            ret = 3;
         else if ((playersList.bandits).size() >= ((playersList.cowboys).size()))
-            return 2;
+            ret = 2;
         else if (curMoney >= moneyLim)
-            return 2;
+            ret = 2;
         else if ((playersList.bandits).size() == 0)
-            return 3;
+            ret = 3;
         else
-            return 1;
+            ret = 1;
+        if (ret == 2){
+            winner.setBanditWin();
+            //this.winner = winner;
+            this.leaderboard.addWinner(winner);
+            //this.leaderboard.addWinner(winner);
+        }
+        if (ret == 3){
+            winner.setCowboyWin();
+            this.leaderboard.addWinner(winner);
+            //this.leaderboard.addWinner(winner);
+        }
+        return ret;
     }
 
     public void addVote(Player p){
@@ -379,6 +438,7 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
                 return ret;
             }
         }
+        this.playersList.resetAllVotes();
         return null;
     }
 
@@ -417,7 +477,22 @@ public class MainActivity extends AppCompatActivity implements IConfigGame.Liste
         this.loc.clearLocs();
         this.gamePhase = 0;
 
-        this.mainView.displayFragment(new ConfigGameFragment(this), true, "start");
+        this.mainView.displayFragment(new StartFragment(this), true, "start");
+    }
+
+    public boolean getTestMode(){
+        return this.testMode;
+    }
+
+    public void onViewed(){
+        this.mainView.displayFragment(new StartFragment(this), true, "start");
+    }
+
+    public void onSecretPressed(){
+        this.testMode = true;
+    }
+    public Leaderboard getLeaderboard(){
+        return this.leaderboard;
     }
 
 }

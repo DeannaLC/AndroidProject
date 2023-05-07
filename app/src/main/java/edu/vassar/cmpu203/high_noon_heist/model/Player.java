@@ -87,6 +87,10 @@ public class Player implements Serializable {
         return new Bundle();
     }
 
+    public void resetVotes(){
+        this.votes = 0;
+    }
+
     public void updateLoc(String loc){
         this.loc = loc;
     }

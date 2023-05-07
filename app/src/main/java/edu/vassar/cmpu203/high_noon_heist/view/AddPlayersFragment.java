@@ -56,6 +56,12 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
                     Editable playerNameEditable = AddPlayersFragment.this.binding.nameInputEditable.getText();
                     String playerName = playerNameEditable.toString();
 
+                    if (AddPlayersFragment.this.listener.findPlayer(playerName) != null){
+                        Snackbar sb = Snackbar.make(view, "no repeat names", Snackbar.LENGTH_LONG);
+                        sb.show();
+                        return;
+                    }
+
                     if (playerName.length() == 0) {
                         Snackbar sb = Snackbar.make(view, "need player name", Snackbar.LENGTH_LONG);
                         sb.show();

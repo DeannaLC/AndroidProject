@@ -21,36 +21,6 @@ public class HighNoonHeistFragFactory extends FragmentFactory{
         this.controller = controller;
     }
 
-    /*@NonNull
-    @Override
-    public Fragment instantiate(@NonNull ClassLoader classLoader, @NonNull String className) {
-        Fragment fragment;
-        fragment = new Fragment();
-        switch(className) {
-            case "edu.vassar.cmpu203.high_noon_heist.ConfigGameFragment":
-                fragment = new ConfigGameFragment(this.controller);
-                break;
-            case "edu.vassar.cmpu203.high_noon_heist.AddPlayersFragment":
-                fragment = new AddPlayersFragment(this.controller);
-                break;
-            case "edu.vassar.cmpu203.high_noon_heist.PlayerListActionFragment":
-                fragment = new PlayerListActionFragment(this.controller);
-                break;
-            case "edu.vassar.cmpu203.high_noon_heist.ActionSelectFragment":
-                fragment = new ActionSelectFragment(this.controller);
-                break;
-            case "edu.vassar.cmpu203.high_noon_heist.ViewObservationFragment":
-                fragment = new ViewObservationFragment(this.controller);
-                break;
-            case "edu.vassar.cmpu203.high_noon_heist.VoteFragment":
-                fragment = new VoteFragment(this.controller);
-                break;
-            case "edu.vassar.cmpu203.high_noon_heist.ResultScreenFragment":
-                fragment = new ResultScreenFragment(this.controller);
-                break;
-        }
-        return fragment;
-    }*/
 
     @NonNull
     @Override

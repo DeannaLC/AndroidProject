@@ -74,5 +74,21 @@ public class SelectActionTest {
         this.doAction("Jebediah", promptVi);
         this.doAction("Phil", promptVi);
     }
+    @Test
+    public void testActionSelect2(){
+        VoteTest voteTest = new VoteTest();
+        voteTest.testVotes();
+
+        Matcher<View> matcher1 = ViewMatchers.withId(R.id.selectText);
+        ViewInteraction selectVi = Espresso.onView(matcher1);
+        Matcher<View> matcher2 = ViewMatchers.withId(R.id.splashText);
+        ViewInteraction promptVi = Espresso.onView(matcher2);
+
+        selectVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("Choose a player to take Action")));
+        this.doAction("Jack", promptVi);
+        this.doAction("Jeb", promptVi);
+        this.doAction("Jebediah", promptVi);
+        this.doAction("Phil", promptVi);
+    }
 
 }

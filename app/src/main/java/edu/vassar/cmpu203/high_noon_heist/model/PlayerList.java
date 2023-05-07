@@ -226,4 +226,11 @@ public class PlayerList implements Serializable {
         return playerList;
     }
 
+    public void resetAllVotes(){
+        Player cur;
+        for (int i = 0; i < this.players.size(); i = i + 1){
+            cur = (Player) this.players.get(i);
+            cur.resetVotes();
+        }
+    }
 }

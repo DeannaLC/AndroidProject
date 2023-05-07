@@ -39,9 +39,8 @@ public class VoteFragment extends Fragment implements IVote{
 
     public VoteFragment(){}
 
-    public VoteFragment(Listener listener){//, PlayerList people){
+    public VoteFragment(Listener listener){
         this.listener = listener;
-        //this.people = people;
     }
 
     @Nullable
@@ -100,6 +99,10 @@ public class VoteFragment extends Fragment implements IVote{
                 Button up = new MaterialButton(super.getContext());
                 Button down = new MaterialButton(super.getContext());
                 up.setText("plus");
+                if (i == 0 && this.listener.getTestMode())
+                    up.setId(1123 + i);
+                if (i == 4 && this.listener.getTestMode())
+                    up.setId(5809 + i);
                 down.setText("minus");
                 cur = (Player) people.players.get(i);
                 curName = cur.getName();
@@ -118,33 +121,10 @@ public class VoteFragment extends Fragment implements IVote{
             }
             Button submit = new MaterialButton(super.getContext());
             submit.setText("Submit");
+            submit.setId(1337 + 0);
             submit.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     VoteFragment.this.doneVoting();
-                /*VoteFragment.this.binding.voting.removeAllViews();
-                Player p = VoteFragment.this.listener.onSubmitVotes();
-                TextView resultText = new TextView(VoteFragment.super.getContext());
-                TextView roleText = new TextView(VoteFragment.super.getContext());
-                if (p == null){
-                    resultText.setText("Vote failed! No one was removed!");
-                }
-                else{
-                    resultText.setText(p.getName() + " was removed from the game!");
-                    if (p.role() == 1)
-                        roleText.setText("They were a bandit!");
-                    else
-                        roleText.setText("They were a cowboy!");
-                }
-                VoteFragment.this.binding.voting.addView(resultText);
-                VoteFragment.this.binding.voting.addView(roleText);
-                Button confirm = new MaterialButton(VoteFragment.super.getContext());
-                confirm.setText("Confirm");
-                confirm.setOnClickListener(new View.OnClickListener(){
-                   public void onClick(View view){
-                       VoteFragment.this.listener.onVotingDone();
-                   }
-                });
-                VoteFragment.this.binding.voting.addView(confirm);*/
                 }
             });
             this.binding.voting.addView(submit);
@@ -157,7 +137,9 @@ public class VoteFragment extends Fragment implements IVote{
         if (this.votingOut == null)
             this.votingOut = this.listener.onSubmitVotes();
         TextView resultText = new TextView(super.getContext());
+        resultText.setId(2134 + 0);
         TextView roleText = new TextView(super.getContext());
+        roleText.setText(5589 + 0);
         if (votingOut == null){
             resultText.setText("Vote failed! No one was removed!");
         }
@@ -177,6 +159,7 @@ public class VoteFragment extends Fragment implements IVote{
                 VoteFragment.this.listener.onVotingDone();
             }
         });
+        confirm.setId(2023 + 0);
         this.binding.voting.addView(confirm);
     }
 

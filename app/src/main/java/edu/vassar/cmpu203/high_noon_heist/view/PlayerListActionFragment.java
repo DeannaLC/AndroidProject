@@ -86,6 +86,5 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
     }
 }

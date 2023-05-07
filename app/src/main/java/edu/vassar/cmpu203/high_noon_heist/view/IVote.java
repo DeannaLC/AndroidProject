@@ -18,5 +18,7 @@ public interface IVote {
         public void onVotingDone();
 
         public PlayerList getPlayers();
+
+        public boolean getTestMode();
     }
 }

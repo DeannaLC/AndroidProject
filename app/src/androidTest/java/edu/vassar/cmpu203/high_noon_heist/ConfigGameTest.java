@@ -30,6 +30,12 @@ public class ConfigGameTest {
      */
     @Test
     public void testConfigGame(){
+        /*activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });*/
+
+        Espresso.onView(ViewMatchers.withId(R.id.secret)).perform(ViewActions.click());
+
         Matcher<View> matcher = ViewMatchers.withId(R.id.showOptions);
 
         ViewInteraction settingsVi = Espresso.onView(matcher);
@@ -40,14 +46,14 @@ public class ConfigGameTest {
         Espresso.closeSoftKeyboard();
         Espresso.onView(ViewMatchers.withId(R.id.getDayEditable)).perform(ViewActions.typeText("10"));
         Espresso.closeSoftKeyboard();
-        Espresso.onView(ViewMatchers.withId(R.id.getMoneyEditable)).perform(ViewActions.typeText("1000"));
+        Espresso.onView(ViewMatchers.withId(R.id.getMoneyEditable)).perform(ViewActions.typeText("50000"));
         Espresso.closeSoftKeyboard();
 
         Espresso.onView(ViewMatchers.withId(R.id.configGameButton)).perform(ViewActions.click());
 
         SystemClock.sleep(1000);
 
-        settingsVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("5 players, 2 bandits, 10 days, 1000$ to win")));
+        settingsVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("5 players, 2 bandits, 10 days, 50000$ to win")));
 
     }
 }

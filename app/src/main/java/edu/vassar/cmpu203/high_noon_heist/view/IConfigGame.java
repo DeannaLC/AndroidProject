@@ -11,6 +11,8 @@ public interface IConfigGame {
 
         void onOptionsSet();
 
+        void onSecretPressed();
+
     }
 
     void showConfig();
