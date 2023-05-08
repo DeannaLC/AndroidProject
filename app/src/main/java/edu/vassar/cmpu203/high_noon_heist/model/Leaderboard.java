@@ -17,6 +17,10 @@ public class Leaderboard implements Serializable {
         this.winners.add(win);
     }
 
+    /**
+     * Fix for unknown leaderboard duplications
+     */
+
     public String toString(){
         String ret = "";
         for (int i = 0; i < winners.size(); i = i + 1){

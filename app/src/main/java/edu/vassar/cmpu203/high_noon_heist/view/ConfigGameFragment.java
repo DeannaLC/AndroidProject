@@ -98,14 +98,14 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
            public void onClick(View view){
                 ConfigGameFragment.this.listener.onLeaderboardCheck();
            }
-        });*/
+        });
 
         this.binding.secret.setOnClickListener(new View.OnClickListener(){
            public void onClick(View view){
                ConfigGameFragment.this.listener.onSecretPressed();
            }
         });
-        //this.binding.secret.setVisibility(View.INVISIBLE);
+        //this.binding.secret.setVisibility(View.INVISIBLE);*/
     }
 
     /**

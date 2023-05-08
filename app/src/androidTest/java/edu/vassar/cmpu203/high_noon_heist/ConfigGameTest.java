@@ -30,11 +30,16 @@ public class ConfigGameTest {
      */
     @Test
     public void testConfigGame(){
-        /*activityRule.getScenario().onActivity(activity -> {
+        activityRule.getScenario().onActivity(activity -> {
             activity.testMode = true;
-        });*/
+        });
+        this.configGame();
 
-        Espresso.onView(ViewMatchers.withId(R.id.secret)).perform(ViewActions.click());
+    }
+
+    public void configGame(){
+        Espresso.onView(ViewMatchers.withId(R.id.start)).perform(ViewActions.click());
+        //Espresso.onView(ViewMatchers.withId(R.id.secret)).perform(ViewActions.click());
 
         Matcher<View> matcher = ViewMatchers.withId(R.id.showOptions);
 
@@ -54,6 +59,5 @@ public class ConfigGameTest {
         SystemClock.sleep(1000);
 
         settingsVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("5 players, 2 bandits, 10 days, 50000$ to win")));
-
     }
 }

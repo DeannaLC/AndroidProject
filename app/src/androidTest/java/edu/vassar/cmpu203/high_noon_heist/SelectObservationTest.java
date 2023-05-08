@@ -50,8 +50,16 @@ public class SelectObservationTest {
      */
     @Test
     public void testSelectObservation(){
+        activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });
+
+        this.selectObservation();
+    }
+
+    public void selectObservation(){
         SelectActionTest selectAct = new SelectActionTest();
-        selectAct.testActionSelect();
+        selectAct.actionSelect();
 
         Matcher<View> matcher1 = ViewMatchers.withId(R.id.selectText);
         ViewInteraction selectVi = Espresso.onView(matcher1);
@@ -65,22 +73,20 @@ public class SelectObservationTest {
         this.doObservation("Jeb", promptVi);
         this.doObservation("Jebediah", promptVi);
         this.doObservation("Phil", promptVi);
-
-        /*
-        Matcher<View> matcher3 = ViewMatchers.withId(R.id.moneyStolen);
-        ViewInteraction stolenVi = Espresso.onView(matcher3);
-        Matcher<View> matcher4 = ViewMatchers.withId(R.id.winText);
-        ViewInteraction winVi = Espresso.onView(matcher4);
-
-        stolenVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("Money stolen: ")));
-        winVi.check(ViewAssertions.matches(ViewMatchers.withSubstring("Bandits win!")));
-         */
     }
 
     @Test
-    public void testSelectObservation2(){
+    public void testSelectObservation2() {
+        activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });
+
+        this.selectObservation2();
+    }
+
+    public void selectObservation2(){
         SelectActionTest selectAct = new SelectActionTest();
-        selectAct.testActionSelect2();
+        selectAct.actionSelect2();
 
         Matcher<View> matcher1 = ViewMatchers.withId(R.id.selectText);
         ViewInteraction selectVi = Espresso.onView(matcher1);

@@ -29,8 +29,12 @@ public class ResultScreenTest {
 
     @Test
     public void testResults(){
+        activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });
+
         VoteTest voteTest = new VoteTest();
-        voteTest.testVotes2();
+        voteTest.doVotes2();
 
         Espresso.onView(ViewMatchers.withId(2023)).perform(ViewActions.click());
 

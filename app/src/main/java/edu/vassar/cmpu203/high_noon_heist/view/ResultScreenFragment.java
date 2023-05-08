@@ -45,7 +45,7 @@ public class ResultScreenFragment extends Fragment implements IResults{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.binding.moneyStolen.setText("Money stolen: " + this.listener.getMoney() + "$");
-        if (this.listener.checkWin() == 2){
+        if (this.listener.getWin() == 2){
             this.binding.winText.setText("Bandits win!");
         }
         else

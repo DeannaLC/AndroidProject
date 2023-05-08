@@ -48,8 +48,17 @@ public class AddPlayersTest {
     @Test
     public void testAddPlayers(){
 
+        activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });
+
+        this.addPlayers();
+
+    }
+
+    public void addPlayers(){
         ConfigGameTest config = new ConfigGameTest();
-        config.testConfigGame();
+        config.configGame();
 
         Espresso.onView(ViewMatchers.withText("Next")).perform(ViewActions.click());
 

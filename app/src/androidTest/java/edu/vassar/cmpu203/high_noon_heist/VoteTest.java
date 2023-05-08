@@ -29,8 +29,15 @@ public class VoteTest {
 
     @Test
     public void testVotes(){
+        activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });
+
+        this.doVotes();
+    }
+    public void doVotes(){
         SelectObservationTest selectObs = new SelectObservationTest();
-        selectObs.testSelectObservation();
+        selectObs.selectObservation();
 
         Espresso.onView(ViewMatchers.withId(1123)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(1123)).perform(ViewActions.click());
@@ -53,8 +60,16 @@ public class VoteTest {
 
     @Test
     public void testVotes2(){
+        activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });
+
+        this.doVotes2();
+    }
+
+    public void doVotes2(){
         SelectObservationTest selectObs = new SelectObservationTest();
-        selectObs.testSelectObservation2();
+        selectObs.selectObservation2();
 
         Espresso.onView(ViewMatchers.withId(5813)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(5813)).perform(ViewActions.click());

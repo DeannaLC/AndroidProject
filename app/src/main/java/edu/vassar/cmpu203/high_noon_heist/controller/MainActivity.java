@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     private PlayerList canAct;
 
     private Location loc = new Location();
-    Winner winner;
+    //Winner winner;
     public boolean testMode = false;
     Leaderboard leaderboard;
     private IPersistenceFacade persistenceFacade;
@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     private static final String CANACT = "canAct";
     private static final String LOCATION = "loc";
     private static final String GAMEPHASE = "gamePhase";
-    //private static final String WINNER = "winner";
     private static final String LEADERBOARD = "leaderboard";
 
     public MainActivity(){}
@@ -116,8 +115,6 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
             this.current = this.playersList.findPlayer(cur.getName());
             if (savedInstanceState.getBundle(CANACT) != null)
                 this.sharePlayers(savedInstanceState);
-            //if (savedInstanceState.getBundle(WINNER) != null)
-            //    this.winner = Winner.fromBundle(savedInstanceState.getBundle(WINNER));
             this.leaderboard = Leaderboard.fromBundle(savedInstanceState.getBundle(LEADERBOARD));
         }
     }
@@ -179,8 +176,6 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         outState.putIntegerArrayList(BANDITVALS, this.banditVals);
         if (this.canAct != null)
             outState.putBundle(CANACT, this.canAct.toBundle());
-        //if (this.winner != null)
-        //    outState.putBundle(WINNER, this.winner.toBundle());
         outState.putBundle(LEADERBOARD, this.leaderboard.toBundle());
         outState.putBundle(LOCATION, this.loc.toBundle());
     }
@@ -338,7 +333,6 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         else {
             if (this.gamePhase == 1) {
                 if (this.checkWin() == 2) {
-                    this.leaderboard.addWinner(this.winner);
                     this.mainView.displayFragment(new ResultScreenFragment(this), true, "listAction");
                     return;
                 }
@@ -351,7 +345,6 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
                 this.curDay = this.curDay + 1;
                 if (this.checkWin() == 1) {
                     this.loc.clearLocs();
-                    this.leaderboard.addWinner(this.winner);
                     this.mainView.displayFragment(new VoteFragment(this), true, "vote");
                     return;
                 }
@@ -361,18 +354,6 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
             }
         }
     }
-
-    /*public void setRobbedInPL(){
-        String name = this.current.getName();
-        Bandit update = (Bandit) this.playersList.findPlayer(name);
-        update.robbed = true;
-    }
-
-    public void setLocInPL(){
-        String name = this.current.getName();
-        Player update = this.playersList.findPlayer(name);
-        update.updateLoc(current.viewLoc());
-    }*/
 
     public void observeAt(String place, Player player){
         player.observe(this.loc, place);
@@ -407,16 +388,29 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
             ret = 1;
         if (ret == 2){
             winner.setBanditWin();
-            //this.winner = winner;
             this.leaderboard.addWinner(winner);
-            //this.leaderboard.addWinner(winner);
+            return ret;
         }
-        if (ret == 3){
+        else if (ret == 3){
             winner.setCowboyWin();
             this.leaderboard.addWinner(winner);
-            //this.leaderboard.addWinner(winner);
+            return ret;
         }
         return ret;
+    }
+
+    public int getWin() {
+        this.persistenceFacade.saveLeaderboard(this.leaderboard);
+        if (curDay == dayLim)
+            return 3;
+        else if ((playersList.bandits).size() >= ((playersList.cowboys).size()))
+            return 2;
+        else if (curMoney >= moneyLim)
+            return 2;
+        else if ((playersList.bandits).size() == 0)
+            return 3;
+        else
+            return 1;
     }
 
     public void addVote(Player p){
@@ -487,12 +481,7 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     public void onViewed(){
         this.mainView.displayFragment(new StartFragment(this), true, "start");
     }
-
-    public void onSecretPressed(){
-        this.testMode = true;
-    }
     public Leaderboard getLeaderboard(){
         return this.leaderboard;
     }
-
 }

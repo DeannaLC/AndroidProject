@@ -10,9 +10,6 @@ public interface IConfigGame {
         void onSetOptions(int total, int bandits, int dayLim, int moneyLim, IConfigGame config);
 
         void onOptionsSet();
-
-        void onSecretPressed();
-
     }
 
     void showConfig();

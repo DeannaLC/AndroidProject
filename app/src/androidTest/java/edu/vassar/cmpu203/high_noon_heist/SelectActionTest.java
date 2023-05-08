@@ -56,8 +56,16 @@ public class SelectActionTest {
      */
     @Test
     public void testActionSelect(){
+        activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });
+
+        this.actionSelect();
+    }
+
+    public void actionSelect(){
         AddPlayersTest addPeople = new AddPlayersTest();
-        addPeople.testAddPlayers();
+        addPeople.addPlayers();
 
         Espresso.onView(ViewMatchers.withText("Next")).perform(ViewActions.click());
 
@@ -74,10 +82,19 @@ public class SelectActionTest {
         this.doAction("Jebediah", promptVi);
         this.doAction("Phil", promptVi);
     }
+
     @Test
     public void testActionSelect2(){
+        activityRule.getScenario().onActivity(activity -> {
+            activity.testMode = true;
+        });
+
+        this.actionSelect2();
+    }
+
+    public void actionSelect2(){
         VoteTest voteTest = new VoteTest();
-        voteTest.testVotes();
+        voteTest.doVotes();
 
         Matcher<View> matcher1 = ViewMatchers.withId(R.id.selectText);
         ViewInteraction selectVi = Espresso.onView(matcher1);
@@ -90,5 +107,4 @@ public class SelectActionTest {
         this.doAction("Jebediah", promptVi);
         this.doAction("Phil", promptVi);
     }
-
 }
