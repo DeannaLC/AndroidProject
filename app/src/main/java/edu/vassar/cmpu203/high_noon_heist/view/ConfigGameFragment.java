@@ -33,6 +33,10 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
 
     public ConfigGameFragment() {}
 
+    /**
+     * Constructor for ConfigGameFragment
+     * @param listener to run methods and get data from
+     */
     public ConfigGameFragment(Listener listener){
         this.listener = listener;
     }
@@ -45,6 +49,13 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
         return this.binding.getRoot(); // return top level view
     }
 
+    /**
+     * Shows input for setting options
+     *
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
@@ -76,6 +87,12 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
                 int dayLim = Integer.parseInt(dayLimStr);
                 int moneyLim = Integer.parseInt(moneyLimStr);
 
+                if (playerTotal == 0 || banditAmt == 0 || dayLim == 0 || moneyLim == 0){
+                    Snackbar sb = Snackbar.make(view, "cannot have 0s", Snackbar.LENGTH_LONG);
+                    sb.show();
+                    return;
+                }
+
                 if (playerTotal % 2 == 0) {
                     if (banditAmt >= playerTotal / 2) {
                         Snackbar sb = Snackbar.make(view, "too many bandits", Snackbar.LENGTH_LONG);
@@ -90,6 +107,7 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
                         return;
                     }
                 }
+
                 ConfigGameFragment.this.optionsDone = true;
                 ConfigGameFragment.this.listener.onSetOptions(playerTotal, banditAmt, dayLim, moneyLim, ConfigGameFragment.this);
             }
@@ -120,11 +138,22 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
 
     }
 
+    /**
+     * Saves whether options have been set
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(OPTIONSDONE, this.optionsDone);
     }
+
+    /**
+     * Retrieves previous fragment state
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);

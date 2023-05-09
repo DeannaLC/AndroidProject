@@ -44,6 +44,12 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
         this.listener = listener;
     }
 
+    /**
+     * Dynamically generates RadioButtons based on canAct from listener
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         RadioButton newButton;
@@ -79,10 +85,5 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.binding = FragmentPlayerListActionBinding.inflate(inflater);
         return this.binding.getRoot();
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 }

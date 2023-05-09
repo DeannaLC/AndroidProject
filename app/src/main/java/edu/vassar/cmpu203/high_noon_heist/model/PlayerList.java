@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.Iterator;
 
 /**
- * Class that contains list of Players
+ * Class that contains lists of Players
  */
 public class PlayerList implements Serializable {
     public ArrayList players = new ArrayList<Player>();
@@ -25,12 +25,20 @@ public class PlayerList implements Serializable {
     
     public PlayerList(){}
 
+    /**
+     * Adds a cowboy to the PlayerList object
+     * @param name of cowboy being added
+     */
     public void addCowboy(String name){
         Cowboy c = new Cowboy(name);
         players.add(c);
         cowboys.add(c);
     }
 
+    /**
+     * Adds a bandit to the PlayerList object
+     * @param name of bandit being added
+     */
     public void addBandit(String name){
         Bandit b = new Bandit(name);
         players.add(b);
@@ -54,7 +62,11 @@ public class PlayerList implements Serializable {
         }
         return ret;
     }
-    
+
+    /**
+     * Displays all the players in PlayerList object
+     * @return String showing all the players
+     */
     public String toString(){
         String playersRes = "";
         Player p;

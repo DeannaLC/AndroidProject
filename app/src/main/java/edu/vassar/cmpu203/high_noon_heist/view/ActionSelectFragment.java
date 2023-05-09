@@ -52,6 +52,12 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         this.listener = listener;
     }
 
+    /**
+     * Displays options for actions based on current player
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Player active = this.listener.getCurrent();
@@ -87,6 +93,9 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         return ret;
     }
 
+    /**
+     * Shows confirmation that a Player will watch a certain place
+     */
     public void watchConfirm(){
         this.watchingPlace = false;
         this.onWatchConfirm = true;
@@ -110,6 +119,9 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         };
     }
 
+    /**
+     * Shows confirmation a player is stealing from a certain place and how much they're getting
+     */
     public void stealConfirm(){
         this.stealing = false;
         this.onStealConfirm = true;
@@ -181,6 +193,9 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         }
     }
 
+    /**
+     * Displays options where a player can steal from
+     */
     public void stealingOptions(){
         this.stealing = true;
         this.binding.splashText.setText("Choose where to Steal from");
@@ -199,6 +214,10 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         this.binding.buttonSet.addView(ranch);;
     }
 
+    /**
+     * Stores which part of the fragment a player is in, and what data needs to stay consistent
+     * @param outState Bundle in which to place your saved state.
+     */
     public void onSaveInstanceState(@NonNull Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putString(PLACE, this.place);
@@ -209,6 +228,11 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         outState.putInt(STEALINGVAL, this.stealingVal);
     }
 
+    /**
+     * Retrieves data from bundle to put into fields
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     public void onViewStateRestored(@NonNull Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {

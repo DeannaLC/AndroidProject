@@ -37,6 +37,12 @@ public class LeaderboardFragment extends Fragment implements ILeaderboard{
         return this.binding.getRoot();
     }
 
+    /**
+     * Shows the leaderboard
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.showDisplay();
         this.binding.back.setOnClickListener(new View.OnClickListener(){
@@ -52,6 +58,9 @@ public class LeaderboardFragment extends Fragment implements ILeaderboard{
 
     }
 
+    /**
+     * Shows leaderboard data
+     */
     public void showDisplay(){
         Leaderboard display = this.listener.getLeaderboard();
         this.binding.leaderboardDisplay.setText(display.toString());

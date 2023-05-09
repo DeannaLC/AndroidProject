@@ -46,6 +46,13 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
         return this.binding.getRoot();
     }
 
+    /**
+     * Shows input for adding players
+     *
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.binding.confirmButton.setVisibility(View.INVISIBLE);
@@ -128,11 +135,22 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
         this.showNames();
     }
 
+    /**
+     * Saves whether app is currently viewing role or on input view
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
     public void onSaveInstanceState(@NonNull Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putBoolean(VIEWINGROLE, this.viewingRole);
     }
 
+    /**
+     * Puts fragment back in previous state
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     public void onViewStateRestored(@NonNull Bundle savedInstanceState){
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null)

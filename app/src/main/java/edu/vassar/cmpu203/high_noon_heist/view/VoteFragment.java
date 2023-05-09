@@ -37,9 +37,6 @@ public class VoteFragment extends Fragment implements IVote{
     private static final String VOTESDONE = "votesDone";
     private Player votingOut;
     private static final String VOTINGOUT = "votingOut";
-
-   // private PlayerList people;
-
     public VoteFragment(){}
 
     /**
@@ -187,6 +184,10 @@ public class VoteFragment extends Fragment implements IVote{
         this.binding.voting.addView(confirm);
     }
 
+    /**
+     * Saves whether votes have been submitted
+     * @param outState Bundle in which to place your saved state.
+     */
     public void onSaveInstanceState(@NonNull Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putBoolean(VOTESDONE, this.votesDone);
@@ -195,6 +196,11 @@ public class VoteFragment extends Fragment implements IVote{
         }
     }
 
+    /**
+     * Restores previous fragment state
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     public void onViewStateRestored(@NonNull Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null)

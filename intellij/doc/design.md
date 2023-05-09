@@ -1,9 +1,6 @@
 ```plantuml
 @startuml
 
-
-
-
 title Configure Game
 hide footbox
 skin rose
@@ -109,9 +106,30 @@ actor Gamer as gamer
 participant " : UI" as UI
 participant "m : MainActivity" as main
 participant ":Player" as player
+participant ":PlayerList" as players
 
-loop Voting
+alt Voting
 UI -> gamer: Display list of names
+alt add votes
+gamer -> UI: Press add on Player
+UI -> player: addVote()
+else subtract votes
+gamer -> UI: Press subtract on Player
+UI -> player: subVote()
+end
+UI -> gamer: Display new vote counts
+else Done Voting
+gamer -> UI: Press submit
+UI -> main: onSubmitVotes()
+main -> players: checkTie()
+main -> players: camRemove()
+alt checkTie() && canRemove()
+main -> players: mostVotes()
+main -> players: removePlayer()
+end
+main -> UI: onVotingDone() 
+UI -> gamer: Display voting results
+end
 
 ```
 
@@ -180,6 +198,78 @@ mainView : IMainView
 +onLeaderboardCleared(leaderDisplay : ILeaderboard)
 +getLeaderboard() : Leaderboard
 }
+
+interface IActionSelect.Listener{
+observeAt(place : String, player : Player)
+stealFrom(place : String) : int
+onActionDone()
+getCurrent() : Player
+}
+
+interface IAddPlayers.Listener{
+onAddedPlayer(name : String, addPlayers : IAddPlayers)
+checkPlayerCap() : boolean
+onPlayersSet()
+getPlayers() : PlayerList
+showRole() : String
+findPlayer(name : String) : Player
+}
+
+interface IConfigGame.Listener{
+onSetOptions(total : int, bandits : int, dayLim : int, config : IConfigGame)
+onOptionsSet()
+}
+
+interface ILeaderboard.Listener{
+getLeaderBoard() : Leaderboard
+onViewed()
+onLeaderboardCleared(l : ILeaderboard)
+}
+
+interface IPlayerListAction.Listener{
+setCurrentPlayer(player : Player)
+playerSelected(name : String)
+checkPhase() : int
+getCanAct() : PlayerList
+}
+
+interface IResults.Listener{
+getWin() : int
+getMoney() : int
+onGameDone() : int
+}
+
+interface IStart.Listener{
+onBegin()
+onViewed()
+onLeaderboardCheck()
+}
+
+interface IViewObservation.Listener{
+showObservation(choice : int) : String
+onActionDone()
+getCurrent() : Player
+doViewLoc() : String
+}
+
+interface IVote.Listener{
+findPlayer(name : String) : Player
+onSubmitVotes() : Player
+getCurDay() : int
+onVotingDone()
+getPlayers() : PlayerList
+getTestMode() : boolean
+}
+
+IActionSelect.Listener <|.. MainActivity
+IAddPlayers.Listener <|.. MainActivity
+IConfigGame.Listener <|.. MainActivity
+ILeaderboard.Listener <|.. MainActivity
+IPlayerListAction.Listener <|.. MainActivity
+IResults.Listener <|.. MainActivity
+IStart.Listener <|.. MainActivity
+IViewObservation.Listener <|.. MainActivity
+IVote.Listener <|.. MainActivity
 ```
 
 ```plantuml
@@ -271,6 +361,7 @@ cowboyWin : boolean = false
 date : String
 winDate : Date
 --
++Winner()
 +setBanditWin()
 +setCowboyWin()
 +toString() : String
@@ -278,6 +369,17 @@ winDate : Date
 {static} +fromBundle(b : Bundle) : Winner
 }
 
+class Leaderboard{
+winners : ArrayList
+--
++Leaderboard()
++addWinner(win : Winner)
++toString() : String
++toBundle() : Bundle
+{static} +fromBundle(b : Bundle) : Leaderboard
+}
+
+Winner o-- "Aggregation of" Leaderboard: \t\t
 Player o-- "Aggregation of" PlayerList: \t\t
 Player -> "Contained in" Location: \t\t
 Player <|-- Bandit
@@ -287,9 +389,73 @@ Player <|-- Cowboy
 
 ```plantuml
 @startuml
+title Persistence
+skin rose
+hide empty methods
+
+interface IPersistenceFacade{
+saveLeaderboard(leaderboard : Leaderboard)
+retrieveLeaderboard() : Leaderboard
+}
+
+class LocalStorageFacade{
+directory : File
+--
++saveLeaderboard(leaderboard : Leaderboard)
++retrieveLeaderboard() : Leaderboard
+}
+
+IPersistenceFacade <|.. LocalStorageFacade
+```
+
+```plantuml
+@startuml
 title View
 skin rose
 hide empty methods
+
+class MainView{
+fmanager : FragmentManager
+binding : MainScreenBinding
+--
++MainView(activity : FragmentActivity)
++getRootView() : View
++displayFragment(fragment : Fragment, reversible : boolean, name : String)
+}
+
+interface IMainView{
+getRootView() : View
+displayFragment(fragment : Fragment, reversible : boolean, name : String)
+}
+
+class HighNoonHeistFragFactory{
+controller : MainActivity
+--
+HighNoonHeistFragFactory(controller : MainActivity)
+instantiate(classLoader : ClassLoader, className : String) : Fragment
+}
+
+class StartFragment{
+listener : Listener
+binding : FragmentStartBinding
+rules1 : boolean = false
+rules2 : boolean = false
+rules3 : boolean = false
+--
++StartFragment()
++StartFragment(listener : Listener)
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
++onViewCreated(view : View, savedInstanceState : Bundle)
++rulesSet1()
++rulesSet2()
++rulesSet3()
++onSaveInstanceState(outState : Bundle)
++onViewStateRestored(savedInstanceState : Bundle)
+}
+
+interface IStart{
+Listener
+}
 
 class ConfigGameFragment{
 binding : FragmentConfigGameBinding
@@ -297,62 +463,167 @@ listener : Listener
 --
 +ConfigGameFragment()
 +ConfigGameFragment(listener : Listener)
-+onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle)
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
 +onViewCreated(view : View, savedInstanceState : Bundle)
 +showConfig(m : MainActivity)
++onSaveInstanceState(outState : Bundle)
++onViewStateRestored(savedInstanceState : Bundle)
+}
+
+interface IConfigGame{
+Listener
+showConfig()
 }
 
 class AddPlayersFragment{
 binding : FragmentAddPlayersBinding
 listener : Listener
+viewingRole : boolean = false
 --
 +AddPlayersFragment()
 +AddPlayersFragment(listener : Listener)
-+onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle)
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
 +onViewCreated(view : View, savedInstanceState : Bundle)
-+showName(players : PlayerList)
++showNames(players : PlayerList)
 +showRole(main : MainActivity)
 +clearRole(players : PlayerList)
++onSaveInstanceState(outState : Bundle)
++onViewStateRestored(savedInstanceState : Bundle)
+}
+
+interface IAddPlayers{
+Listener
+showNames()
+showRole()
 }
 
 class PlayerListActionFragment{
 binding : FragmentPlayerListActionBinding
 listener : Listener
-activePlayers : PlayerList
 --
 +PlayerListActionFragment()
 +PlayerListActionFragment(listener : Listener, activePlayers : PlayerList)
-+onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle)
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
 +onViewCreated(view : View, savedInstanceState : Bundle)
+}
+
+interface IPlayerListAction{
+Listener
 }
 
 class ActionSelectFragment{
 binding : FragmentActionSelectBinding
 listener : Listener
-active : Player
+stealing : boolean = false
+watchingPlace : boolean = false
+onStealConfirm : boolean = false
+onWatchConfirm : boolean = false
+place : String
+stealingVal : int = 0
 --
 +ActionSelectFragment()
 +ActionSelectFragment(active : Player, listener : Listener)
-+onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle)
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
 +onViewCreated(view : View, savedInstanceState : Bundle)
-+generalObserveButton(place : String)
-+generalStealButton(place : String)
++generalObserveButton(place : String) : View.OnClickListener
++generalStealButton(place : String) : View.OnClickListener
 +addConfirm()
++watchConfirm()
++stealConfirm()
 +cowboyAction()
 +banditAction()
++stealingOptions()
++onSaveInstanceState(outState : Bundle)
++onViewStateRestored(savedInstanceState : Bundle)
 }
 
-class viewObservationFragment{
+interface IActionSelect{
+Listener
+}
+
+class ViewObservationFragment{
 binding : FragmentViewObservationBinding
 listener : Listener
-current : Player
+viewingPerson : boolean = false
+viewingNumber : boolean = false
+result : String
 --
 +viewObservationFragment()
 +viewObservationFragment(listener : Listener, current : Player)
-+onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle)
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
 +onViewCreated(view : View, savedInstanceState : Bundle)
 +cowboyObservation()
 +banditObservation()
++showNumber()
++showPerson()
 +addConfirm()
++onSaveInstanceState(outState : Bundle)
++onViewStateRestored(savedInstanceState : Bundle)
 }
+
+interface IViewObservation{
+Listener
+}
+
+class VoteFragment{
+listener : Listener
+binding : FragmentVoteBinding
+votesDone : boolean = false
+votingOut : Player
+--
++VoteFragment()
++VoteFragment(listener : Listener)
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
++onViewCreated(view : View, savedInstanceState : Bundle)
++addVoteListener(name : String) : View.OnClickListener
++subVoteListener(name : String) : View.OnClickListener
++doneVoting()
++onSaveInstanceState(outState : Bundle)
++onViewStateRestored(savedInstanceState : Bundle)
+}
+
+interface IVote{
+Listener
+}
+
+class ResultScreenFragment{
+binding : FragmentResultScreen
+listener : Listener
+--
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
++onViewCreated(view : View, savedInstanceState : Bundle)
+}
+
+interface IResults{
+Listener
+}
+
+class LeaderboardFragment{
+listener : Listener
+binding : FragmentLeaderboardBinding
+--
++LeaderboardFragment()
++LeaderboardFragment(listener : Listener)
++onCreateView(inflater : LayoutInflater, container : ViewGroup, savedInstanceState : Bundle) : View
++onViewCreated(view : View, savedInstanceState : Bundle)
++showDisplay()
+}
+
+interface ILeaderboard{
+Listener
+showDisplay()
+}
+
+IMainView <|.. MainView
+IStart <|.. StartFragment
+IConfigGame <|.. ConfigGameFragment
+IAddPlayers <|.. AddPlayersFragment
+IPlayerListAction <|.. PlayerListActionFragment
+IActionSelect <|.. ActionSelectFragment
+IViewObservation <|.. ViewObservationFragment
+IVote <|.. VoteFragment
+IResults <|.. ResultScreenFragment
+ILeaderboard <|.. LeaderboardFragment
+
+
 ```

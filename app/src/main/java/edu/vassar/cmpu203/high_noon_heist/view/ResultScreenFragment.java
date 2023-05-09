@@ -29,7 +29,8 @@ public class ResultScreenFragment extends Fragment implements IResults{
     }
 
     /**
-     * Constructor for result screen
+     * Constructor for ResultScreenFragment
+     * @param listener to retrieve data from and run methods
      */
     public ResultScreenFragment(Listener listener){
         this.listener = listener;

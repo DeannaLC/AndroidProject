@@ -50,6 +50,12 @@ public class StartFragment extends Fragment implements IStart{
         return this.binding.getRoot();
     }
 
+    /**
+     * Displays starting screen
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.binding.start.setOnClickListener(new View.OnClickListener(){
@@ -69,6 +75,9 @@ public class StartFragment extends Fragment implements IStart{
         });
     }
 
+    /**
+     * Displays first batch of rules
+     */
     public void ruleSet1(){
         this.rules1 = true;
         this.binding.startOptions.removeAllViews();
@@ -95,6 +104,9 @@ public class StartFragment extends Fragment implements IStart{
         this.binding.startOptions.addView(next);
     }
 
+    /**
+     * Displays second batch of rules
+     */
     public void ruleSet2(){
         this.rules1 = false;
         this.rules2 = true;
@@ -120,6 +132,9 @@ public class StartFragment extends Fragment implements IStart{
         this.binding.startOptions.addView(next);
     }
 
+    /**
+     * Displays third batch of rules
+     */
     public void ruleSet3(){
         this.rules2 = false;
         this.rules3 = true;
@@ -149,6 +164,10 @@ public class StartFragment extends Fragment implements IStart{
     }
 
 
+    /**
+     * Saves if rules are being viewed or at beginning screen
+     * @param outState Bundle in which to place your saved state.
+     */
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(RULES1, this.rules1);
@@ -156,6 +175,11 @@ public class StartFragment extends Fragment implements IStart{
         outState.putBoolean(RULES3, this.rules3);
     }
 
+    /**
+     * Restores fragment's previous state
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     public void onViewStateRestored(@NonNull Bundle savedInstanceState){
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
