@@ -42,6 +42,13 @@ public class ResultScreenFragment extends Fragment implements IResults{
         return this.binding.getRoot();
     }
 
+    /**
+     * Takes data from the listener and shows winner
+     *
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.binding.moneyStolen.setText("Money stolen: " + this.listener.getMoney() + "$");

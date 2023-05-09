@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- * Bandit class
+ * Bandit class, able to make random observations and steal
  */
 public class Bandit extends Player implements Serializable
 {
@@ -32,7 +32,6 @@ public class Bandit extends Player implements Serializable
      * @return
      */
     public String observation(Location l, int a){
-        //int a doesn't do anything, there to satisfy polymorphism requirement
         if (robbed)
             return "";
         Player retPlayer;
@@ -63,7 +62,7 @@ public class Bandit extends Player implements Serializable
 
     /**
      * Allows a bandit to take money from a Location
-     * @param l, Location they're getting money from
+     * @param l, Location they're being added to and getting money from
      * @param place, name of the Location they're getting money from
      * @return an integer on how much they've stolen
      */
@@ -88,6 +87,10 @@ public class Bandit extends Player implements Serializable
         return "Your role is Bandit";
     }
 
+    /**
+     * Puts bandit object into a bundle
+     * @return Bundle data is stored in
+     */
     public Bundle toBundle(){
         final Bundle b = new Bundle();
         b.putString(NAME, this.name);
@@ -98,6 +101,11 @@ public class Bandit extends Player implements Serializable
         return b;
     }
 
+    /**
+     * Gets a Bandit object from a bundle
+     * @param b, bundle data is retrieved from
+     * @return Bandit object from the bundle
+     */
     public static Bandit fromBundle(@NonNull Bundle b){
         final String name = b.getString(NAME);
         final String loc = b.getString(LOCATION);

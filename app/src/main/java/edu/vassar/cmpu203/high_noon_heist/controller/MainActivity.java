@@ -40,6 +40,9 @@ import edu.vassar.cmpu203.high_noon_heist.view.StartFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.ViewObservationFragment;
 import edu.vassar.cmpu203.high_noon_heist.view.VoteFragment;
 
+/**
+ * Controller class, runs the entire game
+ */
 public class MainActivity extends AppCompatActivity implements IStart.Listener, ILeaderboard.Listener, IConfigGame.Listener, IAddPlayers.Listener, IPlayerListAction.Listener, IActionSelect.Listener,  IResults.Listener, IViewObservation.Listener, IVote.Listener {
 
     int curDay = 0;
@@ -52,9 +55,7 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     private ArrayList banditVals;
     private Player current;
     private PlayerList canAct;
-
     private Location loc = new Location();
-    //Winner winner;
     public boolean testMode = false;
     Leaderboard leaderboard;
     private IPersistenceFacade persistenceFacade;
@@ -78,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
 
     public MainActivity(){}
 
+    /**
+     * Displays starting screen, loads in fields from bundle and file if they exist
+     * @param savedInstanceState, bundle retrieve data from
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportFragmentManager().setFragmentFactory(new HighNoonHeistFragFactory(this));
@@ -119,14 +124,24 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         }
     }
 
+    /**
+     * Displays config fragment
+     */
     public void onBegin(){
         this.mainView.displayFragment(new ConfigGameFragment(this), true, "configGame");
     }
 
+    /**
+     * Displays leaderboard fragment
+     */
     public void onLeaderboardCheck(){
         this.mainView.displayFragment(new LeaderboardFragment(this), true, "leaders");
     }
 
+    /**
+     * Makes loc, playersList, and canAct fields share the same player objects upon recreation from bundles
+     * @param b, bundle to retrieve data from
+     */
     public void sharePlayers(Bundle b){
         Location l = Location.fromBundle(b.getBundle(LOCATION));
         PlayerList actors = PlayerList.fromBundle(b.getBundle(CANACT));
@@ -159,6 +174,10 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         this.canAct = shareActors;
     }
 
+    /**
+     * Saves data to a file and bundle when a fragment is recreated
+     * @param outState, bundle to save data to
+     */
     protected void onSaveInstanceState(@NonNull Bundle outState){
         super.onSaveInstanceState(outState);
         this.persistenceFacade.saveLeaderboard(this.leaderboard);
@@ -180,6 +199,10 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         outState.putBundle(LOCATION, this.loc.toBundle());
     }
 
+    /**
+     * Creates a copy of the PlayerList field
+     * @return new PlayerList with the same Player objects in it
+     */
     public PlayerList getPlayerListCopy(){
         return this.playersList.copyPlayers();
     }
@@ -197,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     }
 
     /**
-     * Changes to player select once all players are set
+     * Changes to player select once all players are added
      */
     @Override
     public void onPlayersSet(){
@@ -210,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     }
 
     /**
-     * Randomly determines which players will be bandits
+     * Randomly determines which players will be bandits unless test mode is enabled
      */
     public void draw(){
         ArrayList ret = new ArrayList();
@@ -281,6 +304,10 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         addPlayers.showRole();
     }
 
+    /**
+     * Shows role of the most recent added Player
+     * @return String showing role
+     */
     public String showRole(){
         Player p = (Player) this.playersList.players.get(playersList.players.size() - 1);
         return p.displayRole();
@@ -323,11 +350,12 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     }
 
     /**
-     * Changes screen once a viewing is confirmed
+     * Changes screen depending on if a win condition is met once a viewing is confirmed
+     * Switches from action to either result or observation, observation to result or voting
      */
     @Override
     public void onActionDone(){
-        this.canAct.removeByName(current.getName());
+        this.canAct.removePlayer(current);
         if (this.canAct.players.size() > 0)
             this.mainView.displayFragment(new PlayerListActionFragment(this), true, "listAction");
         else {
@@ -363,6 +391,11 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         return this.current.observation(this.loc, number);
     }
 
+    /**
+     * Called when a bandit steals from somewhere, adds to curMoney count
+     * @param place, where is being stolen from
+     * @return amount that is stolen
+     */
     public int stealFrom(String place){
         int val = current.rob(this.loc, place);
         this.curMoney = this.curMoney + val;
@@ -370,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     }
 
     /**
-     * Checks whether the game has been won
+     * Checks whether the game has been won, adds winner to leaderboard field if someone wins
      * @return 3 if cowboys win, 2 if bandits win, 1 if game is still in play
      */
     public int checkWin(){
@@ -399,6 +432,10 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         return ret;
     }
 
+    /**
+     *
+     * @return 3 for cowboy win, 2 for bandit win, 1 which will not be reached
+     */
     public int getWin() {
         this.persistenceFacade.saveLeaderboard(this.leaderboard);
         if (curDay == dayLim)
@@ -421,14 +458,18 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         p.subVote();
     }
 
+    /**
+     * Determines whether a Player is removed from the game once votes are submitted
+     * @return Player if one is removed, null otherwise
+     */
     public Player onSubmitVotes(){
-        ArrayList vals = this.playersList.voteVals();
         boolean repeats = this.playersList.checkTie();
         Player ret;
         if (repeats == false){
             if (this.playersList.canRemove()) {
                 ret = this.playersList.mostVotes();
-                this.playersList.removeByName(ret.getName());
+                //this.playersList.removeByName(ret.getName());
+                this.playersList.removePlayer(ret);
                 return ret;
             }
         }
@@ -440,11 +481,14 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         return this.canAct;
     }
 
+    /**
+     * Switches fragment once voting is done
+     * Goes back to action fragment if game is still in play, switches to results if someone wins
+     */
     public void onVotingDone(){
         this.gamePhase = 1;
         canAct = this.playersList.copyPlayers();
         if (this.checkWin() == 1) {
-            //this.mainView.displayFragment(new PlayerListActionFragment(this, this.canAct), true, "select");
             this.mainView.displayFragment(new PlayerListActionFragment(this), true, "select");
             return;
         }
@@ -464,6 +508,9 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         return this.current.viewLoc();
     }
 
+    /**
+     * Resets game settings once the game finishes
+     */
     public void onGameDone(){
         this.curDay = 0;
         this.curMoney = 0;
@@ -480,6 +527,16 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
 
     public void onViewed(){
         this.mainView.displayFragment(new StartFragment(this), true, "start");
+    }
+
+    /**
+     * Clears the leaderboard field and in the file
+     * @param leaderDisplay, fragment that will show cleared leaderboard
+     */
+    public void onLeaderboardCleared(ILeaderboard leaderDisplay){
+        this.leaderboard = new Leaderboard();
+        this.persistenceFacade.saveLeaderboard(this.leaderboard);
+        leaderDisplay.showDisplay();
     }
     public Leaderboard getLeaderboard(){
         return this.leaderboard;

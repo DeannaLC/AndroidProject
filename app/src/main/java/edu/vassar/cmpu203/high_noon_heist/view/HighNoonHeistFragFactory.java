@@ -11,7 +11,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 
-
+/**
+ * Used for state restoration to call listener constructor instead of empty constructor
+ */
 public class HighNoonHeistFragFactory extends FragmentFactory{
     private static final String VIEW_PACKAGE = HighNoonHeistFragFactory.class.getPackage().getName(); // package where all all fragments reside
     private final MainActivity controller;

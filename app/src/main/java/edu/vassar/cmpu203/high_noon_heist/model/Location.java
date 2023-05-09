@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Write a description of class Locations here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * Class for storing Players who go to different locations
+ * Can show amount of players at different locations, specific names, and how much they can steal
  */
 public class Location implements Serializable
 {
@@ -126,6 +124,11 @@ public class Location implements Serializable
         return b;
     }
 
+    /**
+     * Puts a Player in a location
+     * @param p, Player being added
+     * @param place they're added to
+     */
     public void addTo(Player p, String place){
         if (place.equals("bank"))
             this.bank.add(p);

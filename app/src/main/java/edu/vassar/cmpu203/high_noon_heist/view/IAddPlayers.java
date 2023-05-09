@@ -6,11 +6,15 @@ import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
 
+/**
+ * AddPlayersFragment interface
+ */
 public interface IAddPlayers {
+    /**
+     * Listener for AddPlayersFragment
+     */
     interface Listener{
         void onAddedPlayer(@NonNull String name, IAddPlayers addPlayers);
-
-        //void onConfiguredGame();
 
         boolean checkPlayerCap();
 

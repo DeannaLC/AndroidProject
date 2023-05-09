@@ -14,6 +14,9 @@ import java.io.ObjectOutputStream;
 
 import edu.vassar.cmpu203.high_noon_heist.model.Leaderboard;
 
+/**
+ * Handles saving and reading leaderboard from local storage
+ */
 public class LocalStorageFacade implements IPersistenceFacade{
     private final File directory;
     private static final String FILENAME = "leaderboard";
@@ -22,6 +25,10 @@ public class LocalStorageFacade implements IPersistenceFacade{
         this.directory = directory;
     }
 
+    /**
+     * Saves leaderboard to local storage
+     * @param leaderboard to be saved
+     */
     @Override
     public void saveLeaderboard(@NonNull Leaderboard leaderboard) {
 
@@ -44,6 +51,10 @@ public class LocalStorageFacade implements IPersistenceFacade{
         }
     }
 
+    /**
+     * Retrieves leaderboard from local storage
+     * @return leaderboard being retrieved
+     */
     public Leaderboard retrieveLeaderboard(){
         Leaderboard leaderboard = null; // null to begin with for negative outcome
 

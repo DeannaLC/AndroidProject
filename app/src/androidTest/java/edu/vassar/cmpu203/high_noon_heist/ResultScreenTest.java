@@ -19,14 +19,19 @@ import org.junit.runner.RunWith;
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 
+/**
+ * Test for ResultScreenFragment
+ */
 @RunWith(AndroidJUnit4.class)
 public class ResultScreenTest {
-
 
     @org.junit.Rule
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * Checks display upon game end
+     */
     @Test
     public void testResults(){
         activityRule.getScenario().onActivity(activity -> {

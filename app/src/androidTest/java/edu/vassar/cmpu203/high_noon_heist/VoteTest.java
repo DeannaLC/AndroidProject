@@ -19,6 +19,9 @@ import org.junit.runner.RunWith;
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 
+/**
+ * Tests for VoteFragment
+ */
 @RunWith(AndroidJUnit4.class)
 public class VoteTest {
 
@@ -27,6 +30,9 @@ public class VoteTest {
     public ActivityScenarioRule<MainActivity> activityRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
+    /**
+     * Test for voting
+     */
     @Test
     public void testVotes(){
         activityRule.getScenario().onActivity(activity -> {
@@ -35,6 +41,10 @@ public class VoteTest {
 
         this.doVotes();
     }
+
+    /**
+     * Removes one of the bandits from the game, checks that removal displays correctly
+     */
     public void doVotes(){
         SelectObservationTest selectObs = new SelectObservationTest();
         selectObs.selectObservation();

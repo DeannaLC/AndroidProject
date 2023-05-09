@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.Iterator;
 
 /**
- * Class that contains list of players
+ * Class that contains list of Players
  */
 public class PlayerList implements Serializable {
     public ArrayList players = new ArrayList<Player>();
@@ -37,7 +37,10 @@ public class PlayerList implements Serializable {
         bandits.add(b);
     }
 
-    
+    /**
+     * Creates a new PlayerList containing the same Player objects
+     * @return New PlayerList with same Player objects as original
+     */
     public PlayerList copyPlayers(){
         PlayerList ret = new PlayerList();
         Player p;
@@ -53,14 +56,12 @@ public class PlayerList implements Serializable {
     }
     
     public String toString(){
-        String playersRes = "";//"Players: ";
+        String playersRes = "";
         Player p;
         for (int i = 0; i < players.size(); i++){
             p = (Player) players.get(i);
             playersRes += p.name;
             playersRes += "\n";
-            //if (i != (players.size() - 1))
-            //    playersRes += ", ";
         }
         return playersRes;
     }
@@ -90,17 +91,10 @@ public class PlayerList implements Serializable {
         this.cowboys.remove(p);
     }
 
-    public ArrayList voteVals(){
-        Player cur;
-        ArrayList votes = new ArrayList();
-        for (int i = 0; i < this.players.size(); i = i + 1){
-            cur = (Player) this.players.get(i);
-            votes.add(cur.getVotes());
-        }
-        return votes;
-    }
-
-    /*
+    /**
+     * Puts player's votes into an int array
+     * @return int[] of players' votes
+     */
     public int[] voteVals(){
         Player cur;
         int[] votes = new int[this.players.size()];
@@ -110,18 +104,11 @@ public class PlayerList implements Serializable {
         }
         return votes;
     }
-    */
 
-    /*public String voteValsStr(){
-        Player cur;
-        String ret = "";
-        for (int i = 0; i < this.players.size(); i = i + 1){
-            cur = (Player) this.players.get(i);
-            ret = ret + " " + cur.getVotes();
-        }
-        return ret;
-    }*/
-
+    /**
+     * Tallies votes for all players
+     * @return total number of votes
+     */
     public int tallyVotes(){
         int count = 0;
         Player cur;
@@ -132,6 +119,10 @@ public class PlayerList implements Serializable {
         return count;
     }
 
+    /**
+     * Gives the Player with the most votes
+     * @return Player with most votes
+     */
     public Player mostVotes(){
         Player ret = new Player("");
         Player cur;
@@ -146,13 +137,17 @@ public class PlayerList implements Serializable {
         return ret;
     }
 
+    /**
+     * Checks if there is a tie between the player with the most votes
+     * @return true or false if there's a most votes tie
+     */
     public boolean checkTie(){
         int check = this.mostVotes().getVotes();
         int tally = 0;
         int cur;
-        ArrayList count = this.voteVals();
-        for (int i = 0; i < count.size(); i = i + 1){
-            cur = (int) count.get(i);
+        int[] count = this.voteVals();
+        for (int i = 0; i < count.length; i = i + 1){
+            cur = (int) count[i];
             if (cur == check)
                 tally = tally + 1;
             if (tally > 1)
@@ -161,17 +156,18 @@ public class PlayerList implements Serializable {
         return false;
     }
 
+    /**
+     * Checks if a player can be removed based on if over half the players have voted
+     * @return boolean if a player can be removed or not
+     */
     public boolean canRemove(){
-        return this.tallyVotes() > this.players.size() / 2;
+        return this.tallyVotes() > (this.players.size() / 2);
     }
 
-    public void removeByName(String name){
-        Player removing = this.findPlayer(name);
-        this.players.remove(removing);
-        this.bandits.remove(removing);
-        this.cowboys.remove(removing);
-    }
-
+    /**
+     * Puts PlayerList object into a bundle
+     * @return Bundle containing PlayerList data
+     */
     public Bundle toBundle(){
         final Bundle b = new Bundle();
         final Bundle[] playerBundle = new Bundle[this.players.size()];
@@ -201,16 +197,14 @@ public class PlayerList implements Serializable {
         return b;
     }
 
+    /**
+     * Gets a PlayerList from a bundle
+     * @param b, bundle data is retrieved from
+     * @return PlayerList from the Bundle data
+     */
     public static PlayerList fromBundle(@NonNull Bundle b){
         final PlayerList playerList = new PlayerList();
         for (Parcelable playerParcelable : b.getParcelableArray(PLAYERS)){
-            /*Player p = Player.fromBundle((Bundle) playerParcelable);
-            playerList.players.add(p);
-            if (p.role() == 1){
-                playerList.bandits.add(p);
-            }
-            else
-                playerList.cowboys.add(p);*/
             Bundle x = (Bundle) playerParcelable;
             if (x.getString("role").equals("bandit")){
                 Bandit band = Bandit.fromBundle((Bundle) playerParcelable);
@@ -226,6 +220,9 @@ public class PlayerList implements Serializable {
         return playerList;
     }
 
+    /**
+     * Sets votes of every player back to 0
+     */
     public void resetAllVotes(){
         Player cur;
         for (int i = 0; i < this.players.size(); i = i + 1){

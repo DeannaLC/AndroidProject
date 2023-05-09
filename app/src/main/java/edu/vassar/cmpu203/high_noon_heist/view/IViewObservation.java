@@ -2,14 +2,21 @@ package edu.vassar.cmpu203.high_noon_heist.view;
 
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 
+/**
+ * ViewObservationFragment interface
+ */
 public interface IViewObservation {
+
+    /**
+     * Listener for ViewObservationFragment
+     */
     interface Listener{
-        public String showObservation(int choice);
+        String showObservation(int choice);
 
-        public void onActionDone();
+        void onActionDone();
 
-        public Player getCurrent();
+        Player getCurrent();
 
-        public String doViewLoc();
+        String doViewLoc();
     }
 }

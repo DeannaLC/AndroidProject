@@ -94,18 +94,6 @@ public class ConfigGameFragment extends Fragment implements IConfigGame{
                 ConfigGameFragment.this.listener.onSetOptions(playerTotal, banditAmt, dayLim, moneyLim, ConfigGameFragment.this);
             }
         });
-        /*this.binding.checkLeaderboard.setOnClickListener(new View.OnClickListener(){
-           public void onClick(View view){
-                ConfigGameFragment.this.listener.onLeaderboardCheck();
-           }
-        });
-
-        this.binding.secret.setOnClickListener(new View.OnClickListener(){
-           public void onClick(View view){
-               ConfigGameFragment.this.listener.onSecretPressed();
-           }
-        });
-        //this.binding.secret.setVisibility(View.INVISIBLE);*/
     }
 
     /**

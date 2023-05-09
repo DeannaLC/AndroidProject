@@ -80,12 +80,8 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         View.OnClickListener ret = new View.OnClickListener() {
             public void onClick(View view) {
                 ActionSelectFragment.this.place = place;
-                //ActionSelectFragment.this.listener.setLocInPL();
                 ActionSelectFragment.this.listener.observeAt(place.toLowerCase(), ActionSelectFragment.this.listener.getCurrent());
                 ActionSelectFragment.this.watchConfirm();
-                /*ActionSelectFragment.this.binding.buttonSet.removeAllViews();
-                ActionSelectFragment.this.binding.splashText.setText("You chose to watch the " + place + " for the night");
-                ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());*/
             }
         };
         return ret;
@@ -109,15 +105,7 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         return new View.OnClickListener() {
             public void onClick(View view){
                 ActionSelectFragment.this.place = place;
-                //ActionSelectFragment.this.listener.setLocInPL();
-               // ActionSelectFragment.this.listener.setRobbedInPL();
                 ActionSelectFragment.this.stealConfirm();
-                /*int val = ActionSelectFragment.this.listener.stealFrom(place);
-                ActionSelectFragment.this.onStealConfirm = true;
-                ActionSelectFragment.this.binding.buttonSet.removeAllViews();
-                ActionSelectFragment.this.binding.splashText.setText("You stole " + val + "$ from the " + place);
-                ActionSelectFragment.this.binding.buttonSet.addView(ActionSelectFragment.this.addConfirm());
-                */
             }
         };
     }
@@ -185,21 +173,6 @@ public class ActionSelectFragment extends Fragment implements IActionSelect{
         steal.setOnClickListener(new View.OnClickListener() {
            public void onClick(View view){
                ActionSelectFragment.this.stealingOptions();
-               /*ActionSelectFragment.this.stealing = true;
-               ActionSelectFragment.this.binding.splashText.setText("Choose where to Steal from");
-               ActionSelectFragment.this.binding.buttonSet.removeAllViews();
-               Button bank = new MaterialButton(ActionSelectFragment.super.getContext());
-               bank.setText("Bank");
-               bank.setOnClickListener(ActionSelectFragment.this.generalStealButton("bank"));
-               Button saloon = new MaterialButton(ActionSelectFragment.super.getContext());
-               saloon.setText("Saloon");
-               saloon.setOnClickListener(ActionSelectFragment.this.generalStealButton("saloon"));
-               Button ranch = new MaterialButton(ActionSelectFragment.super.getContext());
-               ranch.setText("ranch");
-               ranch.setOnClickListener(ActionSelectFragment.this.generalStealButton("ranch"));
-               ActionSelectFragment.this.binding.buttonSet.addView(bank);
-               ActionSelectFragment.this.binding.buttonSet.addView(saloon);
-               ActionSelectFragment.this.binding.buttonSet.addView(ranch);;*/
            }
         });
         if (this.stealing == false && this.watchingPlace == false) {

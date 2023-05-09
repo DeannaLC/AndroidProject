@@ -24,6 +24,9 @@ import edu.vassar.cmpu203.high_noon_heist.model.Cowboy;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
 
+/**
+ * Fragment for voting players out of the game
+ */
 public class VoteFragment extends Fragment implements IVote{
 
     private Listener listener;
@@ -39,6 +42,10 @@ public class VoteFragment extends Fragment implements IVote{
 
     public VoteFragment(){}
 
+    /**
+     * VoteFragment constructor
+     * @param listener, MainActivity that runs methods
+     */
     public VoteFragment(Listener listener){
         this.listener = listener;
     }
@@ -50,6 +57,11 @@ public class VoteFragment extends Fragment implements IVote{
         return this.binding.getRoot();
     }
 
+    /**
+     * Creates an OnClickListener for adding votes corresponding to a Player and updates display
+     * @param name of Player having votes updated
+     * @return OnClickListener that adds a vote to a player
+     */
     public View.OnClickListener addVoteListener(String name){
         return new View.OnClickListener(){
             public void onClick(View view){
@@ -68,21 +80,30 @@ public class VoteFragment extends Fragment implements IVote{
         };
     }
 
+    /**
+     * Creates an OnClickListener for subtracting votes corresponding to a Player and updates display
+     * @param name of Player having votes updated
+     * @return OnClickListener that subtracts a vote from a player
+     */
     public View.OnClickListener subVoteListener(String name){
         return new View.OnClickListener(){
             public void onClick(View view){
                 PlayerList people = VoteFragment.this.listener.getPlayers();
                 Player person = VoteFragment.this.listener.findPlayer(name);
                 person.subVote();
-                //VoteFragment.this.binding.voteStr.setText(VoteFragment.this.people.voteValsStr());
                 int curId = people.players.indexOf(person) + 4300;
                 TextView edit = (TextView) VoteFragment.this.binding.voting.findViewById(curId);
                 edit.setText(person.getVotes() + "");
-
             }
         };
     }
 
+    /**
+     * Dynamically generates vote buttons for Players, their names, and how many votes they have
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Player cur;
         TextView nameDisplay;
@@ -101,8 +122,8 @@ public class VoteFragment extends Fragment implements IVote{
                 up.setText("plus");
                 if (i == 0 && this.listener.getTestMode())
                     up.setId(1123 + i);
-                if (i == 4 && this.listener.getTestMode())
-                    up.setId(5809 + i);
+                if (i == 2 && this.listener.getTestMode())
+                    up.setId(5811 + 2);
                 down.setText("minus");
                 cur = (Player) people.players.get(i);
                 curName = cur.getName();
@@ -131,6 +152,9 @@ public class VoteFragment extends Fragment implements IVote{
         }
     }
 
+    /**
+     * Shows what happens when voting is done
+     */
     public void doneVoting(){
         this.votesDone = true;
         this.binding.voting.removeAllViews();
@@ -139,7 +163,7 @@ public class VoteFragment extends Fragment implements IVote{
         TextView resultText = new TextView(super.getContext());
         resultText.setId(2134 + 0);
         TextView roleText = new TextView(super.getContext());
-        roleText.setText(5589 + 0);
+        roleText.setId(5589 + 0);
         if (votingOut == null){
             resultText.setText("Vote failed! No one was removed!");
         }
@@ -166,7 +190,9 @@ public class VoteFragment extends Fragment implements IVote{
     public void onSaveInstanceState(@NonNull Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putBoolean(VOTESDONE, this.votesDone);
-        outState.putBundle(VOTINGOUT, this.votingOut.toBundle());
+        if (this.votingOut != null) {
+            outState.putBundle(VOTINGOUT, this.votingOut.toBundle());
+        }
     }
 
     public void onViewStateRestored(@NonNull Bundle savedInstanceState) {

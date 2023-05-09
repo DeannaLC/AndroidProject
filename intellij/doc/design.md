@@ -99,8 +99,25 @@ end
 ```
 
 ```plantuml
+@startuml
 
-title Design Class Diagram
+title Vote
+hide footbox
+skin rose
+
+actor Gamer as gamer
+participant " : UI" as UI
+participant "m : MainActivity" as main
+participant ":Player" as player
+
+loop Voting
+UI -> gamer: Display list of names
+
+```
+
+```plantuml
+@startuml
+title Controller
 skin rose
 
 hide empty methods
@@ -117,63 +134,101 @@ playersList : PlayerList
 banditVals : List
 current : Player
 canAct : PlayerList
+testMode : boolean
 loc : Location
+leaderboard : Leaderboard
+persistenceFacade : IPersistenceFacade
 mainView : IMainView
 --
-+onCreate
-+getPlayerListCopy()
-+getMoney()
-+checkPlayerCap()
++onCreate(savedInstanceState : Bundle)
++onBegin()
++onLeaderboardCheck()
++sharePlayers(b : Bundle)
++onSaveInstanceState(outState : Bundle)
++getPlayerListCopy() : PlayerList
++getMoney() : int
++checkPlayerCap() : boolean
 +onPlayersSet
-+findPlayer(name : String)
++findPlayer(name : String) : Player
 +draw()
 +onSetOptions()
 +onOptionsSet()
 +onAddedPlayer()
-+showRole()
++showRole() : String
 +setCurrentPlayer(current : Player)
-+toString()
-+getPlayers()
++toString() : String
++getPlayers() : PlayerList
 +playerSelected(name : String)
-+checkPhase()
++checkPhase() : int
 +onActionDone()
 +observeAt(place : String, player : Player)
-+stealFrom(place : String)
-+checkWin()
++showObservation(number : int) : String
++stealFrom(place : String) : int
++checkWin() : int
++getWin() : int
++addVote(p : Player)
++subVote(p : Player)
++onSubmitVotes() : Player
++getCanAct() : PlayerList
++onVotingDone()
++getCurDay() : int
++getCurrent() : Player
++doViewLoc() : String
++onGameDone()
++getTestMode() : boolean
++onViewed()
++onLeaderboardCleared(leaderDisplay : ILeaderboard)
++getLeaderboard() : Leaderboard
 }
+```
+
+```plantuml
+
+title Model Classes
+skin rose
+
+hide empty methods
 
 Class Player{
-alive : boolean
 name : String
 loc : String
 votes : int
 --
 +Player(name : String)
-+getName()
++getName() : String
 +observe(l: Location, loc : String)
-+role()
++role() : int
 +vote(votes : int)
-+clearVotes()
-+viewLoc()
++resetVotes()
++viewLoc() : String
++getVotes() : int
 +observation(loc : Location, a : int)
 +rob(l : Location, place : String)
-+displayRole()
++displayRole() : String
++addVote()
++subVote()
+{static} +fromBundle(b : Bundle)
++checkBundleRole(b : Bundle) : boolean
 }
 
 class Bandit{
 robbed : boolean
 --
-+role()
-+observation(l : Location, a : int)
-+displayRole()
-+rob(l : Location, place : String)
++role() : int
++observation(l : Location, a : int) : String
++displayRole() : String
++rob(l : Location, place : String) : int
++toBundle() : Bundle
+{static} + fromBundle(b : Bundle) : Bandit
 }
 
 class Cowboy{
 --
-+observation(l : Location, a : int)
-+role()
-+displayRole()
++observation(l : Location, a : int) : String
++role() : int
++displayRole() : String
++toBundle() : Bundle
+{static} +fromBundle(b : Bundle) : Cowboy
 }
 
 class PlayerList{
@@ -181,13 +236,19 @@ players : ArrayList<Player>
 bandits : ArrayList<Bandit>
 cowboys : ArrayList<Cowboy>
 --
-+addPlayer(name : String, bands : ArrayList, cur : int)
 +addCowboy(name : String)
 +addBandit(name : String)
-+copyPlayers()
-+toString()
-+findPlayer(person : String)
++copyPlayers() : PlayerList
++toString() : String
++findPlayer(person : String) : Player
 +removePlayer(p : Player)
++voteVals() : int[]
++tallyVotes() : int
++mostVotes() : Player
++checkTie() : boolean
++canRemove() : boolean
++toBundle() : Bundle
+{static} +fromBundle(b : Bundle) : PlayerList
 }
 
 class Location{
@@ -196,9 +257,39 @@ saloon : ArrayList<Player>
 ranch : ArrayList<Player>
 --
 +clearLocs()
-+randPlayer(name : String, place : String)
-+getValue(place : String)
++randPlayer(name : String, place : String) : Player
++getValue(place : String) : int
++addTo(p : Player, place : String)
++inLocation(name : String) : String
++toBundle() : Bundle
+{static} +fromBundle(b : Bundle) : Location
 }
+
+class Winner{
+banditWin : boolean = false
+cowboyWin : boolean = false
+date : String
+winDate : Date
+--
++setBanditWin()
++setCowboyWin()
++toString() : String
++toBundle() : Bundle
+{static} +fromBundle(b : Bundle) : Winner
+}
+
+Player o-- "Aggregation of" PlayerList: \t\t
+Player -> "Contained in" Location: \t\t
+Player <|-- Bandit
+Player <|-- Cowboy
+
+```
+
+```plantuml
+@startuml
+title View
+skin rose
+hide empty methods
 
 class ConfigGameFragment{
 binding : FragmentConfigGameBinding
@@ -264,10 +355,4 @@ current : Player
 +banditObservation()
 +addConfirm()
 }
-
-Player o-- "Aggregation of" PlayerList: \t\t
-Player -> "Contained in" Location: \t\t
-Player <|-- Bandit
-Player <|-- Cowboy
-
 ```

@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.util.Random;
 import java.util.ArrayList;
 
+/**
+ * Cowboy class, able to make observations
+ */
 public class Cowboy extends Player implements Serializable
 {
 

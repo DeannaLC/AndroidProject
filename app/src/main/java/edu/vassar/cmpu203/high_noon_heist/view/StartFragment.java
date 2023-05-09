@@ -18,6 +18,9 @@ import edu.vassar.cmpu203.high_noon_heist.R;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentResultScreenBinding;
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentStartBinding;
 
+/**
+ * Beginning fragment for starting the game, checking leaderboard, viewing rules
+ */
 public class StartFragment extends Fragment implements IStart{
 
     private Listener listener;

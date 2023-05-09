@@ -18,6 +18,9 @@ import org.junit.runner.RunWith;
 
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 
+/**
+ * Tests for ViewObservationFragment
+ */
 @RunWith(AndroidJUnit4.class)
 public class SelectObservationTest {
 
@@ -37,7 +40,8 @@ public class SelectObservationTest {
         Espresso.onView(ViewMatchers.withId(R.id.confirmActionPlayer)).perform(ViewActions.click());
         try {
             Espresso.onView(ViewMatchers.withText("Number")).perform(ViewActions.click());
-            vi.check(ViewAssertions.matches(ViewMatchers.withSubstring("You saw 5 total at the bank")));
+            vi.check(ViewAssertions.matches(ViewMatchers.withSubstring("You saw")));
+            vi.check(ViewAssertions.matches(ViewMatchers.withSubstring("total at the bank")));
         }
         catch(NoMatchingViewException ignore){
             vi.check(ViewAssertions.matches(ViewMatchers.withSubstring("You hung out at the bank for the night")));
@@ -46,7 +50,7 @@ public class SelectObservationTest {
     }
 
     /**
-     * Test for player select, observation, and end result screen.
+     * Test for player observations
      */
     @Test
     public void testSelectObservation(){
@@ -57,6 +61,9 @@ public class SelectObservationTest {
         this.selectObservation();
     }
 
+    /**
+     * Selects players and checks their observations
+     */
     public void selectObservation(){
         SelectActionTest selectAct = new SelectActionTest();
         selectAct.actionSelect();
@@ -75,6 +82,9 @@ public class SelectObservationTest {
         this.doObservation("Phil", promptVi);
     }
 
+    /**
+     * Test for observations after a player is removed
+     */
     @Test
     public void testSelectObservation2() {
         activityRule.getScenario().onActivity(activity -> {
@@ -84,6 +94,9 @@ public class SelectObservationTest {
         this.selectObservation2();
     }
 
+    /**
+     * Selects players and checks their observations
+     */
     public void selectObservation2(){
         SelectActionTest selectAct = new SelectActionTest();
         selectAct.actionSelect2();

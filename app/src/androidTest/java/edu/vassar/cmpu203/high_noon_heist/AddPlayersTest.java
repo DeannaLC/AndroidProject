@@ -19,6 +19,9 @@ import org.junit.runner.RunWith;
 
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 
+/**
+ * Test for the AddPlayersFragment
+ */
 @RunWith(AndroidJUnit4.class)
 public class AddPlayersTest {
 
@@ -56,6 +59,9 @@ public class AddPlayersTest {
 
     }
 
+    /**
+     * Tests adding players into the game, viewing their roles, and showing added players display
+     */
     public void addPlayers(){
         ConfigGameTest config = new ConfigGameTest();
         config.configGame();

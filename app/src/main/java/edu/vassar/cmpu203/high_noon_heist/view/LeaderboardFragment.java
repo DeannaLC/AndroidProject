@@ -15,6 +15,9 @@ import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentLeaderboardBinding
 import edu.vassar.cmpu203.high_noon_heist.databinding.FragmentPlayerListActionBinding;
 import edu.vassar.cmpu203.high_noon_heist.model.Leaderboard;
 
+/**
+ * Fragment for showing previous wins
+ */
 public class LeaderboardFragment extends Fragment implements ILeaderboard{
 
     private FragmentLeaderboardBinding binding;
@@ -35,14 +38,23 @@ public class LeaderboardFragment extends Fragment implements ILeaderboard{
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Leaderboard display = this.listener.getLeaderboard();
-        this.binding.leaderboardDisplay.setText(display.toString());
+        this.showDisplay();
         this.binding.back.setOnClickListener(new View.OnClickListener(){
            public void onClick(View view){
                LeaderboardFragment.this.listener.onViewed();
            }
         });
+        this.binding.clear.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                LeaderboardFragment.this.listener.onLeaderboardCleared(LeaderboardFragment.this);
+            }
+        });
 
+    }
+
+    public void showDisplay(){
+        Leaderboard display = this.listener.getLeaderboard();
+        this.binding.leaderboardDisplay.setText(display.toString());
     }
 
 }

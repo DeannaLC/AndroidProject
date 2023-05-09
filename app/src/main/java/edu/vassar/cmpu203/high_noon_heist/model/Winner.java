@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Class saving who won and the time they won
+ */
 public class Winner implements Serializable {
     boolean banditWin = false;
     boolean cowboyWin = false;

@@ -20,11 +20,11 @@ import org.junit.runner.RunWith;
 
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 
+/**
+ * Tests for ActionSelectFragment
+ */
 @RunWith(AndroidJUnit4.class)
 public class SelectActionTest {
-
-    public boolean robbed = false;
-
 
     @org.junit.Rule
     public ActivityScenarioRule<MainActivity> activityRule =
@@ -63,6 +63,9 @@ public class SelectActionTest {
         this.actionSelect();
     }
 
+    /**
+     * Selects players and makes them perform actions
+     */
     public void actionSelect(){
         AddPlayersTest addPeople = new AddPlayersTest();
         addPeople.addPlayers();
@@ -83,6 +86,9 @@ public class SelectActionTest {
         this.doAction("Phil", promptVi);
     }
 
+    /**
+     * Tests action select after a player is removed
+     */
     @Test
     public void testActionSelect2(){
         activityRule.getScenario().onActivity(activity -> {
@@ -92,6 +98,9 @@ public class SelectActionTest {
         this.actionSelect2();
     }
 
+    /**
+     * Selects players and makes them perform actions
+     */
     public void actionSelect2(){
         VoteTest voteTest = new VoteTest();
         voteTest.doVotes();

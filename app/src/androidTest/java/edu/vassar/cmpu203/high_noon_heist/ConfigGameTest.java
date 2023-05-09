@@ -18,6 +18,9 @@ import org.junit.runner.RunWith;
 
 import edu.vassar.cmpu203.high_noon_heist.controller.MainActivity;
 
+/**
+ * Tests for ConfigGameFragment
+ */
 @RunWith(AndroidJUnit4.class)
 public class ConfigGameTest {
 
@@ -37,6 +40,9 @@ public class ConfigGameTest {
 
     }
 
+    /**
+     * Tests setting options for the game and showing that it displays
+     */
     public void configGame(){
         Espresso.onView(ViewMatchers.withId(R.id.start)).perform(ViewActions.click());
         //Espresso.onView(ViewMatchers.withId(R.id.secret)).perform(ViewActions.click());

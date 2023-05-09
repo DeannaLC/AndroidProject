@@ -63,23 +63,12 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         number.setOnClickListener(new View.OnClickListener() {
            public void onClick(View view){
                ViewObservationFragment.this.showNumber();
-               /*ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
-               String res = ViewObservationFragment.this.listener.showObservation(0);
-               ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " total at the " + ViewObservationFragment.this.listener.doViewLoc());
-               ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());*/
            }
         });
         Button person = new MaterialButton(super.getContext());
         person.setText("Person");
         person.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                /*ViewObservationFragment.this.binding.viewPromptButtons.removeAllViews();
-                String res = ViewObservationFragment.this.listener.showObservation(1);
-                if (res == null)
-                    ViewObservationFragment.this.binding.viewPrompt.setText("No other players at the " + ViewObservationFragment.this.listener.doViewLoc());
-                else
-                    ViewObservationFragment.this.binding.viewPrompt.setText("You saw " + res + " at the " + ViewObservationFragment.this.listener.doViewLoc());
-                ViewObservationFragment.this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());*/
                 ViewObservationFragment.this.showPerson();
             }
         });

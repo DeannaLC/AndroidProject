@@ -3,22 +3,25 @@ package edu.vassar.cmpu203.high_noon_heist.view;
 import edu.vassar.cmpu203.high_noon_heist.model.Player;
 import edu.vassar.cmpu203.high_noon_heist.model.PlayerList;
 
+/**
+ * VoteFragment interface
+ */
 public interface IVote {
+
+    /**
+     * Listener for VoteFragment
+     */
     interface Listener{
-        public void addVote(Player p);
+        Player findPlayer(String name);
 
-        public void subVote(Player p);
+        Player onSubmitVotes();
 
-        public Player findPlayer(String name);
+        int getCurDay();
 
-        public Player onSubmitVotes();
+        void onVotingDone();
 
-        public int getCurDay();
+        PlayerList getPlayers();
 
-        public void onVotingDone();
-
-        public PlayerList getPlayers();
-
-        public boolean getTestMode();
+        boolean getTestMode();
     }
 }

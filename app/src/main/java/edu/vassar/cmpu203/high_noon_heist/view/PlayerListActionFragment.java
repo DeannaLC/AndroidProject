@@ -39,11 +39,9 @@ public class PlayerListActionFragment extends Fragment implements IPlayerListAct
     /**
      * Constructor for PlayerListActionFragment
      * @param listener, MainActivity to run methods
-     * @param activePlayers, players who have not yet done something in the game phase
      */
-    public PlayerListActionFragment(Listener listener){//, PlayerList activePlayers){
+    public PlayerListActionFragment(Listener listener){
         this.listener = listener;
-        //this.activePlayers = activePlayers;
     }
 
     @Override

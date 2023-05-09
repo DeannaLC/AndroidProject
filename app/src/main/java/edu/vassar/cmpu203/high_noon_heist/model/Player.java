@@ -8,7 +8,6 @@ import java.io.Serializable;
  * Superclass for Bandit and Cowboy subclasses
  */
 public class Player implements Serializable {
-    boolean alive = true;
     String name;
     String loc;
     int votes;
@@ -30,6 +29,11 @@ public class Player implements Serializable {
         return this.name;
     }
 
+    /**
+     * Puts a player in a location for them to observe
+     * @param l, location object they're added to
+     * @param loc, name of location they're going to
+     */
     public void observe(Location l, String loc){
         this.loc = loc;
         if (loc.equals("bank")){
@@ -45,14 +49,8 @@ public class Player implements Serializable {
         return 3;
     }
 
-    //public void rob(){}
-
     public void vote(int votes){
         this.votes = votes;
-    }
-    
-    void clearVotes(){
-        this.votes = 0;
     }
 
     public String viewLoc(){
@@ -74,10 +72,16 @@ public class Player implements Serializable {
         return this.votes;
     }
 
+    /**
+     * Adds 1 vote
+     */
     public void addVote(){
         this.votes = this.votes + 1;
     }
 
+    /**
+     * Removes 1 vote if over 0
+     */
     public void subVote(){
         if (this.votes != 0)
             this.votes = this.votes - 1;
@@ -87,6 +91,9 @@ public class Player implements Serializable {
         return new Bundle();
     }
 
+    /**
+     * Sets player's votes back to 0
+     */
     public void resetVotes(){
         this.votes = 0;
     }

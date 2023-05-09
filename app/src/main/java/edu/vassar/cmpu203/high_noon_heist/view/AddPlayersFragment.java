@@ -49,8 +49,6 @@ public class AddPlayersFragment extends Fragment implements IAddPlayers {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         this.binding.confirmButton.setVisibility(View.INVISIBLE);
-        //PlayerList players = this.listener.getPlayers();
-        //this.binding.displayPlayers.setText(players.toString());
         this.binding.addNameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                     Editable playerNameEditable = AddPlayersFragment.this.binding.nameInputEditable.getText();

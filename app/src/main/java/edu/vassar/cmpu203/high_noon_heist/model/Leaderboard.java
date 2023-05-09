@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Class for displaying previous wins
+ *
+ * Aggregation of winners
+ */
 public class Leaderboard implements Serializable {
     ArrayList winners = new ArrayList<>();
     final static String WINNERS = "winners";
@@ -16,10 +21,6 @@ public class Leaderboard implements Serializable {
     public void addWinner(Winner win){
         this.winners.add(win);
     }
-
-    /**
-     * Fix for unknown leaderboard duplications
-     */
 
     public String toString(){
         String ret = "";
