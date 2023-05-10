@@ -19,7 +19,6 @@ public class HighNoonHeistFragFactory extends FragmentFactory{
     private final MainActivity controller;
 
     public HighNoonHeistFragFactory(MainActivity controller){
-        //super();
         this.controller = controller;
     }
 

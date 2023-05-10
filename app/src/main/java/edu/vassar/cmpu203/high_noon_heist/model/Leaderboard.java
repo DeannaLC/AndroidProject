@@ -18,10 +18,18 @@ public class Leaderboard implements Serializable {
 
     public Leaderboard(){}
 
+    /**
+     * Adds a Winner to winners field
+     * @param win, Winner being added
+     */
     public void addWinner(Winner win){
         this.winners.add(win);
     }
 
+    /**
+     * Shows all the Winners in the class
+     * @return String with all the winners
+     */
     public String toString(){
         String ret = "";
         for (int i = 0; i < winners.size(); i = i + 1){
@@ -30,6 +38,10 @@ public class Leaderboard implements Serializable {
         return ret;
     }
 
+    /**
+     * Puts Leaderboard into a bundle
+     * @return Bundle with leaderboard data
+     */
     public Bundle toBundle(){
         Bundle b = new Bundle();
         final Bundle[] winnerBundle = new Bundle[this.winners.size()];
@@ -42,6 +54,11 @@ public class Leaderboard implements Serializable {
         return b;
     }
 
+    /**
+     * Retrieves leaderboard from a bundle
+     * @param b, bundle data is retrieved from
+     * @return Leaderboard from bundle
+     */
     public static Leaderboard fromBundle(Bundle b){
         final Leaderboard ret = new Leaderboard();
         for (Parcelable winnerParcelable : b.getParcelableArray(WINNERS)){

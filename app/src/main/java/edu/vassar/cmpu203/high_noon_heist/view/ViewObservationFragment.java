@@ -46,6 +46,12 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         this.listener = listener;
     }
 
+    /**
+     * Decides what is shown based on a player's role
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Player current = this.listener.getCurrent();
@@ -55,6 +61,10 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
             this.banditObservation(current);
     }
 
+    /**
+     * Generates options for a Cowboy to select an observation
+     * @param current, player who sees something
+     */
     public void cowboyObservation(Player current){
         //Player current = this.listener.getCurrent();
         this.binding.viewPrompt.setText("View number of players or a specific player at " + current.viewLoc() + "?");
@@ -78,6 +88,10 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         }
     }
 
+    /**
+     * Shows what a bandit will see
+     * @param current, bandit who views somethign
+     */
     public void banditObservation(Player current){
         String text = this.listener.showObservation(0);
         if (text == null){
@@ -94,6 +108,9 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         this.binding.viewPromptButtons.addView(this.addConfirm());
     }
 
+    /**
+     * Shows total players at someone's location
+     */
     public void showNumber(){
         this.viewingNumber = true;
         this.binding.viewPromptButtons.removeAllViews();
@@ -103,6 +120,9 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
     }
 
+    /**
+     * Shows a random person at someone's location
+     */
     public void showPerson(){
         this.viewingPerson = true;
         this.binding.viewPromptButtons.removeAllViews();
@@ -115,6 +135,10 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         this.binding.viewPromptButtons.addView(ViewObservationFragment.this.addConfirm());
     }
 
+    /**
+     * Adds a confirm button
+     * @return confirm button
+     */
     public Button addConfirm(){
         Button confirm = new MaterialButton(super.getContext());
         confirm.setText("Confirm");
@@ -126,6 +150,10 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         return confirm;
     }
 
+    /**
+     * Saves if a player is viewing something, and what they're seeing
+     * @param outState Bundle in which to place your saved state.
+     */
     public void onSaveInstanceState(@NonNull Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putBoolean(VIEWINGNUMBER, this.viewingNumber);
@@ -133,6 +161,11 @@ public class ViewObservationFragment extends Fragment implements IViewObservatio
         outState.putString(RESULT, this.result);
     }
 
+    /**
+     * Restores previous fragment state
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     public void onViewStateRestored(@NonNull Bundle savedInstanceState){
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {

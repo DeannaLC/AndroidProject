@@ -25,6 +25,10 @@ public class Player implements Serializable {
         this.name = name;
     }
 
+    /**
+     * Gives player's name
+     * @return name field
+     */
     public String getName() {
         return this.name;
     }
@@ -45,29 +49,63 @@ public class Player implements Serializable {
             (l.ranch).add(this);
     }
 
+    /**
+     * Identifier for Player's role
+     * @return 3 showing player, won't ever be reached in play
+     */
     public int role(){
         return 3;
     }
 
+    /**
+     * Sets number of votes for a player
+     * @param votes, number of votes to have
+     */
     public void vote(int votes){
         this.votes = votes;
     }
 
+    /**
+     * Shows location a Player is in
+     * @return loc field
+     */
     public String viewLoc(){
         return this.loc;
     }
 
+    /**
+     * General observation function
+     *
+     * @param loc, Location they're added to
+     * @param a, choice on what they see if they're a Cowboy
+     * @return empty string since Player won't use this
+     */
     public String observation(Location loc, int a){
         return "";
     }
 
+    /**
+     * General rob function
+     * @param l, Location they'll be added to and rob from
+     * @param place they're going to
+     * @return 0 since this case isn't used
+     */
     public int rob(Location l, String place){
         return 0;
     };
+
+    /**
+     * String identifier for a role
+     * @return "hi" since not reached in game
+     */
     public String displayRole(){
         return "hi";
     }
 
+    /**
+     * Gives number of votes a player has
+     * @return votes field
+     */
     public int getVotes(){
         return this.votes;
     }
@@ -87,6 +125,10 @@ public class Player implements Serializable {
             this.votes = this.votes - 1;
     }
 
+    /**
+     * Turns Player object into a bundle
+     * @return empty Bundle since not used
+     */
     public Bundle toBundle(){
         return new Bundle();
     }
@@ -98,14 +140,19 @@ public class Player implements Serializable {
         this.votes = 0;
     }
 
+    /**
+     * Updates location a player is at
+     * @param loc, new loc field
+     */
     public void updateLoc(String loc){
         this.loc = loc;
     }
 
-    public static Player fromBundle(Bundle b){
-        return new Player("");
-    }
-
+    /**
+     * Checks to see if a bundle is a Cowboy or Bandit
+     * @param b, bundle being checked
+     * @return true if bandit, false if cowboy
+     */
     public static boolean checkBundleRole(Bundle b){
         return b.getString(ROLE).equals("bandit");
     }

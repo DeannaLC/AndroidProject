@@ -25,6 +25,17 @@ Full system tests can be run using SelectObservationEndScreenTest
 
 ========================================================
 
+**CONSTRUCTION**
+
+Final Android app is capable of running full games. Voting for player removals and a start screen with rules and leaderboard have been added since the last iteration.
+It has full working dynamic state and data persistence uses a leaderboard showing previous wins.
+
+While the game runs, not much work was done in terms of balancing. It's currently assumed that settings will be put in that won't immediately end the game or make it unreasonably long. There also wasn't a ton done in terms of how the UI looks. 
+
+Espresso tests go through one full win case. Running testResults() in ResultScreenTest goes through every test at once.
+
+Otherwise, the program appears bug free, does what it's supposed to when things are clicked, and displays data correctly.
+
 **CREDIT**
 
 Background image taken from: https://www.pxfuel.com/en/desktop-wallpaper-ztful

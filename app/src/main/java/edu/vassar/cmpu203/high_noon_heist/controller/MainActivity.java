@@ -294,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
      */
     @Override
     public void onAddedPlayer(@NonNull String name, IAddPlayers addPlayers) {
-        //temp for testing adding player screen alone
         if (this.playersList.players.size() == 0)
             this.draw();
         if (banditVals.indexOf(this.playersList.players.size()) == -1)
@@ -318,10 +317,18 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     }
 
 
+    /**
+     * Displays game configurations as a String
+     * @return game configurations in string form
+     */
     public String toString(){
         return this.playerCount + " players, " + this.banditCount + " bandits, " + this.dayLim + " days, " + this.moneyLim + "$ to win";
     }
 
+    /**
+     * Gives players in the game
+     * @return PlayerList field
+     */
     public PlayerList getPlayers(){
         return this.playersList;
     }
@@ -383,10 +390,20 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         }
     }
 
+    /**
+     * Makes a player observe at a place
+     * @param place where player is going
+     * @param player going to a place
+     */
     public void observeAt(String place, Player player){
         player.observe(this.loc, place);
     }
 
+    /**
+     * Shows results of observation done by a player
+     * @param number showing which type of observation will be done
+     * @return result of observation
+     */
     public String showObservation(int number){
         return this.current.observation(this.loc, number);
     }
@@ -433,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
     }
 
     /**
-     *
+     * Shows who won the game based on the number
      * @return 3 for cowboy win, 2 for bandit win, 1 which will not be reached
      */
     public int getWin() {
@@ -448,14 +465,6 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
             return 3;
         else
             return 1;
-    }
-
-    public void addVote(Player p){
-        p.addVote();
-    }
-
-    public void subVote(Player p){
-        p.subVote();
     }
 
     /**
@@ -477,6 +486,10 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         return null;
     }
 
+    /**
+     * Gives players who can act
+     * @return canAct field
+     */
     public PlayerList getCanAct(){
         return this.canAct;
     }
@@ -496,14 +509,26 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
             this.mainView.displayFragment(new ResultScreenFragment(this), true, "results");
     }
 
+    /**
+     * Gives current ingame day
+     * @return curDay field
+     */
     public int getCurDay(){
         return this.curDay;
     }
 
+    /**
+     * Gives current player
+     * @return current field
+     */
     public Player getCurrent(){
         return this.current;
     }
 
+    /**
+     * Gives location of current player
+     * @return viewLoc of current
+     */
     public String doViewLoc(){
         return this.current.viewLoc();
     }
@@ -521,10 +546,17 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         this.mainView.displayFragment(new StartFragment(this), true, "start");
     }
 
+    /**
+     * Returns if app is in test mode
+     * @return testMode field
+     */
     public boolean getTestMode(){
         return this.testMode;
     }
 
+    /**
+     * Goes back to main menu once leaderboard or rules are viewed
+     */
     public void onViewed(){
         this.mainView.displayFragment(new StartFragment(this), true, "start");
     }
@@ -538,6 +570,11 @@ public class MainActivity extends AppCompatActivity implements IStart.Listener, 
         this.persistenceFacade.saveLeaderboard(this.leaderboard);
         leaderDisplay.showDisplay();
     }
+
+    /**
+     * Gives game leaderboard
+     * @return leaderboard field
+     */
     public Leaderboard getLeaderboard(){
         return this.leaderboard;
     }

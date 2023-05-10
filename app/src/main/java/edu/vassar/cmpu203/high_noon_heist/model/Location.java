@@ -11,7 +11,7 @@ import java.util.Random;
 
 /**
  * Class for storing Players who go to different locations
- * Can show amount of players at different locations, specific names, and how much they can steal
+ * Can show amount of players at different locations, specific names, and how much they steal
  */
 public class Location implements Serializable
 {
@@ -96,6 +96,10 @@ public class Location implements Serializable
             return 1000 - rnd.nextInt(501);
     }
 
+    /**
+     * Puts Location object into a bundle
+     * @return Bundle with location data
+     */
     public Bundle toBundle(){
         Bundle b = new Bundle();
         final Bundle[] bankBundle = new Bundle[this.bank.size()];
@@ -138,6 +142,11 @@ public class Location implements Serializable
             this.ranch.add(p);
     }
 
+    /**
+     * Gets a location object from a bundle
+     * @param b, bundle data is retrieved from
+     * @return Location from bundle
+     */
     public static Location fromBundle(@NonNull Bundle b){
         Location ret = new Location();
         for (Parcelable bankPerson : b.getParcelableArray(BANK)) {
@@ -164,6 +173,11 @@ public class Location implements Serializable
         return ret;
     }
 
+    /**
+     * Gives location a player is in
+     * @param name of player being checked
+     * @return String of location they're at
+     */
     public String inLocation(String name){
         for (int i = 0; i < this.bank.size(); i = i + 1) {
             if (name.equals(this.bank.get(i).getName()))

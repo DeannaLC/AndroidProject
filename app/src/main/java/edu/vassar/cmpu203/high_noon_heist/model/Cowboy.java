@@ -54,6 +54,10 @@ public class Cowboy extends Player implements Serializable
         return 0;
     }
 
+    /**
+     * Displays cowboy role
+     * @return cowboy role String
+     */
     public String displayRole(){
         return "Your role is Cowboy";
     }

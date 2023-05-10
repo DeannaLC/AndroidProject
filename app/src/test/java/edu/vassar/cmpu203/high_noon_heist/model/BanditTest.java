@@ -2,6 +2,8 @@ package edu.vassar.cmpu203.high_noon_heist.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import android.os.Bundle;
+
 import org.junit.jupiter.api.Test;
 
 class BanditTest {
@@ -82,4 +84,5 @@ class BanditTest {
         Bandit badGuy = new Bandit("badGuy");
         assertEquals("Your role is Bandit", badGuy.displayRole());
     }
+
 }
