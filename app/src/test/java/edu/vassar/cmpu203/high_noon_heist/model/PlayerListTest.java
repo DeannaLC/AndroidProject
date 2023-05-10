@@ -57,8 +57,9 @@ class PlayerListTest {
 
 
     /**
-     * Tests voteVals() by creating a PlayerList object and adding 3 players to its list of players, adding the new Player object to the PlayerLists list of players,
-     * then running findPlayer() on the Playerlist to check that the Player object is contained within its list of players.
+     * Tests voteVals() by creating a PlayerList object and adding 3 players to its list of players,
+     * setting vote values for each of them,
+     * then checking that voteVals() on the PlayerList object is equal to an int array of those vote values.
      */
     @Test
     void testVoteVals()
@@ -79,9 +80,9 @@ class PlayerListTest {
 
         int[] exArr = {2,8,3};
 
-        //boolean check = Arrays.equals(exArr, plList.voteVals());
+        boolean check = Arrays.equals(exArr, plList.voteVals());
 
-        //assertTrue(check);
+        assertTrue(check);
     }
 
     /**
